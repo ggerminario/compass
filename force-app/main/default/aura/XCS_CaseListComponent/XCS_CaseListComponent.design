@@ -1,0 +1,5 @@
+<design:component>
+	<design:attribute name="StatusDesired" label="Status choosen to be viewed" description="Inserire qui lo status che si desidera far utilizzare come filtro al componente. E' possibile inserire più Stati, separati da virgola. Es. New,Closed,In Corso"/>
+	<design:attribute name="FiltroQuery" label="Filtro Query" description="Inserire qui il filtro desiderato. Es. IsClosed=true" required="false"/>
+	<design:attribute name="Filter" label="Filtro Ricerca" description="Inserire se si vuole la presenza un filtro di ricerca" required="true"/>
+</design:component>

@@ -1,0 +1,75 @@
+<aura:component controller="CRMReclamiInsReclamiPrecedentiCtrl"
+                implements="force:appHostable,flexipage:availableForAllPageTypes" 
+                access="global" 
+                >
+    
+    <aura:attribute name="praticaSelezionata" type="Object"/>
+    <aura:attribute name="clienteSelezionato" type="OCSCliente"/>
+    <aura:attribute name="listaReclamiPrecedenti" type="Case[]" default="[]"/>
+    <aura:attribute name="reclamoSelezionato" type="Case"/>
+    <aura:attribute name="selectedRows" type="List"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="numeroReclamo" type="String"/>
+    <aura:attribute name="aziendaSelezionata" type="String"/>
+    <aura:attribute name="isDisabled" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    <aura:if isTrue="{!v.listaReclamiPrecedenti.length>0}">
+        <!--<div> Reclami Precedenti</div> -->
+        <div style="margin-left:15px;margin-right:15px;">
+
+        <div class="slds-section slds-is-open">
+                <h3 class="slds-section__title slds-theme_shade">
+                    <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Reclami Precedenti</span>
+                </h3>
+                <div aria-hidden="false" class="slds-section__content">
+
+
+                    <lightning:layout>
+                        <lightning:layoutItem size="12"> <!-- 20190716: anomalia 0001226 -->
+                            <lightning:datatable data="{!v.listaReclamiPrecedenti}"
+                                                 columns="{!v.columns}"
+                                                 keyField="Id"
+                                                 maxRowSelection="1"
+                                                 selectedRows="{!v.selectedRows}"
+                                                 onrowselection="{!c.selectReclamo}"
+                                                 />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                    
+                    <aura:if isTrue="{!v.reclamoSelezionato!=null}">  
+                        <br/>
+                        <aura:if isTrue="{!not(v.isDisabled)}">  
+                            <lightning:layout>
+                                <lightning:layoutItem size="12">
+                                    <div class="slds-grid">
+                                        <div class="slds-col">
+                                            <lightning:button variant="destructive" label="Rimuovi Associazione" title="Rimuovi Associazione" onclick="{!c.annulla }"/>
+                                        </div>
+                                        <div class="slds-col">
+                                            <lightning:input type="text"
+                                                             label="Reclamo Selezionato:"
+                                                             value="{!v.reclamoSelezionato.Numero_Reclamo_Calc__c}"
+                                                             readonly="true"
+                                                             />
+                                            
+                                        </div>
+                                    </div>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+                        </aura:if>
+                    </aura:if>
+                   
+                    
+        
+        <aura:set attribute="else">
+            <ui:message title="Attenzione" severity="warning" closable="true">
+                Lista reclami precedenti vuota!
+            </ui:message>
+        </aura:set>
+        </div>
+        </div>
+        </div>
+    </aura:if>
+    
+</aura:component>

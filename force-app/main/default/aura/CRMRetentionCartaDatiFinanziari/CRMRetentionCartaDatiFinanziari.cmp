@@ -1,0 +1,19 @@
+<aura:component controller="CRMRetentionCartaDFController" implements="force:appHostable,flexipage:availableForAllPageTypes,force:hasRecordId,lightning:availableForFlowScreens">
+    
+    <aura:attribute name="codicePratica" type="String" />
+    <aura:attribute name="cartaDatiFinanziari" type="OCSCartaDatiFinanziariResponse" />
+    <aura:attribute name="isOutbound" type="boolean" default="false"/>
+      
+    
+    
+    <aura:handler name="init" value="{! this }" action="{! c.init }"/>
+    <aura:handler name="change" value="{!v.codicePratica}" action="{!c.init}" />
+  
+    <div class='outerBox'>
+        <lightning:spinner aura:id="Spinner" size="medium" variant="brand" class="slds-hide spinner" />
+        <c:PVDatiFinanziariCarta cartaDatiFinanziariData='{!v.cartaDatiFinanziari.datiCartaDatiFinanziariResponse}'/>
+    </div>
+    
+    
+    
+</aura:component>

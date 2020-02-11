@@ -1,0 +1,964 @@
+<aura:component implements="force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome,force:hasRecordId" controller="GD_Mail_ReportCnt" >
+    
+    <aura:attribute name="activeSections6" type="List" default="[]" />
+    <aura:attribute name="activeSections7" type="List" default="[]" />
+    <aura:attribute name="sec1" type="List" default="['A','B']" />
+    <aura:attribute name="sec2" type="List" default="['B1','B2']" />
+    <ltng:require styles="{!$Resource.FPStyle}" />
+    <aura:attribute name="activeSectionsMessage" type="String" default="" />
+    <aura:attribute name="name" type="String" default="" />
+    <aura:attribute name="Valore" type="Map"   />
+    <aura:attribute name="listFiliali" type="List"   />
+    <aura:attribute name="checkValue" type="Map" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="disable2" type="boolean"  />
+    <aura:attribute name="SectionToView" type="String" />
+    
+    <aura:attribute name="Checked_RA" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_Disabled" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_17_a" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_17_b" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_18_a" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_18_b" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_19_a" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_19_b" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_20_a" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_20_b" type="boolean" default="false" />
+     
+    <aura:attribute name="Checked_RA_2" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_3" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_4" type="boolean" default="false" />
+    <aura:attribute name="Checked_RA_5" type="boolean" default="false" />
+    <aura:attribute name="ListBooleans" type="Boolean[]"/>
+    <aura:attribute name="listActiveSection" type="String" default="" />
+
+
+    <aura:html tag="style">
+        .cuf-content {
+        padding: 0 0rem !important;
+        }
+        .slds-p-around--medium {
+        padding: 0rem !important;
+        }       
+        .slds-modal__content{
+        overflow-y:hidden !important;
+    
+        }
+    </aura:html>
+    
+    
+    <!--Modal Body-->  
+    <div class="slds-modal__content slds-p-around--x-small  slds-size_1-of-1 slds-is-relative" style=" width:100%" >
+        <form class="slds-form--stacked">
+            <lightning:accordion
+                       allowMultipleSectionsOpen="true"
+                       onsectiontoggle="{! c.handleSectionToggle }"
+                       activeSectionName="{! v.activeSections6 }"
+                       
+                       >
+                <aura:if isTrue="{!v.SectionToView=='ND'}">
+                   <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="true" /></li>
+                    <li>	
+                        <lightning:accordionSection name="A" label="00">
+                            
+                            
+                            <lightning:accordion allowMultipleSectionsOpen="true"
+                                                 onsectiontoggle="{! c.handleSectionToggle }"
+                                                 activeSectionName="{!v.activeSections7}"
+                                             >
+                                 <ul class="slds-list_horizontal level2B">
+                                      <li class="li-check">    
+					                  <ui:inputCheckbox  class="checkbox" change="{!c.printState2}" value="{!v.Valore.B1}" disabled="true"/></li>
+                                          <li><lightning:accordionSection name="B1" label="BORG">
+                                              </lightning:accordionSection></li>
+                                 </ul>
+                                 <ul class="slds-list_horizontal level2B">
+                                     <li class="li-check">    
+					                     <ui:inputCheckbox  class="checkbox" change="{!c.printState2}" value="{!v.Valore.B2}" disabled="true"/></li>
+                                         <li><lightning:accordionSection name="B2" label="CANALE AGENTI">
+                                             </lightning:accordionSection></li>
+                                 </ul>
+                                 <ul class="slds-list_horizontal level2B">
+                                     <li class="li-check">    
+					                     <ui:inputCheckbox  class="checkbox" change="{!c.printState2}" value="{!v.Valore.B2}" disabled="true"/></li>
+                                         <li><lightning:accordionSection name="B2" label="DIREZIONE COMMERCIALE">
+                                             </lightning:accordionSection></li>
+                                 </ul>
+                                 <ul class="slds-list_horizontal level2B">
+                                     <li class="li-check">    
+					                     <ui:inputCheckbox  class="checkbox" change="{!c.printState2}" value="{!v.Valore.B2}" disabled="true"/></li>
+                                         <li><lightning:accordionSection name="B2" label="Direzione di sede">
+                                             </lightning:accordionSection></li>
+                                 </ul>
+                                 <ul class="slds-list_horizontal level2B">
+                                     <li class="li-check">    
+					                     <ui:inputCheckbox  class="checkbox" change="{!c.printState2}" value="{!v.Valore.B2}" disabled="true"/></li>
+                                         <li><lightning:accordionSection name="B2" label="FUTURO">
+                                             </lightning:accordionSection></li>
+                                 </ul>
+                            </lightning:accordion>
+                        </lightning:accordionSection>
+                    </li>
+                </ul>
+                </aura:if>
+                <aura:if isTrue="{!v.SectionToView=='RA'}">
+                   <ul class="slds-list_horizontal level1AX">
+                  
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RA_16_a}" checked="{!v.Valore.Check_RA_16_b}" onchange="{!c.onchangeEvent}" value="16" aura:id="C16"/>
+                        <!--onchange="{!c.onchangeEvent}" />-->
+                    </li>
+                    <li>
+                        <lightning:accordionSection name="A16" label="16">
+                            
+                                   <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="AS16"                                                                                          
+                                             >
+                            
+                                    <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                        <aura:if isTrue="{!filiale.id=='16'}">
+                                            <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                <ul class="slds-list_horizontal level2B">
+                                                    <li class="li-check">    
+                                                    <input type="checkbox" style="background-color:white" id="{!'16-'+indx}" name="{!'16-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                    </li>
+                                                <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                        </lightning:accordionSection></li>
+                                               </ul>              
+                                            </aura:iteration>  
+                                        </aura:if>
+                                    </aura:iteration>
+                            </lightning:accordion>                       
+                    </lightning:accordionSection>
+                    </li>
+                   </ul>
+                   <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RA_17_a}" checked="{!v.Valore.Check_RA_17_b}" onchange="{!c.onchangeEvent}" value="17"  aura:id="C17"/></li>
+                    <li>	
+                        <lightning:accordionSection name="A17" label="17">
+                                   <lightning:accordion allowMultipleSectionsOpen="true"
+                                                        
+                                                        activeSectionName="AS17"
+                                                        >
+
+                                            <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                <aura:if isTrue="{!filiale.id=='17'}">
+                                                    <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                        <ul class="slds-list_horizontal level2B">
+                                                            <li class="li-check">    
+                                                            <input type="checkbox" class="checkbox" id="{!'17-'+indx}" name="{!'17-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                            </li>
+                                                                <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                </lightning:accordionSection></li>
+                                                        </ul>              
+                                                    </aura:iteration>  
+                                                </aura:if>
+                                            </aura:iteration>
+                    
+
+                                  </lightning:accordion>
+                        </lightning:accordionSection>
+                    </li>
+                </ul>
+                   <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RA_18_a}" checked="{!v.Valore.Check_RA_18_b}" onchange="{!c.onchangeEvent}" value="18"  aura:id="C18"/></li>
+                    <li>	
+                        <lightning:accordionSection name="A18" label="18">
+                                   <lightning:accordion allowMultipleSectionsOpen="true"
+                                                       
+                                                        activeSectionName="AS18"
+                                                        >
+                                            <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                <aura:if isTrue="{!filiale.id=='18'}">
+                                                    <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                        <ul class="slds-list_horizontal level2B">
+                                                            <li class="li-check">    
+                                                            <input type="checkbox" class="checkbox" id="{!'18-'+indx}" name="{!'18-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                            </li>
+                                                                <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                </lightning:accordionSection></li>
+                                                        </ul>              
+                                                    </aura:iteration>  
+                                                </aura:if>
+                                            </aura:iteration>
+            
+                                    </lightning:accordion>              
+                        </lightning:accordionSection>
+                    </li>
+                </ul>
+                   <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RA_19_a}" checked="{!v.Valore.Check_RA_19_b}" onchange="{!c.onchangeEvent}" value="19"  aura:id="C19"/></li>
+                    <li>	
+                        
+                    <lightning:accordionSection name="A19" label="19">
+                                <lightning:accordion allowMultipleSectionsOpen="true"
+                                                    
+                                                     activeSectionName="AS19">
+                                    
+                                    <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                        <aura:if isTrue="{!filiale.id=='19'}">
+                                            <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                <ul class="slds-list_horizontal level2B">
+                                                    <li class="li-check">    
+                                                    <input type="checkbox" class="checkbox" id="{!'19-'+indx}" name="{!'19-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                    </li>
+                                                        <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                        </lightning:accordionSection></li>
+                                                </ul>              
+                                            </aura:iteration>  
+                                        </aura:if>
+                                    </aura:iteration>
+        
+
+                                </lightning:accordion>
+                    </lightning:accordionSection>
+                    </li>
+                </ul>
+                   <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RA_20_a}" checked="{!v.Valore.Check_RA_20_b}" onchange="{!c.onchangeEvent}" value="20"  aura:id="C20"/></li>
+                    <li>	
+                        
+                    <lightning:accordionSection name="A20" label="20">
+                                <lightning:accordion allowMultipleSectionsOpen="true"
+                                                     
+                                                     activeSectionName="AS20">
+
+                                    <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                    <aura:if isTrue="{!filiale.id=='20'}">
+                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                            <ul class="slds-list_horizontal level2B">
+                                                <li class="li-check">    
+                                                <input type="checkbox" class="checkbox" id="{!'20-'+indx}" name="{!'20-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                </li>
+                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                    </lightning:accordionSection></li>
+                                            </ul>              
+                                        </aura:iteration>  
+                                    </aura:if>
+                                    </aura:iteration>
+                                                             
+
+
+                                </lightning:accordion>
+                    </lightning:accordionSection>
+                    </li>
+                </ul>
+                </aura:if>
+                <aura:if isTrue="{!v.SectionToView=='RC'}">
+                   <ul class="slds-list_horizontal level1B">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RC_11_a}" checked="{!v.Valore.Check_RC_11_b}"  onchange="{!c.onchangeEvent}" value="11"  aura:id="C11"/></li>
+                      <li>	
+                      <lightning:accordionSection name="A11" label="11">
+                               <lightning:accordion allowMultipleSectionsOpen="true"
+                                                    
+                                                     activeSectionName="{!v.activeSections11}">
+                                    
+                                    <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                        <aura:if isTrue="{!filiale.id=='11'}">
+                                            <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                <ul class="slds-list_horizontal level2B">
+                                                    <li class="li-check">    
+                                                    <input type="checkbox" class="checkbox" id="{!'11-'+indx}" name="{!'11-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                    </li>
+                                                        <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                        </lightning:accordionSection></li>
+                                                </ul>              
+                                            </aura:iteration>  
+                                        </aura:if>
+                                    </aura:iteration>
+                
+
+                                </lightning:accordion>
+                      </lightning:accordionSection>
+                      </li>
+                    </ul>
+                   <ul class="slds-list_horizontal level1B">
+                      <li class="li-check">  
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RC_12_a}" checked="{!v.Valore.Check_RC_12_b}" onchange="{!c.onchangeEvent}" value="12"  aura:id="C12"/></li>
+                          <!-- <lightning:input type="checkbox" disabled="{!v.Checked_RA_6}" checked="{!!v.Checked_RA_6}" /></li> -->
+                      <li>	
+                        <lightning:accordionSection name="A12" label="12">
+                                   <lightning:accordion allowMultipleSectionsOpen="true"
+                                                     
+                                                     activeSectionName="{!v.activeSections12}">
+                                    
+                                        <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                <aura:if isTrue="{!filiale.id=='12'}">
+                                                    <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                        <ul class="slds-list_horizontal level2B">
+                                                            <li class="li-check">    
+                                                            <input type="checkbox" class="checkbox" id="{!'12-'+indx}" name="{!'12-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                            </li>
+                                                                <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                </lightning:accordionSection></li>
+                                                        </ul>              
+                                                    </aura:iteration>  
+                                                </aura:if>
+                                            </aura:iteration>
+                                    </lightning:accordion>
+                     
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                   <ul class="slds-list_horizontal level1B">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RC_13_a}" checked="{!v.Valore.Check_RC_13_b}"  onchange="{!c.onchangeEvent}" value="13"  aura:id="C13"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A13" label="13">
+                                          <lightning:accordion allowMultipleSectionsOpen="true"
+                                                     
+                                                     activeSectionName="{!v.activeSections13}">
+                                    
+                                                     <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                        <aura:if isTrue="{!filiale.id=='13'}">
+                                                            <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                                <ul class="slds-list_horizontal level2B">
+                                                                    <li class="li-check">    
+                                                                    <input type="checkbox" class="checkbox" id="{!'13-'+indx}" name="{!'13-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                    </li>
+                                                                        <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                        </lightning:accordionSection></li>
+                                                                </ul>              
+                                                            </aura:iteration>  
+                                                        </aura:if>
+                                                    </aura:iteration>
+        
+                                        </lightning:accordion>
+                    
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                   <ul class="slds-list_horizontal level1B">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RC_14_a}" checked="{!v.Valore.Check_RC_14_b}"  onchange="{!c.onchangeEvent}" value="14"  aura:id="C14"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A14" label="14">
+                                               <lightning:accordion allowMultipleSectionsOpen="true"
+                                                     
+                                                     activeSectionName="{!v.activeSections14SEC}">
+
+                                                     <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                        <aura:if isTrue="{!filiale.id=='14'}">
+                                                            <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                                <ul class="slds-list_horizontal level2B">
+                                                                    <li class="li-check">    
+                                                                    <input type="checkbox" class="checkbox" id="{!'14-'+indx}" name="{!'14-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                    </li>
+                                                                        <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                        </lightning:accordionSection></li>
+                                                                </ul>              
+                                                            </aura:iteration>  
+                                                        </aura:if>
+                                                    </aura:iteration>
+                                                     
+                            </lightning:accordion>
+                    
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                   <ul class="slds-list_horizontal level1B">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RC_15_a}" checked="{!v.Valore.Check_RC_15_b}" onchange="{!c.onchangeEvent}" value="15"  aura:id="C15"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A15" label="15">
+                                                      <lightning:accordion allowMultipleSectionsOpen="true"
+                                                     
+                                                     activeSectionName="{!v.activeSections15SEC}">
+                                    
+                                                     <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                        <aura:if isTrue="{!filiale.id=='15'}">
+                                                            <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                                <ul class="slds-list_horizontal level2B">
+                                                                    <li class="li-check">    
+                                                                    <input type="checkbox" class="checkbox" id="{!'15-'+indx}" name="{!'15-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                    </li>
+                                                                        <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                        </lightning:accordionSection></li>
+                                                                </ul>              
+                                                            </aura:iteration>  
+                                                        </aura:if>
+                                                    </aura:iteration>
+
+                                    </lightning:accordion>
+                    
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                </aura:if>
+                <aura:if isTrue="{!v.SectionToView=='RE'}">
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RE_10_a}" checked="{!v.Valore.Check_RE_10_b}"  onchange="{!c.onchangeEvent}" value="10"  aura:id="C10"/>
+                      </li>
+                      <li>	
+                        <lightning:accordionSection name="A10" label="10">
+                            <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="AS10">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='10'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'10-'+indx}" name="{!'10-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                     
+
+                            </lightning:accordion>
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RE_6_a}" checked="{!v.Valore.Check_RE_6_b}"  onchange="{!c.onchangeEvent}" value="6"  aura:id="C6"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A6" label="6">
+                            <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="AS6">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='6'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'6-'+indx}" name="{!'6-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                     
+
+                            </lightning:accordion>
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RE_7_a}" checked="{!v.Valore.Check_RE_7_b}"  onchange="{!c.onchangeEvent}" value="7"  aura:id="C7"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A7" label="7">
+                            <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="AS7">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='7'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'7-'+indx}" name="{!'7-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                 
+
+                            </lightning:accordion>
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RE_8_a}" checked="{!v.Valore.Check_RE_8_b}"  onchange="{!c.onchangeEvent}" value="8"  aura:id="C8"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A8" label="8">
+                            <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="AS8">
+                                    
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='8'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'8-'+indx}" name="{!'8-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+
+                                </lightning:accordion>
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RE_9_a}" checked="{!v.Valore.Check_RE_9_b}"  onchange="{!c.onchangeEvent}" value="9"  aura:id="C9"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A9" label="9">
+                             <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="AS9">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='9'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'9-'+indx}" name="{!'9-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+
+                                                
+
+                            </lightning:accordion>
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                </aura:if>
+                <aura:if isTrue="{!v.SectionToView=='RO'}">
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RO_1_a}" checked="{!v.Valore.Check_RO_1_b}"  onchange="{!c.onchangeEvent}" value="1"  aura:id="C1"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A1" label="1">
+                                 <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="{!v.activeSectionsR0_1}">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='1'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'1-'+indx}" name="{!'1-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                 
+                            </lightning:accordion>
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RO_2_a}" checked="{!v.Valore.Check_RO_2_b}"  onchange="{!c.onchangeEvent}" value="2"  aura:id="C2"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A2" label="2">
+                                 <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="{!v.activeSectionsRO2}">
+                                    
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='2'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'2-'+indx}" name="{!'2-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+
+
+                                    </lightning:accordion>
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RO_3_a}" checked="{!v.Valore.Check_RO_3_b}"  onchange="{!c.onchangeEvent}" value="3"  aura:id="C3"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A3" label="3">
+                                 <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="{!v.activeSectionsRE3}">
+
+                                                 
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='3'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'3-'+indx}" name="{!'3-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                
+                            </lightning:accordion>
+                       
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RO_4_a}" checked="{!v.Valore.Check_RO_4_b}"  onchange="{!c.onchangeEvent}" value="4"  aura:id="C4"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A4" label="4">
+                                 <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="{!v.activeSectionsRE4}">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='4'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'4-'+indx}" name="{!'4-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                 
+                            </lightning:accordion>
+                       
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                    <ul class="slds-list_horizontal level1C">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RO_5_a}" checked="{!v.Valore.Check_RO_5_b}"  onchange="{!c.onchangeEvent}" value="5"  aura:id="C5"/></li>
+                      <li>	
+                        <lightning:accordionSection name="A5" label="5">
+                                 <lightning:accordion allowMultipleSectionsOpen="true"
+                                                 
+                                                 activeSectionName="{!v.activeSectionsRE5}">
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='5'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'5-'+indx}" name="{!'5-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                    
+
+
+                                    </lightning:accordion>
+                       
+                        </lightning:accordionSection>
+                      </li>
+                    </ul>
+                </aura:if>
+                <aura:if isTrue="{!v.SectionToView=='RS'}">
+                      <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RS_26_a}" checked="{!v.Valore.Check_RS_26_b}"  onchange="{!c.onchangeEvent}" value="26"  aura:id="C26"/></li>
+                    <li>	
+                    <lightning:accordionSection name="A26" label="26">
+                                  <lightning:accordion allowMultipleSectionsOpen="true"
+                                                
+                                                 activeSectionName="{!v.activeSectionsRS26}">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='26'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'26-'+indx}" name="{!'26-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                 
+                            </lightning:accordion>
+                    </lightning:accordionSection>
+                    </li>
+                </ul>
+                      <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RS_27_a}" checked="{!v.Valore.Check_RS_27_b}"  onchange="{!c.onchangeEvent}" value="27"  aura:id="C27"/></li>
+                    <li>	
+                    <lightning:accordionSection name="A27" label="27">
+                            <lightning:accordion allowMultipleSectionsOpen="true"
+                                                 onsectiontoggle="{! c.handleSectionToggle }"
+                                                 activeSectionName="{!v.activeSectionsRS27}">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='27'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'27-'+indx}" name="{!'27-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                 
+                                    </lightning:accordion>    
+                    </lightning:accordionSection>
+                    </li>
+                </ul>
+                      <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RS_28_a}" checked="{!v.Valore.Check_RS_28_b}"  onchange="{!c.onchangeEvent}" value="28"  aura:id="C28"/></li>
+                    <li>	
+                    <lightning:accordionSection name="A28" label="28">
+                         <lightning:accordion allowMultipleSectionsOpen="true"
+                                                 
+                                                 activeSectionName="{!v.activeSectionsRS28}">
+ 
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='28'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'28-'+indx}" name="{!'28-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                 
+                            </lightning:accordion>     
+                    </lightning:accordionSection>
+                    </li>
+                </ul>
+                      <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">   
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RS_29_a}" checked="{!v.Valore.Check_RS_29_b}"  onchange="{!c.onchangeEvent}" value="29"  aura:id="C29"/></li>
+                    <li>	
+                    <lightning:accordionSection name="A29" label="29">
+                                                  <lightning:accordion allowMultipleSectionsOpen="true"
+                                                 
+                                                 activeSectionName="{!v.activeSectionsRS29}">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='29'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'29-'+indx}" name="{!'29-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                 
+                            </lightning:accordion>    
+                    </lightning:accordionSection>
+                    </li>
+                </ul>
+                      <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RS_30_a}" checked="{!v.Valore.Check_RS_30_b}"  onchange="{!c.onchangeEvent}" value="30"  aura:id="C30"/></li>
+                    <li>	
+                    <lightning:accordionSection name="A30" label="30">
+                            <lightning:accordion allowMultipleSectionsOpen="true"
+                                                 
+                                                 activeSectionName="{!v.activeSectionsRS30}">
+
+                                                 <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                    <aura:if isTrue="{!filiale.id=='30'}">
+                                                        <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                            <ul class="slds-list_horizontal level2B">
+                                                                <li class="li-check">    
+                                                                <input type="checkbox" class="checkbox" id="{!'30-'+indx}" name="{!'30-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                </li>
+                                                                    <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                    </lightning:accordionSection></li>
+                                                            </ul>              
+                                                        </aura:iteration>  
+                                                    </aura:if>
+                                                </aura:iteration>
+                                                 
+                            </lightning:accordion>        
+                    </lightning:accordionSection>
+                    </li>
+                </ul>
+                </aura:if>
+                <aura:if isTrue="{!v.SectionToView=='RT'}">
+                      <ul class="slds-list_horizontal level1B">
+                          <li class="li-check">    
+                              <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RT_21_a}" checked="{!v.Valore.Check_RT_21_b}"  onchange="{!c.onchangeEvent}" value="21"  aura:id="C21" />
+                          </li>
+                          <li>	
+                              <lightning:accordionSection name="A21" label="21">
+                                 <lightning:accordion allowMultipleSectionsOpen="true"
+                                                    
+                                                      activeSectionName="{!v.activeSectionsRT21}">
+
+                                                      <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                        <aura:if isTrue="{!filiale.id=='21'}">
+                                                            <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                                <ul class="slds-list_horizontal level2B">
+                                                                    <li class="li-check">    
+                                                                    <input type="checkbox" class="checkbox" id="{!'21-'+indx}" name="{!'21-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                    </li>
+                                                                        <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                        </lightning:accordionSection></li>
+                                                                </ul>              
+                                                            </aura:iteration>  
+                                                        </aura:if>
+                                                    </aura:iteration>
+                                                          
+                                 </lightning:accordion>        
+                              </lightning:accordionSection>
+                          </li>
+                      </ul>
+                      <ul class="slds-list_horizontal level1B">
+                          <li class="li-check">    
+                              <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RT_22_a}" checked="{!v.Valore.Check_RT_22_b}"  onchange="{!c.onchangeEvent}" value="22"  aura:id="C22"/>
+                          </li>
+                          <li>	
+                              <lightning:accordionSection name="A22" label="22">
+                                    <lightning:accordion allowMultipleSectionsOpen="true"
+                                                        
+                                                         activeSectionName="{!v.activeSectionsRT22}">
+ 
+                                                         <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                            <aura:if isTrue="{!filiale.id=='22'}">
+                                                                <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                                    <ul class="slds-list_horizontal level2B">
+                                                                        <li class="li-check">    
+                                                                        <input type="checkbox" class="checkbox" id="{!'22-'+indx}" name="{!'22-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                        </li>
+                                                                            <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                            </lightning:accordionSection></li>
+                                                                    </ul>              
+                                                                </aura:iteration>  
+                                                            </aura:if>
+                                                        </aura:iteration>
+                                                                 
+                                 </lightning:accordion>        
+                              </lightning:accordionSection>
+                          </li>
+                      </ul>
+                      <ul class="slds-list_horizontal level1B">
+                      <li class="li-check">    
+                          <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RT_23_a}" checked="{!v.Valore.Check_RT_23_b}"  onchange="{!c.onchangeEvent}" value="23"  aura:id="C23"/></li>
+                      <li>	
+                      <lightning:accordionSection name="A23" label="23">
+                                   <lightning:accordion allowMultipleSectionsOpen="true"
+                                                       
+                                                        activeSectionName="{!v.activeSectionsRT23}">
+
+                                                        <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                            <aura:if isTrue="{!filiale.id=='23'}">
+                                                                <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                                    <ul class="slds-list_horizontal level2B">
+                                                                        <li class="li-check">    
+                                                                        <input type="checkbox" class="checkbox" id="{!'23-'+indx}" name="{!'23-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                        </li>
+                                                                            <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                            </lightning:accordionSection></li>
+                                                                    </ul>              
+                                                                </aura:iteration>  
+                                                            </aura:if>
+                                                        </aura:iteration>
+                                                                
+                                 </lightning:accordion>  
+                    </lightning:accordionSection>
+                    </li>
+                </ul>
+                      <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RT_24_a}" checked="{!v.Valore.Check_RT_24_b}"  onchange="{!c.onchangeEvent}" value="24"  aura:id="C24"/></li>
+                    <li>	
+                    <lightning:accordionSection name="A24" label="24">
+                               <lightning:accordion allowMultipleSectionsOpen="true"
+                                                    
+                                                    activeSectionName="{!v.activeSectionsRT23}">
+
+                                                    <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                        <aura:if isTrue="{!filiale.id=='24'}">
+                                                            <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                                <ul class="slds-list_horizontal level2B">
+                                                                    <li class="li-check">    
+                                                                    <input type="checkbox" class="checkbox" id="{!'24-'+indx}" name="{!'24-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                    </li>
+                                                                        <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                        </lightning:accordionSection></li>
+                                                                </ul>              
+                                                            </aura:iteration>  
+                                                        </aura:if>
+                                                    </aura:iteration>
+                                                        
+                                 </lightning:accordion> 
+                    </lightning:accordionSection>
+                    </li>
+                </ul>
+                      <ul class="slds-list_horizontal level1B">
+                    <li class="li-check">    
+                        <lightning:input type="checkbox" disabled="{!!v.Valore.Check_RT_25_a}" checked="{!v.Valore.Check_RT_25_b}"  onchange="{!c.onchangeEvent}" value="25"  aura:id="C25"/></li>
+                    <li>	
+                        <lightning:accordionSection name="A25" label="25">
+                                 <lightning:accordion allowMultipleSectionsOpen="true"
+                                                     
+                                                      activeSectionName="{!v.activeSectionsRT25}">
+
+                                                      <aura:iteration items="{!v.listFiliali}" var="filiale">
+                                                        <aura:if isTrue="{!filiale.id=='25'}">
+                                                            <aura:iteration items="{!filiale.figli}" var="figlio" indexVar="indx">
+                                                                <ul class="slds-list_horizontal level2B">
+                                                                    <li class="li-check">    
+                                                                    <input type="checkbox" class="checkbox" id="{!'25-'+indx}" name="{!'25-'+indx}" onchange="{!c.checkValue}" data-area="{!filiale.id}"  data-filiale="{!indx}" data-value="{!figlio.id}" value="{!figlio.id}"/>
+                                                                    </li>
+                                                                        <li><lightning:accordionSection name="B1" label="{!figlio.name}">
+                                                                        </lightning:accordionSection></li>
+                                                                </ul>              
+                                                            </aura:iteration>  
+                                                        </aura:if>
+                                                    </aura:iteration>
+    
+                                 </lightning:accordion> 
+                        </lightning:accordionSection>
+                    </li>
+                </ul>
+                </aura:if>  
+            </lightning:accordion>
+        </form> 
+    </div>
+    
+</aura:component>

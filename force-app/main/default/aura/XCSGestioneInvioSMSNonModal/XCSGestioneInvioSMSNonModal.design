@@ -1,0 +1,10 @@
+<design:component >
+
+    
+    <design:attribute name="isVisibleAllSMS" label="isVisibleAllSMS"/>
+    <design:attribute name="SMSTemplateName" label="SMSTemplateName" />
+    <design:attribute name="onlyByName" label="onlyByName"/>
+    
+    
+    
+</design:component>

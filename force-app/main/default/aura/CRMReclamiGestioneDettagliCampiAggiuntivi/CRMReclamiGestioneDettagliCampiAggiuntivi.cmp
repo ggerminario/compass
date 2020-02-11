@@ -1,0 +1,213 @@
+<aura:component controller="CRMReclamiInsDettagliCampiAggiuntiviCtrl"
+                implements="force:appHostable,flexipage:availableForAllPageTypes" 
+                access="global" 
+                >
+    
+    <aura:attribute name="initAggiuntivi" type="Boolean"/>
+    <aura:attribute name="tipoDettagliContainerTipo" type="String"/>    
+    <aura:attribute name="campiCase" type="Case"/>
+    <aura:attribute name="trattabile" type="String" default=""/>
+    <aura:attribute name="options" type="List" default="[{'label':'Trattabile','value':'Trattabile'},
+                                                        {'label':'Non Trattabile','value':'Non Trattabile'}]"
+                    />
+    <aura:attribute name="listaTipoProdottoVita" type="List"/>
+    <aura:attribute name="tipoProdottoVita" type="String"/>
+    <aura:attribute name="listaTipoProdottoDanni" type="List"/>
+    <aura:attribute name="tipoProdottoDanni" type="String"/>
+    <aura:attribute name="listaAreaAziendale" type="List"/>
+    <aura:attribute name="areaAziendale" type="String"/>
+    <aura:attribute name="listaTipoProponente" type="List"/>
+    <aura:attribute name="tipoProponente" type="String"/>
+    <aura:attribute name="listaAreaGeograficaProponente" type="List"/>
+    <aura:attribute name="areaGeograficaProponente" type="String"/>
+    <aura:attribute name="listaTipoReclamante" type="List"/>
+    <aura:attribute name="tipoReclamante" type="String"/>
+    
+    <aura:attribute name="output" type="Object"/>
+    <aura:attribute name="isOk" type="Boolean"/>
+    <aura:attribute name="errorMessage" type="String"/>
+    <aura:attribute name="isDisabled" type="Boolean" default="false"/>
+    
+    <aura:handler name="change" value="{!v.trattabile}" action="{!c.handleChangeAgg}"/>
+    <aura:handler name="change" value="{!v.tipoProdottoVita}" action="{!c.handleChangeAgg}"/>
+    <aura:handler name="change" value="{!v.tipoProdottoDanni}" action="{!c.handleChangeAgg}"/>
+    <aura:handler name="change" value="{!v.areaAziendale}" action="{!c.handleChangeAgg}"/>
+    <aura:handler name="change" value="{!v.tipoProponente}" action="{!c.handleChangeAgg}"/>
+    <aura:handler name="change" value="{!v.areaGeograficaProponente}" action="{!c.handleChangeAgg}"/>
+    <aura:handler name="change" value="{!v.tipoReclamante}" action="{!c.handleChangeAgg}"/>
+    
+    <aura:attribute name="tipoProdottoVitaInit" type="String"/> 
+    <aura:attribute name="tipoProdottoDanniInit" type="String"/>
+    <aura:attribute name="tipoProdottoAreaInit" type="String"/> 
+    <aura:attribute name="tipoProponenteInit" type="String"/>
+    <aura:attribute name="tipoReclamanteInit" type="String"/>
+    <aura:attribute name="areaGeograficaProponenteInit" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <aura:method name="salvaReclamoCampiAggiuntivi" action="{!c.salvaReclamoCampiAggiuntivi}" access="PUBLIC"/>
+    
+    
+    <lightning:radioGroup label="Trattabile:"
+                          options="{!v.options}"
+                          value="{!v.trattabile}"
+                          type="radio"
+                          required="true"
+                          disabled="{!v.isDisabled}"
+                          />
+    
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+            <span>
+             
+                <lightning:select label="Tipo Prodotto Vita"
+                                  value="{!v.tipoProdottoVita}"
+                                  required="true"
+                                  disabled="{!v.isDisabled}">
+                    <option value="">- Selezionare - </option>
+                    <option value="1.a">Caso morte</option>
+                    <option value="1.b">Caso vita</option>
+                    <option value="1.c">Miste</option>
+                    <option value="1.d">Index linked</option>
+                    <option value="1.e">Unit linked</option>
+                    <option value="1.f">Multiramo</option>
+                    <option value="1.g">Capitalizzazione</option>
+                    <option value="1.h">Previdenziali</option>
+                    <option value="1.i">Altri</option>
+
+                    
+                    
+                </lightning:select>
+            </span>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <span>
+               
+                <lightning:select label="Tipo Prodotto Danni"
+                                  value="{!v.tipoProdottoDanni}"
+                                  required="true"
+                                  disabled="{!v.isDisabled}">
+                    
+                    <option value="">- Selezionare - </option>
+                    
+                    <option value="2.a">Furto Auto</option>
+                    <option value="2.b">Furto altri casi</option>
+                    <option value="2.c">Infortuni</option>
+                    <option value="2.d">Incendio</option>
+                    <option value="2.e">Malattia</option>
+                    <option value="2.f">Credito/Cauzione</option>
+                    <option value="2.g">R.C. diversi</option>
+                    <option value="2.h">Altri danni ai beni</option>
+                    <option value="2.i">R.C. Auto/Natanti</option>
+                    <option value="2.l">Trasporti</option>
+                    <option value="2.m">Tutela legale</option>
+                    <option value="2.n">Assistenza</option>
+                    <option value="2.o">Altri</option>
+
+                    
+                </lightning:select>
+                
+            </span>
+        </div>
+
+    </div>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-2">
+            <span>
+                <lightning:select label="Area Aziendale"
+                                  value="{!v.areaAziendale}"
+                                  required="true"
+                                  disabled="{!v.isDisabled}"
+                                  >
+                    <option value="">- Selezionare - </option>
+                    <option value="1">Commerciale</option>
+                    <option value="1.a">Agente di assicurazione</option>
+                    <option value="1.b">Broker di assicurazione</option>
+                    <option value="1.c">Produttore diretto</option>
+                    <option value="1.d">Banche, intermediari finanziari, Sim, Poste Italiane S.p.a. Divisione servizi di Bancoposta</option>
+                    <option value="1.e">Call Center/Vendita diretta</option>
+                    <option value="1.f">Altri addetti all’attività di intermediazione</option>
+                    <option value="2">Liquidativa</option>
+                    <option value="2.a">Ispettorato</option>
+                    <option value="2.b">Call Center</option>
+                    <option value="2.c">Direzione</option>
+                    <option value="3">Industriale</option>
+                    <option value="4">Amministrativa</option>
+                    <option value="5">Legale</option>
+                    <option value="5.a">Informativa precontrattuale</option>
+                    <option value="5.b">Contratto</option>
+                    <option value="6">Informatica</option>
+                    <option value="7">Altro</option>
+
+                    
+
+                    
+                </lightning:select>
+            </span>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+             <span>
+                 <lightning:select label="Tipo Proponente"
+                                   value="{!v.tipoProponente}"                                
+                                   required="true"
+                                   disabled="{!v.isDisabled}">
+                     <option value="">- Selezionare - </option>
+                     <option value="1">Diretto interessato</option>
+                     <option value="2">Associazione consumatori/Soggetti portatori di interessi collettivi</option>
+                     <option value="3">Legale</option>
+                     <option value="4">Consulente</option>
+                     <option value="5">Altro</option>
+
+                   
+                 </lightning:select>
+             </span>
+         </div>
+    </div>
+    
+    
+    
+    <div class="slds-grid slds-gutters">	
+       
+        <div class="slds-col slds-size_1-of-2">
+            <span>
+                <lightning:select label="Area Proponente"
+                                  value="{!v.areaGeograficaProponente}"
+                                   required="true"
+                                   disabled="{!v.isDisabled}"
+                                  >
+                    <option value="">- Selezionare -</option>
+                    <option value="1">Nord : Valle d’Aosta, Piemonte, Lombardia, Liguria, Veneto, Trentino, Friuli Venezia Giulia, Emilia Romagna</option>
+                    <option value="2">Centro : Toscana, Lazio, Umbria, Marche, Abruzzo</option>
+                    <option value="3">Sud : Campania, Molise, Puglia, Basilicata, Calabria</option>
+                    <option value="4">Isole : Sicilia, Sardegna</option>
+                    <option value="5">Altro</option>
+
+                   
+                </lightning:select>
+            </span>
+        </div>
+        <div class="slds-col slds-size_1-of-2">
+            <span>
+                <lightning:select label="Tipo Reclamante"
+                                  value="{!v.tipoReclamante}"
+                                   required="true"
+                                   disabled="{!v.isDisabled}"
+                                  >       
+                    <option value="">- Selezionare - </option>
+                    <option value="1">Contraente</option>
+                    <option value="2">Assicurato</option>
+                    <option value="3">Danneggiato</option>
+                    <option value="4">Beneficiario</option>
+                    <option value="5">Associazione consumatori/Soggetti portatori di interessi collettivi</option>
+                    <option value="6">Altro</option>
+
+                    
+                </lightning:select>
+            </span>
+        </div>
+    </div>
+    
+    
+    
+    
+ 
+</aura:component>

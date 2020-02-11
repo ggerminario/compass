@@ -1,0 +1,39 @@
+<!--
+  @Component Name     : PV2790EstinzioneChiusuraContoGestione.cmp
+  @Description        : 
+  @Author             : Raffaele Prudenzano
+  @Group              : 
+  @Last Modified By   : Raffaele Prudenzano
+  @Last Modified On   : 25/11/2019,  16:37:13
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    2019-11-25 16:37:13   Raffaele Prudenzano     Initial Version
+-->
+
+<aura:component controller="PV2790EstinzioneChiusuraContoGestione" access="global">
+
+  <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+  <aura:attribute name="parent" type="Aura.Component" required="true"
+    description="componente padre per accedere ai metodi comuni" />
+  <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre" />
+
+  <!-- da parent -->
+  <aura:attribute name="theCase" type="Case" />
+  <aura:attribute name="dispositionSelezionato" type="XCS_Disposition__c" />
+  <aura:attribute name='note' type='String' />
+  <aura:attribute name="allegati" type="Attachment[]" />
+  <aura:attribute name="newStatus" type="String" />
+
+  <aura:attribute name="dataEstinzione" type="String" />
+
+
+  <div class="slds-p-vertical_small my-inline">
+    <p class="my-red"><strong>ATTENZIONE!!!</strong></p>
+    <p>Evadibile entro: {!v.dataEstinzione}</p>
+  </div>
+
+
+
+</aura:component>

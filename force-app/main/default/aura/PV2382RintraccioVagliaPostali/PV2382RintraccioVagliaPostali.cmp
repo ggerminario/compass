@@ -1,0 +1,106 @@
+<!--
+  @File Name          : PV2382RintraccioVagliaPostali.cmp
+  @Description        : 
+  @Author             : Cristiano
+  @Group              : 
+  @Last Modified By   : Cristiano
+  @Last Modified On   : 17/1/2020, 12:40:39
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    8/1/2020   Cristiano     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" controller="PV2382RintraccioVagliaPosteItalianeIns">
+    TO DO Rintraccio Vaglia Poste Italiane
+    <aura:attribute name="importo" type="String" default=""/>
+    <aura:attribute name="dataValuta" type="Date" default="" />
+    <aura:attribute name="provincia" type="String" default=""/>
+    <aura:attribute name="ufficio" type="String" default=""/>
+    <aura:attribute name="codiceVaglia" type="String" default=""/>
+    <aura:attribute name="nome" type="String" default=""/>
+    <aura:attribute name="indirizzoMitt" type="String" default=""/>
+    <aura:attribute name="CFPartitaIva" type="String" default=""/>
+    <aura:attribute name="indirizzoBen" type="String" default=""/>
+    <aura:attribute name="comunicazMitt" type="String" default=""/>
+    <aura:attribute name="today" type="Date" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <lightning:card>
+        <lightning:layout  multipleRows="true" horizontalAlign="end">
+                <lightning:layoutItem size="12" padding="horizontal-small">
+                    Emissione
+                </lightning:layoutItem>
+                <br/>
+                <lightning:layoutItem size="12" padding="horizontal-small">
+                    <lightning:input type="String" name="nome"  label="Cognome o Rag.Soc/Nome Mittente" value="{!v.nome}"/>
+                </lightning:layoutItem>    
+                <lightning:layoutItem size="12" padding="horizontal-small">
+                    <lightning:input type="String" name="indirizzoMitt"  label="Indirizzo Mittente" value="{!v.indirizzoMitt}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" padding="horizontal-small">
+                    <lightning:input type="String" name="CFPartitaIva"  label="Codice Fiscale o Partita Iva" value="{!v.CFPartitaIva}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6" padding="horizontal-small">
+                    <lightning:input type="string" name="COMPASS S.P.A" label="Cognome o Rag.Soc/Nome Beneficiario" disabled="true" value="COMPASS S.P.A"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6" padding="horizontal-small">
+                    <lightning:input type="String" name="indirizzoBen"  label="Indirizzo Beneficiario" value="{!v.indirizzoBen}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" padding="horizontal-small">
+                    <lightning:input type="String" name="comMitt"  label="Comunicazione dal Mittente" value="{!v.comunicazMitt}"/>
+                </lightning:layoutItem>
+                <!--
+                <lightning:layoutItem size="2" padding="horizontal-small" >
+                    <br/>
+                    <div class="slds-p-left_medium slds-p-vertical_small" >
+                        EUYN
+                    </div>
+                    
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="10" padding="horizontal-small">
+                    <lightning:input type="string" maxlength="30" name="codVaglia" formatter="string" label="Codice Vaglia" value="{!v.codiceVaglia}"/>
+                </lightning:layoutItem>
+            -->
+            <lightning:layoutItem size="4" padding="horizontal-small">
+                <lightning:input type="number" name="Importo" formatter="currency" currencyCode="EUR" label="Importo" value="{!v.importo}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" padding="horizontal-small" >
+                <lightning:input type="string" maxlength="2" name="provincia" formatter="string" label="Provincia" value="{!v.provincia}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="2" padding="horizontal-small" >
+                <lightning:input type="string" maxlength="3" name="Ufficio" formatter="string" label="Ufficio" value="{!v.ufficio}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="1" padding="horizontal-small" >
+                <br/>
+                <div class="slds-p-vertical_small" >
+                    EUYN
+                </div>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="3" padding="horizontal-small">
+                <lightning:input type="string" maxlength="30" name="codVaglia" formatter="string" label="Codice Vaglia" value="{!v.codiceVaglia}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem size="12" padding="horizontal-small" >
+                <lightning:input type="date" name="DataValuta" formatter="date" label="Data Valuta" value="{!v.dataValuta}" max="{!v.today}"/>
+            </lightning:layoutItem>
+
+        </lightning:layout>
+        <br/>
+        <lightning:layoutItem size="12">
+            <div class="slds-text-color_error slds-text-title_bold">
+                <table class="slds-table">
+                    <tbody>
+                        <tr class="slds-hint-parent">
+                            <td colspan="3" class="slds-cell-buffer_left">
+                                <p class="slds-p-horizontal_small slds-text-color_error slds-text-title_bold ">
+                                <center>
+                                    Allegare un singolo file contenente la scansione del bollettino mancante.
+                                </center>
+                                </p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </lightning:layoutItem>
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,28 @@
+<!--
+  @File Name          : PV3824CpayCredenziali.cmp
+  @Description        : 
+  @Author             : Raffaele Prudenzano
+  @Group              : 
+  @Last Modified By   : Raffaele Prudenzano
+  @Last Modified On   : 24/1/2020, 11:36:47
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    17/12/2019   Raffaele Prudenzano     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" access="global" controller="PV3824CpayCredenziali">
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <div class="slds-p-top_medium slds-grid slds-gutters">
+        <div class="slds-col">
+            <p><strong>Recapiti cliente</strong></p>
+            <p><strong>Cellulare</strong></p>
+            <p><strong>Mail</strong></p>
+        </div>
+        <div class="slds-col">
+            <br />
+            <p>{!v.PVForm.cliente.telCellulare}</p>
+            <p>{!v.PVForm.cliente.email}</p>
+        </div>
+    </div>
+
+</aura:component>

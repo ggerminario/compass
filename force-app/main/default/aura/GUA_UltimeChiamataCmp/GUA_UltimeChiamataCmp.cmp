@@ -1,0 +1,135 @@
+<!--
+  @Component Name : GUA_UltimeChiamataCmp.cmp
+  @Description        : 
+  @Author             : BADJI SANA
+  ==============================================================================
+  Ver         Date                 Author      		      Modification
+  ==============================================================================
+  1.0       17/10/2019              SANA BADJI              Initial Version
+-->
+
+<aura:component controller="GUA_UltimeChiamataCnt" implements="flexipage:availableForAllPageTypes,force:appHostable,flexipage:availableForRecordHome,force:hasRecordId,force:hasSObjectName" access="global">
+    <aura:attribute type="String" name="accountId" default="" />
+    <aura:attribute type="Object" name="case" default="" />
+    <aura:attribute type="String" name="data" default="Data/Ora Chiamata: " />
+    <aura:attribute type="String" name="coda" default=" Coda: " />
+    <aura:attribute type="String" name="op" default=" - Gestita da " />
+    <aura:attribute type="String" name="utenza" default=" Utenza: " />
+    <aura:attribute type="String" name="note" default=" Note: " />
+    <aura:attribute type="String" name="accountName" default="" />
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    <aura:attribute name="activeSections" type="String" default="" />
+    <aura:attribute name="activeSectionsMessage" type="String" default="" />
+    <aura:attribute name="operatore" type="Object" default="" />
+    <aura:attribute name="isOpen" type="Boolean" default="false" />
+    <aura:attribute name="UltimeChimataDealerList" type="TASK" default="{ 'sobjectType':
+                                                                        'TASK',
+                                                                        'CallObject': '',
+                                                                        'CallType': '',
+                                                                        'Status': '',
+                                                                        'ActivityDate': '',
+                                                                    'CallDisposition': ''}" />
+
+    <aura:handler name="change" value="{!v.accountId}" action="{!c.init}"/>                                                                
+    <!-- create 2 aura handler with waiting and donewaiting events-->
+    <!--<aura:handler event="aura:waiting" action="{!c.showSpinner}" />
+    <aura:handler event="aura:doneWaiting" action="{!c.hideSpinner}" />-->
+    <!--create a component attributs -->
+    <aura:attribute name="Spinner" type="boolean" default="false" />
+
+    <!--loading spinner start... style=Brand Medium (blue dots)-->
+    <aura:if isTrue="{!v.Spinner}">
+        <div aura:id="spinnerId" class="slds-spinner_container">
+            <div class="slds-spinner--brand  slds-spinner slds-spinner--large slds-is-relative" role="alert">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div>
+    </aura:if>
+    <!-- Loading spinner end-->
+
+    <aura:if isTrue="{!not(empty(v.UltimeChimataDealerList))}">
+
+        
+
+        <lightning:accordion>
+            <aura:iteration items="{!v.UltimeChimataDealerList}" var="UltimeChimata">
+                
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col slds-size_1-of-10">
+                        Dettagli
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-4">
+                        <lightning:accordionSection name="A" label="{! UltimeChimata.Sotto_Categoria__c + ' - ' + v.data + UltimeChimata.Tasks[0].CreatedDate  + v.op +UltimeChimata.Tasks[0].CreatedBy.Name }">
+                            <aura:set attribute="body">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="color_black">Esiti Selezionati</th>
+                                            <!--<th class="color_black">Categoria</th>
+                                            <th class="color_black">Stato</th>
+                                            <th class="color_black">Esito</th>
+                                            <th class="color_black">Operatore</th>-->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <aura:iteration items="{!UltimeChimata.Tasks}" var="UltimeChimataDealer">
+                                        <tr>
+                                            <td>
+                                                {!UltimeChimataDealer.Disposition__r.Name}
+                                            </td>
+                                            <!--<aura:if isTrue="{!UltimeChimataDealer.What.RecordType.DeveloperName == 'GUA_Inbound'}">
+                                                <td>Affari Inbound</td>
+                                                <td>{!UltimeChimataDealer.Status}</td>
+                                                <td> CTI Inbound / Affari@Phone / {!UltimeChimataDealer.Disposition__r.Name}</td>
+                                                <aura:set attribute="else">
+                                                    <td>Affari Outbound</td>
+                                                    <td>{!UltimeChimataDealer.Status}</td>
+                                                    <td>CTI Outbound / Affari@Phone / {!UltimeChimataDealer.Disposition__r.Name}</td>
+                                                </aura:set>
+                                            </aura:if>-->
+                                            <!--<td>{!UltimeChimataDealer.CreatedBy.Alias} </td>-->
+                                        </tr>
+                                        </aura:iteration>
+                                    </tbody>
+                                </table>
+                                
+                                <br/>
+                                <aura:if isTrue="{!UltimeChimata.Tasks[0].Note__c!=null}">
+                                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                    <thead>
+                                        <tr class="slds-line-height_reset">
+                                            <th class="color_black">Note</th>
+                                            
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <tr>
+                                            <td>
+                                                {!UltimeChimata.Tasks[0].Note__c}
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </aura:if>
+                            </aura:set>
+                        </lightning:accordionSection>
+                    </div>
+                    
+                
+                </div>
+            </aura:iteration>
+        </lightning:accordion>
+        <aura:set attribute="else">
+            <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+                <h2> nessuna ultima chiamata trovata</h2>
+            </div>
+        </aura:set>
+    </aura:if>
+
+</aura:component>

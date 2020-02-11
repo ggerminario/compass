@@ -1,0 +1,334 @@
+<aura:component controller="pianificaSlotController" implements="flexipage:availableForAllPageTypes">
+    
+    <!--aura:registerEvent name="appEvent" type="c:GestioneFilialeEvent"/-->    
+    
+    <aura:attribute name="ImpFiliale" type="Boolean" default="false"/>
+    <aura:attribute name="branchOCSExternalId" type="Object" />
+    <aura:attribute name="branch" type="Object" />
+    <aura:attribute name="branchSel" type="String" />
+    
+    <aura:attribute name="targhetDate" type="Date"/>
+    <aura:attribute name="today" type="Date"/>
+    
+    <aura:attribute name="initWrapper" type="Object"/>
+    <aura:attribute name="regionList" type="List" default="[]"/>
+    <aura:attribute name="areaList" type="List" default="[]"/>
+    
+    <aura:attribute name="regioneSelected" type="String"/>
+    <aura:attribute name="areaSelected" type="String"/>
+    
+    <aura:attribute name="filialistiPerFiliale" type="Map"/>
+    <aura:attribute name="weekDays" type="Object[]"/>
+    <aura:attribute name="slotList" type="SFA_Slot__c[]"/>
+    <aura:attribute name="allZoneSlotList" type="SFA_Slot__c[]"/>
+    <aura:attribute name="draftSlotList" type="SFA_Slot__c[]"/>
+    <aura:attribute name="assenzeProlungateList" type="SFA_Assenza_Prolungata__c[]"/>
+    <aura:attribute name="user" type="User"/>
+    <aura:attribute name="users" type="User[]"/>
+    <aura:attribute name="branches" type="Account[]"/>
+    <aura:attribute name="zonePerFiliale" type="Map"/>
+    <aura:attribute name="TypeSelectOptions" type="Map"/>
+    <aura:attribute name="trashSlotList" type="SFA_Slot__c[]" default="[]"/>
+    <aura:attribute name="unsavedAdd" type="Integer" default="0"/>
+    <aura:attribute name="mapOfAppointmentsPerDesk" type="Map"/>
+    
+    <!--CR Modelli Pianificazione -->
+    <aura:attribute name="modelliEsistenti" type="List" default=""/>
+    <aura:attribute name="showModal" type="Boolean" default="false"/>
+    
+     <aura:attribute name="weekDaysMod" type="Object[]"/>
+    <aura:attribute name="selectedTab" type="String" default="new"/> 
+    
+    <aura:attribute name="ImpFilialeMod" type="Boolean" default="false"/>
+    <aura:attribute name="branchOCSExternalIdMod" type="Object" />
+    <aura:attribute name="branchMod" type="Object" />
+    <aura:attribute name="branchSelMod" type="String" />
+    
+    <aura:attribute name="targhetDateMod" type="Date"/>
+    <aura:attribute name="todayMod" type="Date"/>
+    
+    <aura:attribute name="initWrapperMod" type="Object"/>
+    <aura:attribute name="regionListMod" type="List" default="[]"/>
+    <aura:attribute name="areaListMod" type="List" default="[]"/>
+    
+    <aura:attribute name="regioneSelectedMod" type="String"/>
+    <aura:attribute name="areaSelectedMod" type="String"/>
+    
+    <aura:attribute name="filialistiPerFilialeMod" type="Map"/>
+    <aura:attribute name="slotListMod" type="SFA_Slot__c[]"/>
+    <aura:attribute name="allZoneSlotListMod" type="SFA_Slot__c[]"/>
+    <aura:attribute name="draftSlotListMod" type="SFA_Slot__c[]"/>
+    <aura:attribute name="assenzeProlungateListMod" type="SFA_Assenza_Prolungata__c[]"/>
+    <aura:attribute name="userMod" type="User"/>
+    <aura:attribute name="usersMod" type="User[]"/>
+    <aura:attribute name="branchesMod" type="Account[]"/>
+    <aura:attribute name="zonePerFilialeMod" type="Map"/>
+    <aura:attribute name="TypeSelectOptionsMod" type="Map"/>
+    <aura:attribute name="trashSlotListMod" type="SFA_Slot__c[]" default="[]"/>
+    <aura:attribute name="unsavedAddMod" type="Integer" default="0"/>
+    <aura:attribute name="mapOfAppointmentsPerDeskMod" type="Map"/>
+    <aura:attribute name="filialeSelectedMod" type="Account"/>
+    <aura:attribute name="selezioneModello" type="String" default=""/>
+    <aura:attribute name="descrizioneMod" type="String" default=""/>
+    <aura:attribute name="nomeMod" type="String" default=""/>
+    <aura:attribute name="settimana" type="Object"/>
+    <aura:attribute name="numSettimana" type="Integer" default="1"/>
+    <aura:attribute name="slotModello" type="SFA_Slot__c[]" default="[]"/>
+    
+    <!-- Fine CR Modelli Pianificazione -->
+    
+    <aura:handler name="init" action="{!c.init}" value="{!this}" />
+    <aura:handler event="ltng:sendMessage" action="{!c.sendMessageHandler}"/> 
+    
+    
+    <!-- CR Modello Inizio-->
+    <aura:if isTrue="{!v.showModal}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_large" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                        
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Applica modello</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                   
+                    
+                        
+                <lightning:layoutItem size="12" padding="around-small">
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-3 slds-grid_align-center">
+                            <span>
+                                <lightning:input label="Nome modello" value="{!v.nomeMod}" readonly="true"/>
+                            </span>
+                        </div>
+                        <div class="slds-col slds-size_1-of-3 ">
+                          
+                        </div>
+                        
+                        <div class="slds-col slds-size_1-of-3" >
+                            <span>
+                                <lightning:select label="Per quante settimane vuoi applicare il modello?" value="{!v.numSettimana}" onchange="{!c.onchangeSettimana}">
+                                    <option value="1">1 Settimana</option>
+                                    <option value="2">2 Settimane</option>
+                                    <option value="3">3 Settimane</option>
+                                    <option value="4">4 Settimane</option>
+                                </lightning:select>
+                                <br/>
+                                <p>
+                                    Da <span style="font-weight:bold"> <lightning:formattedDateTime   value="{!v.settimana.inizio}" month="short" day="2-digit" weekday="long"/> </span>
+                                    Al <span style="font-weight:bold"> <lightning:formattedDateTime  value="{!v.settimana.fine}"  month="short" day="2-digit" weekday="long"/> </span>
+                                </p>
+                                   
+                            </span>
+                        </div>
+                    </div>
+                    <div class="slds-grid">
+                        <div class="slds-col slds-size_1-of-2 slds-grid_align-center">
+                            <span>
+                                <lightning:input label="Descrizione" readonly="true" value="{!v.descrizioneMod}"  />
+                            </span>
+                        </div>
+                        
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <lightning:card title="Capo Filiale">
+                        <lightning:layout>
+                            <lightning:layoutItem size="12" padding="around-small">
+                                <c:calendarBoxContainerComponent 
+                                                                 weekDays="{!v.weekDaysMod}"
+                                                                 today="{!v.today}"
+                                                                 slotList="{!v.slotListMod}" 
+                                                                 draftSlotList="{!v.draftSlotListMod}"
+                                                                 user="{!v.user}" 
+                                                                 branches="{!v.branches}"
+                                                                 zonePerFiliale="{!v.zonePerFiliale}"
+                                                                 TypeSelectOptions="{!v.TypeSelectOptions}"
+                                                                 unsavedAdd="{!v.unsavedAdd}"
+                                                                 assenzeProlungateList="{!v.assenzeProlungateList}"
+                                                                 mapOfAppointmentsPerDesk="{!v.mapOfAppointmentsPerDesk}"
+                                                                 isModelloPianificazione="{!true}"
+                                                                 trashSlotList="{!v.trashSlotListMod}"
+                                                                 isApplicaModello="{!true}"
+                                                                 />
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:card>
+                </lightning:layoutItem>
+                
+                <lightning:layoutItem size="12" padding="around-small">
+                    <lightning:card class="" title="Addetto Filiale">
+                        <lightning:layout multipleRows="true">
+                            <aura:if isTrue = "{!v.usersMod}">
+                                <aura:iteration items="{!v.usersMod}" var="user" indexVar="index">
+                                    <lightning:layoutItem size="12" class="borderBottomSlots">
+                                        <c:calendarBoxContainerComponent aura:id="CalendarBoxContainerFilialistiId"
+                                                                         weekDays="{!v.weekDaysMod}" 
+                                                                         slotList="{!v.slotListMod}"
+                                                                         draftSlotList="{!v.draftSlotListMod}" 
+                                                                         user="{!user}" 
+                                                                         isModelloPianificazione="{!true}"
+                                                                         today="{!v.todayMod}"
+                                                                         trashSlotList="{!v.trashSlotListMod}"
+                                                                         branches="{!v.branches}"
+                                                                         zonePerFiliale="{!v.zonePerFiliale}"
+                                                                         TypeSelectOptions="{!v.TypeSelectOptions}"
+                                                                         unsavedAdd="{!v.unsavedAdd}"
+                                                                         assenzeProlungateList="{!v.assenzeProlungateList}"
+                                                                         mapOfAppointmentsPerDesk="{!v.mapOfAppointmentsPerDesk}"
+                                                                         isApplicaModello="{!true}"
+                                                                         />
+                                    </lightning:layoutItem>
+                                </aura:iteration>
+                            </aura:if>
+                        </lightning:layout>
+                    </lightning:card>
+                </lightning:layoutItem>
+           
+                    
+                    
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.closeModal}">Annulla</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.applicaModelloDefinitivamente}">Applica Modello</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    <!-- CR Modello Fine-->
+    
+    
+    <lightning:card title="Pianifica Slot">
+        <c:SpinnerComponent aura:id="spinnerComponent"/>
+        <aura:set attribute="actions">
+            <aura:if isTrue="{!v.unsavedAdd>0 || !empty(v.trashSlotList)}">
+                <lightning:icon class="slds-var-p-right_small" iconName="utility:warning" title="Attenzione: modifiche non salvate" alternativeText="Warning!" variant="warning"/>
+            </aura:if>
+            <lightning:buttonIcon iconName="utility:refresh" onclick="{! c.init }" alternativeText="Refresh" />
+            <lightning:button label="Cancella" title="Cancella" onclick="{!c.cancelFun}"/>
+            <lightning:button variant="brand" label="Salva" title="Salva" onclick="{!c.saveSlotList}"/>
+        </aura:set>
+        <lightning:layout verticalAlign="center" multipleRows="true">
+            <lightning:layoutItem size="12">
+                <lightning:layout horizontalAlign="center">  
+                    <lightning:layoutItem size="5" class="slds-var-p-around_x-small">
+                        <lightning:layoutItem size="3" class="slds-p-around_x-small">     
+                            <lightning:select name="regione" value="{!v.regioneSelected}" label="Regione" onchange="{!c.onChangeRegionSelect}">
+                                
+                                <aura:iteration items="{!v.regionList}" var="regione">
+                                    <option text="{!regione}" value="{!regione}" selected="{!v.regioneSelected == regione}"/>
+                                </aura:iteration>  
+                            </lightning:select>
+                            <lightning:select name="area" value="{!v.areaSelected}" label="Area" onchange="{!c.onChangeAreaSelect}">
+                                
+                                <aura:iteration items="{!v.areaList}" var="area">
+                                    <option text="{!area}" value="{!area}" selected="{!v.areaSelected == area}"/>
+                                </aura:iteration>  
+                            </lightning:select>
+                        </lightning:layoutItem>
+                        
+                        <lightning:select name="utr" aura:id="utrId" value="{!v.branchOCSExternalId}"  label="Filiale" onchange="{!c.onChangeBranchSelect}" disabled="{!v.unsavedAdd>0 || !empty(v.trashSlotList)}">
+                            
+                            <aura:iteration items="{!v.branches}" var="branch">
+                                <option text="{!branch.Name + ' ('+branch.typeLabel+')'}" value="{!branch.OCS_External_Id__c}"  selected="{!branch.OCS_External_Id__c==v.branch.OCS_External_Id__c}"/>
+                            </aura:iteration>  
+                        </lightning:select>
+                        
+                        <lightning:layout verticalAlign="center" horizontalAlign="center" multipleRows="false">
+                            <lightning:layoutItem size="8">
+                                <lightning:input type="date" name="data" label="Data" value="{!v.targhetDate}" disabled="{!v.unsavedAdd>0 || !empty(v.trashSlotList)}"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="4">
+                                <lightning:button variant="brand" label="Cerca" title="Cerca" class="slds-m-left_x-small slds-m-top_large" onclick="{!c.submitNewTargetDate}" disabled="{!v.unsavedAdd>0 || !empty(v.trashSlotList)}"/>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="5" class="slds-var-p-around_x-small">
+                        <!--CR inizio-->
+                     
+                            <lightning:select label="Scegli il modello"  value="{!v.selezioneModello}">
+                                <option value="">Seleziona</option>
+                                <aura:iteration items="{!v.modelliEsistenti}" var="item">
+                                    <option value="{!item.Id}">{!item.Name}</option>
+                                </aura:iteration>              
+                            </lightning:select>
+                            <lightning:layout verticalAlign="center" horizontalAlign="center" multipleRows="false">
+                                
+                                <lightning:layoutItem size="12">   
+                                    <lightning:layout verticalAlign="center" horizontalAlign="center"> 
+                                        <lightning:button variant="brand" label="Applica Modello" class="slds-m-left_x-small slds-m-top_large" onclick="{!c.applicaModello}"/>
+                                    </lightning:layout>
+                                </lightning:layoutItem>
+                            </lightning:layout>
+
+                         <!--CR fine-->
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="2">
+                        <aura:if isTrue="false">
+                            <lightning:layout horizontalAlign="center"> 
+                                <lightning:button variant="brand" label="Modifica Pianif."/>
+                            </lightning:layout>
+                        </aura:if>
+                    </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:layoutItem>
+            
+            <aura:if isTrue="{!v.ImpFiliale}">
+                <lightning:layoutItem size="12">
+                    <lightning:card class="" title="Capo Filiale">
+                        <lightning:layout>
+                            <lightning:layoutItem size="12" padding="around-small">
+                                <c:calendarBoxContainerComponent aura:id="CalendarBoxContainerManagerId"
+                                                                 weekDays="{!v.weekDays}" 
+                                                                 slotList="{!v.slotList}" 
+                                                                 draftSlotList="{!v.draftSlotList}"
+                                                                 user="{!v.user}" 
+                                                                 branches="{!v.branches}"
+                                                                 zonePerFiliale="{!v.zonePerFiliale}"
+                                                                 TypeSelectOptions="{!v.TypeSelectOptions}"
+                                                                 trashSlotList="{!v.trashSlotList}"
+                                                                 unsavedAdd="{!v.unsavedAdd}"
+                                                                 today="{!v.today}"
+                                                                 assenzeProlungateList="{!v.assenzeProlungateList}"
+                                                                 mapOfAppointmentsPerDesk="{!v.mapOfAppointmentsPerDesk}"
+                                                                 />
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:card>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" padding="around-small">
+                    <lightning:card class="" title="Addetto Filiale">
+                        <lightning:layout multipleRows="true">
+                            <aura:iteration items="{!v.users}" var="user" indexVar="index">
+                                <lightning:layoutItem size="12" class="borderBottomSlots">
+                                    <c:calendarBoxContainerComponent aura:id="CalendarBoxContainerFilialistiId"
+                                                                     weekDays="{!v.weekDays}" 
+                                                                     slotList="{!v.slotList}"
+                                                                     draftSlotList="{!v.draftSlotList}" 
+                                                                     user="{!user}" 
+                                                                     branches="{!v.branches}"
+                                                                     branch="{!v.branch}"
+                                                                     zonePerFiliale="{!v.zonePerFiliale}"
+                                                                     TypeSelectOptions="{!v.TypeSelectOptions}"
+                                                                     showHeader="{!index==0}"
+                                                                     isFilialista="true"
+                                                                     trashSlotList="{!v.trashSlotList}"
+                                                                     unsavedAdd="{!v.unsavedAdd}"
+                                                                     today="{!v.today}"
+                                                                     assenzeProlungateList="{!v.assenzeProlungateList}"
+                                                                     mapOfAppointmentsPerDesk="{!v.mapOfAppointmentsPerDesk}"
+                                                                     />
+                                </lightning:layoutItem>
+                            </aura:iteration>
+                        </lightning:layout>
+                    </lightning:card>
+                </lightning:layoutItem>
+            </aura:if>
+            
+        </lightning:layout> 
+    </lightning:card>
+    
+</aura:component>

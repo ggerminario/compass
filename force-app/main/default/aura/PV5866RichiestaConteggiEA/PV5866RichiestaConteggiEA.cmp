@@ -1,0 +1,64 @@
+<!--
+  @File Name          : PV5866RichiestaConteggiEA.cmp
+  @Description        : 
+  @Author             : Federica Forte
+  @Group              : 
+  @Last Modified By   : Raffaele Prudenzano
+  @Last Modified On   : 23/1/2020, 15:12:00
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    19/12/2019   Federica Forte     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV5866RichiestaConteggiEA'>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="selectedData" type="Date" />
+    
+    <aura:attribute name="listaMod" type="List" default="[{'label': 'posta prioritaria:', 'value': 'posta prioritaria'},
+        {'label': 'email:', 'value': 'email'},
+        {'label': 'fax:', 'value': 'fax'}]" />
+    
+    <aura:attribute name="selectedMod" type="List" />
+
+    <aura:attribute name="yesNo" type="List" default="[{'label': 'No', 'value': 'No'},
+        {'label': 'Si', 'value': 'Si'}]" />
+
+    <aura:attribute name="selectedOfferte" type="String" default="No" />
+
+    <aura:attribute name="filiale" type="List" default="[{'label': 'No', 'value': ''},
+        {'label': 'Si', 'value': 'Filiale'}]" />
+
+    <aura:attribute name="selectedNotifica" type="String" default="" />
+
+    <p class="my-space"><div class="my-text">Data ricezione richiesta conteggio:</div>
+        <lightning:input type="date" name="data" value="{!v.selectedData}"/>
+    </p>
+
+    <p class="my-space"><div class="my-text">Modalità ricezione conteggio:</div>
+        <lightning:checkboxGroup name="modalita" options="{!v.listaMod}" value="{!v.selectedMod}" />
+    </p>
+
+    <p class="my-space"><div class="my-text">Il cliente ha richiesto il depennamento dalle offerte promozionali?</div>
+        <lightning:radioGroup name="offerte" options="{!v.yesNo}" value="{!v.selectedOfferte}" />
+    </p>
+
+    <aura:if isTrue="{!v.selectedOfferte=='Si'}">
+        <div class="slds-text-color_error">
+            <p class="my-space">Inserire manualmente una richiesta di ‘Cancellazione da offerte promozionali’</p>
+        </div>
+    </aura:if>
+
+    <!-- opzione visibile solo a utente di filiale -->
+    <aura:if isTrue="{!v.PVForm.userData.user.Branch_Or_Office__c=='FIL'}">
+        <p class="my-space"><div class="my-text">Vuoi notifica in filiale alla chiusura richiesta?</div>
+            <lightning:radioGroup name="notifica" options="{!v.filiale}" value="{!v.selectedNotifica}" />
+        </p>
+    </aura:if>
+
+    <div class="slds-text-color_error">
+        <p class="my-space">Verificare l' indirizzo di residenza (o domicilio, se presente) presso il quale il cliente richiede l'invio del conteggio; 
+            qualora fosse diverso, provvedere ad effettuare la variazione</p>
+    </div>
+
+</aura:component>

@@ -1,0 +1,45 @@
+.THIS .slds-accordion__summary-action-icon{
+    display:none;
+}
+.THIS .slds-accordion__section{
+    padding:0;
+}
+
+/*
+.THIS .contenitore{
+   background-color:#CFCFCF;
+}*
+.THIS .li-check{
+    margin-top: 0.9rem;
+}
+/*
+.THIS .level1{
+    background-color:#CFCFCF;
+}
+.THIS .level2{
+    background-color:#ECECEC;
+}
+.THIS .level3{
+    background-color:#E4E4E4;
+}*
+
+.THIS li{
+    margin-left:3px;
+}
+.THIS ul{
+    width:100%
+}
+.THIS .grande{
+    width: 100%;
+}
+.THIS .field{
+    border-radius: 15px;
+    border: 1px solid #1E90FF; 
+    width: 180px;
+    height: 18px;
+    text-align:center;
+}
+.THIS input.uiInput--checkbox[type=checkbox]:checked{
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACWSURBVDhPYxgygAmIg6E0ySAfiF8DMTuYRwJQBOLPQBwB5pEAGIF4DxBvBPNIBMlA/A6IpcA8EoA0EH8A4kQwDwtQBeKTQKwJ5qGCTUC8E4hBTscKmIF4DhCDnOYIEoCCKCAGBZIcmEcAVAHxDyCOA2IxIAZFSzYQEw0igfg7EN8C4oNAjNO5uIAtEIPCABQWgw4wMAAAhEoUecDgJT4AAAAASUVORK5CYII=");
+
+}*/

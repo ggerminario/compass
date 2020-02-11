@@ -1,0 +1,43 @@
+<!--
+  @File Name          : PV3700RispedizioneBollettiniPostali.cmp
+  @Description        : 
+  @Author             : Matteo Gobbo
+  @Group              : 
+  @Last Modified By   : Marco Cutolo
+  @Last Modified On   : 10/12/2019, 16:08:48
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    9/12/2019   Matteo Gobbo     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" access='global'  controller="PV3700RispedizioneBollettiniPostaliCnt">
+    <aura:attribute name="isBp" type="Boolean" default="false" />
+    <aura:attribute name="dataUltimoInvio" type="String" default=""/>
+ 
+   
+        <aura:if isTrue="{!v.isBp}">
+            <lightning:card class='slds-form_stacked' title="Data ultimo invio">
+                <p class="slds-p-horizontal_large" style="font-size: 11px">
+                    {!v.messaggio}
+                </p>
+                <p class="slds-p-horizontal_large" >
+                    {!v.dataUltimoInvio}
+                </p>
+            </lightning:card>
+
+            <lightning:card class='slds-form_stacked' title="Indirizzo">
+                <lightning:layout>
+                <lightning:layoutItem size="6">
+                    <p class="slds-p-horizontal_large">
+                        <!--<lightning:formattedAddress street="{!v.PVForm.cliente.indirizzo}" city="{!v.PVForm.cliente.localita}" postalCode="{!v.PVForm.cliente.cap}" province="{!v.PVForm.cliente.provincia}"/>-->
+                        {!v.PVForm.cliente.indirizzo} <br></br>
+                        {!v.PVForm.cliente.cap} &nbsp; {!v.PVForm.cliente.localita} &nbsp; {!v.PVForm.cliente.provincia}
+                    </p>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="6">
+                    Se è necessario modificare l'indirizzo, premere F5 e selezionare il PV Variazione Indirizzi.
+                </lightning:layoutItem>
+                </lightning:layout>
+            </lightning:card>
+            </aura:if>
+
+</aura:component>

@@ -1,0 +1,83 @@
+<!--
+  @Component Name     : PV2794EstinzioneChiusuraConto.cmp
+  @Description        : 
+  @Author             : Raffaele Prudenzano
+  @Group              : 
+  @Last Modified By   : Adriana Lattanzi
+  @Last Modified On   : 27/11/2019,  12:35:40
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    2019-11-19 17:05:10   Raffaele Prudenzano     Initial Version
+-->
+
+<aura:component extends="c:PVSubComponentBase" access="global" controller="PV2794EstinzioneChiusuraConto" implements="force:appHostable">
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="options" type="string[]" default="[
+    {'label': 'Sì', 'value': 'SI'},
+    {'label': 'No', 'value': 'NO'}
+    ]" />
+    <aura:attribute name="value1" type="String" />
+    <aura:attribute name="value2" type="String" />
+    <aura:attribute name="value3" type="String" />
+    <aura:attribute name="value4" type="String" />
+    <aura:attribute name="value5" type="String" />
+
+    <aura:attribute name="rapportohb" type="OCSRecuperaRapportoHBCpayResponse.RecuperaRapportoHBCpayResponseDTO" />
+    <aura:attribute name="showLink" type="Boolean" default="false" />
+    <aura:attribute name="viewLink" type="PV2790EstinzioneChiusuraConto.IndirizziUrl" />
+
+    <p class="slds-p-vertical_small">Sull'allegato sono presenti i seguenti dati?</p>
+
+    <p class="my-inline">
+        <strong>Iban conto da chiudere </strong>
+        <p class="my-red"><strong>*</strong></p>
+        <lightning:radioGroup class="my-radio" options="{! v.options }" value="{!v.value1}" required="true"
+            variant="label-hidden" aura:id="radio1"/>
+    </p>
+
+    <p class="my-inline"><strong>Iban su cui effettuare rimborso</strong>
+        <p class="my-red"><strong>*</strong></p>
+        <lightning:radioGroup class="my-radio" options="{! v.options }" value="{!v.value2}" required="true"
+            variant="label-hidden" aura:id="radio2"/>
+    </p>
+
+    <p class="my-inline"><strong>Nuovo Iban su cui trasferire utenze</strong>
+        <p class="my-red"><strong>*</strong></p>
+        <lightning:radioGroup class="my-radio" options="{! v.options }" value="{!v.value3}" required="true"
+            variant="label-hidden" aura:id="radio3"/>
+    </p>
+
+    <p class="my-inline"><strong>Carta di debito revocata/ritirata</strong>
+        <p class="my-red"><strong>*</strong></p>
+        <lightning:radioGroup class="my-radio" options="{! v.options }" value="{!v.value4}" required="true"
+            variant="label-hidden" aura:id="radio4"/>
+    </p>
+
+    <p class="my-inline"><strong>Copia documento d'identità</strong>
+        <p class="my-red"><strong>*</strong></p>
+        <lightning:radioGroup class="my-radio" options="{! v.options }" value="{!v.value5}" required="true"
+            variant="label-hidden" aura:id="radio5"/>
+    </p>
+
+    <aura:if isTrue="{!v.showLink}" >
+        <div class="slds-grid slds-gutters slds-m-vertical_large ">
+                <div class="slds-col">
+                    <span>
+                        <lightning:button label="Home Banking Con OTP" class="slds-m-top--medium" variant="destructive"
+                        onclick="{!c.gotoURLotp}" />
+                    </span>
+                </div>
+                <div class="slds-col slds-m-left_large">
+                    <span>
+                        <lightning:button label="Home Banking Senza OTP" class="slds-m-top--medium" variant="destructive"
+                        onclick="{!c.gotoURL}" />
+                    </span>
+                </div>
+        </div>
+    </aura:if>
+
+</aura:component>

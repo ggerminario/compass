@@ -1,0 +1,24 @@
+<aura:component	controller="SFA_ConvParsingXMLController" implements="flexipage:availableForAllPageTypes,force:hasRecordId,lightning:availableForFlowScreens,force:lightningQuickAction">
+	
+    <aura:attribute name='recordId' type='String'/>
+    <aura:attribute name="spinnerCounter" type="Integer" default="0"/>
+    <aura:attribute name="messaggio" type="String" />
+    <aura:attribute name="controllo" type="boolean" default="false"/>
+    <c:SpinnerComponent aura:id="spinnerComponent" spinnerCounter="{!v.spinnerCounter}"/>
+    <aura:handler name="init" value="{!this}" action="{!c.executeInit}"/>    
+    
+    
+    <aura:if isTrue="{!v.controllo}">
+	  <div>
+         <br/>
+        <p style="text-align:center; width:100%;">
+            <span>
+                  	{!v.messaggio}
+            </span>
+        </p>
+      </div>
+    </aura:if>
+
+
+    
+</aura:component>

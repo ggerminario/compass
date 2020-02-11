@@ -1,0 +1,105 @@
+<!--
+  @File Name          : PV3706VariazioneScadenzaRata.cmp
+  @Description        : 
+  @Author             : Federico Negro
+  @Group              : 
+  @Last Modified By   : Federico Negro
+  @Last Modified On   : 3/12/2019, 14:32:41
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    3/12/2019   Federico Negro     Initial Version
+-->
+<aura:component access='global' controller='PV3706VariazioneScadenzaRataInserimento' extends="c:PVSubComponentBase">
+
+    <aura:attribute name="OK" type="Boolean" default="false"/>
+    <aura:attribute name="codOCS" type="String" default="" />
+    <aura:attribute name="res" type="OCSRecuperaStatoRichiestePSVResponse.ResponseClass" />
+    
+    <!--Lista azioni OCS-->
+    <aura:attribute name="dataAzioni" type="OCSRecuperaStatoRichiestePSVResponse.ResponseClass[]" />
+    <aura:attribute name="colAzioni" type="List" default="[{'label': 'Azione','fieldName': 'Azione','type': 'text','cellAttributes': {'class': {'fieldName': 'showClass'}}},
+                                                        {'label': 'Stato','fieldName': 'Stato','type': 'text','cellAttributes': {'class': {'fieldName': 'showClass'}}},
+                                                        {'label': 'Blocco','fieldName': 'Blocco','type': 'text','cellAttributes': {'class': {'fieldName': 'showClass'}}}]" />
+
+        <!--Lista Comunicazioni-->
+    <aura:attribute name="dataComunicazioni" type="Object[]" />
+    <aura:attribute name="colComunicazioni" type="List" default="[{'label': 'Tipologia','fieldName': 'Tipologia','type': 'text','cellAttributes': {'class': {'fieldName': 'showClass'}}},
+                                                        {'label': 'Codice','fieldName': 'Codice','type': 'text','cellAttributes': {'class': {'fieldName': 'showClass'}}}]" />
+
+
+    <aura:if isTrue="{!and(notequals(v.PVForm.pratica, null), and(v.PVForm.pratica.tipoPratica == 'CO', notequals(v.PVForm.pratica.flagRecupero, 'S')))}">
+
+        <table class="slds-table slds-table_bordered slds-table_col-bordered">
+                <tbody>
+                    <tr class="slds-hint-parent">
+                        <td colspan="3" class="slds-cell-buffer_left">
+                            <p class="slds-p-horizontal_small slds-text-color_error slds-text-title_bold">
+                                Premere il tasto VERIFICA dopo l'inserimento o l'aggiornamento della richiesta su EVO
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        <lightning:card class='slds-form_stacked'>
+            
+            <lightning:layout class="slds-wrap slds-form" multipleRows="true">
+
+                <lightning:layoutItem size="3" padding="horizontal-small">
+                    <c:PVLinkEvo task="TK00000364"   numeroPratica="{!v.PVForm.pratica.numPratica}"
+                        infoPre="{!v.PVForm.pratica.tipoPratica+'CAR'}" infoPost="SCA00000000000      000000000000000000000000000"
+                        btn_label="Apri schermata EVO" />
+                </lightning:layoutItem>
+
+                <lightning:layoutItem size="3" padding="horizontal-small">
+                    <lightning:button aura:id="verificaEVO"
+                        label="Verifica"
+                        variant="neutral"
+                        onclick="{!c.verifica}" />
+                </lightning:layoutItem>
+
+            </lightning:layout>          
+            
+        </lightning:card>
+    
+    </aura:if>
+
+    <aura:if isTrue="{!v.OK}">
+            
+        <div
+            class="slds-m-top_small slds-box slds-box_xx-small slds-text-align_center  slds-theme_info slds-text-heading_small">
+            Azioni rilevate in OCS 
+        </div>
+
+        <lightning:datatable class="table-pv table-pv-75" data="{!v.dataAzioni}" columns="{!v.colAzioni}" keyField="customID"
+            showRowNumberColumn="false" hideCheckboxColumn="true"
+            maxRowSelection="1" />
+
+        <lightning:card title="Comunicazioni al cliente" iconName="utility:email" variant="base">
+            
+            <div
+                class="slds-m-top_small slds-box slds-box_xx-small slds-text-align_center  slds-theme_info slds-text-heading_small">
+                Comunicazione da inviare: 
+            </div>
+                    
+            <lightning:datatable class="table-pv table-pv-75" aura:id="codiciComunicazioni" data="{!v.dataComunicazioni}" columns="{!v.colComunicazioni}" keyField="customID"
+                showRowNumberColumn="false" hideCheckboxColumn="false" onrowselection="{!c.handleRowAction}"
+                maxRowSelection="1" />
+
+                <aura:if isTrue="{!v.codOCS != ''}">
+                    <lightning:layout class="slds-wrap slds-m-top_small" multipleRows="true">
+                        <lightning:layoutItem size="6" padding="horizontal-small">
+                                <c:PVLinkEvo task="TK00000375" codiceCliente="" infoPost="{!v.PVForm.pratica.tipoPratica+v.codOCS+' 000000C              S     '}" 
+                                numeroPratica="{!v.PVForm.pratica.numPratica}"
+                                linkage="{!v.PVForm.pratica.tipoPratica}"
+                                infoPre=""
+                                btn_label="Prosegui con il codice lettera selezionato" btn_icon="utility:email" />
+                        </lightning:layoutItem>
+                    </lightning:layout>
+                </aura:if>
+
+            </lightning:card>
+
+    </aura:if>
+
+</aura:component>

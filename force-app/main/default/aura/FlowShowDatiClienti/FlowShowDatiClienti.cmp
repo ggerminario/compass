@@ -1,0 +1,54 @@
+<!--
+  @File Name          : FlowShowDatiClienti.cmp
+  @Description        : 
+  @Author             : Marco Cutolo
+  @Group              : 
+  @Last Modified By   : Marco Cutolo
+  @Last Modified On   : 13/1/2020, 16:40:29
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    13/1/2020   Marco Cutolo     Initial Version
+-->
+<aura:component implements="lightning:availableForFlowScreens" access="global">
+
+<!--<aura:attribute name="clientList" type="OCSCliente" />-->
+<aura:attribute name="OCSClienti"  type="OCSCliente[]" />
+
+<aura:attribute name="OCSColunms" type="List" default="[{label: 'Nominativo', fieldName: 'denominazioneAzienda', type: 'text', initialWidth: 200},
+{label: 'Data di nascita', fieldName: 'dataNascitaItaliana', type: 'text' },
+{label: 'Luogo di Nascita', fieldName: 'luogoNascita', type: 'text'},
+{label: 'Codice Fiscale', fieldName: 'codFiscale', type: 'text', initialWidth: 200 },
+{label: 'Codice Cliente', fieldName: 'codCliente', type: 'text'}]" />
+
+<aura:attribute name="OCSClienteSelezionato" type="OCSCliente" />
+<aura:attribute name="idOCSClienteSelezionato" type="List" />
+
+<!--
+Codice Cliente: {!v.clientList.codCliente}
+Cognome: {!v.clientList.cognome}
+Nome: {!v.clientList.nome}
+-->
+
+
+<aura:if isTrue="{!v.OCSClienti.length>0}">
+    <div 
+    class="slds-box slds-box_xx-small slds-text-align_center  slds-theme_info slds-text-heading_small">
+    CLIENTI</div>
+    <lightning:datatable class="table-pv" data="{!v.OCSClienti}" columns="{!v.OCSColunms}" keyField="codCliente"
+        maxRowSelection="1" selectedRows="{!v.idOCSClienteSelezionato}" showRowNumberColumn="false" />
+    <aura:set attribute="else">
+        La ricerca non ha prodotto risultati
+    </aura:set>
+</aura:if>
+
+
+<!--
+TO DO SHOW CLIENTI 
+
+<aura:iteration items="{!v.clientList}" var="item">
+        {!item.outputMember.cognome}
+</aura:iteration> 
+-->
+
+
+</aura:component>

@@ -1,0 +1,35 @@
+.THIS .slds-accordion__summary-action-icon{
+    display:none;
+}
+.THIS .checkbox{
+    border-radius: 10px;
+}
+/*
+.THIS .level1B{
+    background-color:#A4C9FF;
+
+}
+.THIS .level2B{
+    background-color:#D3E5FF;
+
+}
+.THIS{
+    border-radius: 2px;
+	background-color:#A4C9FF;	
+}*/
+.THIS li{
+    margin-left: 3px;
+    text-align:left;
+}
+.THIS .li-check{
+    margin-top: 0.9rem;
+}
+.THIS .grande{
+    width: 100%;
+}
+.THIS .li-check{
+    margin-top:0;
+}
+.THIS .check-filiale{
+    background-color: #fff;
+}

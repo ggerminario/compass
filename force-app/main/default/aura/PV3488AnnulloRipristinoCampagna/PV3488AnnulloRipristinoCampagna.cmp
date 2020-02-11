@@ -1,0 +1,53 @@
+<!--
+  @File Name          : PV3488AnnulloRipristinoCampagna.cmp
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : Nicola Musicco
+  @Last Modified On   : 10/1/2020, 13:30:26
+  @Modification Log   : 
+  Ver       Date            Author  nmusicco    		    Modification
+  1.0    18/12/2019   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component  extends="c:PVSubComponentBase" access='global' controller='PV3488AnnulloRipristinoCampagna'>
+
+    <aura:attribute name="azioniCAN" type="List" />
+    <aura:attribute name="evoEsitoAzione" type="Boolean" default="false"/>
+    <aura:attribute name="clickLinkEvo" type="Boolean" default="false"/>
+    
+    <aura:attribute name="azioniCANColumns" type="List"
+     default="[
+    {label: 'Stato', fieldName: 'stato', type: 'text'},
+    {label: 'Blocco', fieldName: 'blocco', type: 'text'},
+    {label: 'Operazione', fieldName: 'operazione', type: 'text'},
+    {label: 'Campagna', fieldName: 'codCampagna', type: 'text'},
+    {label: 'Data acquisto', fieldName: 'dataAcquisto', type: 'text'},
+    {label: 'Progressivo', fieldName: 'progressivo', type: 'text'}]" />
+
+    <aura:if isTrue="{!notequals(v.PVForm.pratica, null)}">
+      <lightning:card class='slds-form_stacked'>
+          
+          <lightning:layout class="slds-wrap slds-form" multipleRows="true">
+
+              <lightning:layoutItem size="3" padding="horizontal-small">
+                  <c:PVLinkEvo task="TK00000364"   numeroPratica="{!v.PVForm.pratica.numPratica}"
+                      infoPre="{!v.PVForm.pratica.tipoPratica+'CAR'}" infoPost="CAN00000000000      000000000000000000000000000"
+                      btn_label="Apri schermata EVO" clicked="{!v.clickLinkEvo}"/>
+              </lightning:layoutItem>
+
+          </lightning:layout>          
+          
+      </lightning:card>
+<!--
+      <lightning:button label="Recupera azioni CAN" onclick="{! c.getAzioniCAN }" 
+                                        variant='destructive' name="btnRecuperaAzioniCAN" aura:id="btnRecuperaAzioniCAN" />
+-->
+      <div class="slds-p-top_small">
+        <div class="slds-box slds-box_xx-small slds-text-align_center slds-theme_info slds-text-heading_small">
+          Azioni CAN rilevate in OCS</div>
+        <lightning:datatable class="table-pv" data="{!v.azioniCAN}" columns="{!v.azioniCANColumns}"
+         showRowNumberColumn="false" keyField="codCampagna" hideCheckboxColumn="true"/>
+      </div>
+  
+  </aura:if>
+</aura:component>

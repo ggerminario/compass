@@ -1,0 +1,42 @@
+<!--
+  @File Name          : PV1752RiattribImportiSistemaPartitarioGestione.cmp
+  @Description        : 
+  @Author             : sabrina vitali
+  @Group              : 
+  @Last Modified By   : sabrina vitali
+  @Last Modified On   : 21/11/2019, 11:51:50
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    20/11/2019   sabrina vitali     Initial Version
+-->
+
+<aura:component controller='PV1752RiattribImportiSistemaPartGestione' implements="flexipage:availableForAllPageTypes,force:hasRecordId" access='global'>
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+    <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni"/>
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre"></aura:method>    
+    
+    <!-- Attributi -->
+    <!-- da parent -->
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name="dispositionSelezionato" type="XCS_Disposition__c"/>
+    <aura:attribute name='note' type='String' />    
+    <aura:attribute name="allegati" type="Attachment[]"/>
+    <aura:attribute name="newStatus" type="String"/>    
+
+    <!-- Attributi gestione-->
+    <aura:attribute name="userData" type="PVForm.UserData" default="" />
+    <aura:attribute name="messaggiErrore" type="String" access="Global"/>
+
+    <!-- main --> 
+    <lightning:card class='slds-form_stacked'>
+        <aura:if isTrue="{!v.theCase.Branch__c != v.userData.accountOffice.Id}">     
+            <div class="slds-grid slds-container_medium slds-align_left slds-wrap">
+                <div class="slds-size_6-of-12">
+                    <lightning:input type="checkbox" aura:id='checkboxRinviaAlMittente'
+                        label='Rinvia al mittente' name='checkbox'/>
+                </div>
+            </div>    
+        </aura:if>    
+    </lightning:card> <!-- /main -->
+
+</aura:component>

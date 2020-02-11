@@ -1,0 +1,3 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:appHostable,force:lightningQuickAction,force:hasRecordId">
+    Gua_ContactOutboundCmp
+</aura:component>

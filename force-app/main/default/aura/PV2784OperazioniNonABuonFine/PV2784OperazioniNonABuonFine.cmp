@@ -1,0 +1,26 @@
+<!--
+  @File Name          : PV2784OperazioniNonABuonFine.cmp
+  @Description        : 
+  @Author             : Federica Forte
+  @Group              : 
+  @Last Modified By   : Federica Forte
+  @Last Modified On   : 21/1/2020, 12:18:55
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    21/1/2020   Federica Forte     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV2784OperazioniNonABuonFineInserimento'>
+    
+    <aura:attribute name="selectedImp" type="String" default=""/>
+
+    <aura:attribute name="selectedData" type="Date" />
+
+    <p class="my-space"><div class="my-text">Importo:</div>
+        <lightning:input type="number" formatter="currency" step="0.01" name="importo" value="{!v.selectedImp}" />
+    </p>
+
+    <p class="my-space"><div class="my-text">Data scadenza:</div>
+        <lightning:input type="date" name="data" value="{!v.selectedData}"/>
+    </p>
+    
+</aura:component>

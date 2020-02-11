@@ -1,0 +1,69 @@
+<!--
+  @Component Name     : PV2790EstinzioneChiusuraConto.cmp
+  @Description        : 
+  @Author             : Raffaele Prudenzano
+  @Group              : 
+  @Last Modified By   : Adriana Lattanzi
+  @Last Modified On   : 27/11/2019,  11:29:20
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    2019-11-19 17:05:00   Raffaele Prudenzano     Initial Version
+-->
+
+<aura:component extends="c:PVSubComponentBase" access="global" controller="PV2790EstinzioneChiusuraConto" implements="force:appHostable">
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <aura:attribute name="numPratica" type="string" />
+    <!-- <aura:attribute name="dataOperazione" type="string" /> -->
+    <aura:attribute name="importo" type="Decimal" />
+    <aura:attribute name="erroriImportoDataForm" type="string" />
+
+    <aura:attribute name="rapportohb" type="OCSRecuperaRapportoHBCpayResponse.RecuperaRapportoHBCpayResponseDTO" />
+    <aura:attribute name="showLink" type="Boolean" default="false" />
+    <aura:attribute name="viewLink" type="PV2790EstinzioneChiusuraConto.IndirizziUrl" />
+
+    <div class="slds-p-vertical_small">
+        <c:PV2790_2794ImportoDataOperazioneForm dataOperazione="{!v.PVForm.dataOperazione}" importo="{!v.importo}"
+            numPratica="{!v.PVForm.pratica.numPratica}" aura:id="importoDataForm" errori="{!v.erroriImportoDataForm}" />
+    </div>
+
+    <aura:if isTrue="{!v.showLink}" >
+            <div class="slds-grid slds-gutters slds-m-vertical_large ">
+                    <div class="slds-col">
+                        <span>
+                            <lightning:button label="Home Banking Con OTP" class="slds-m-top--medium" variant="destructive"
+                            onclick="{!c.gotoURLotp}" />
+                        </span>
+                    </div>
+                    <div class="slds-col slds-m-left_large">
+                        <span>
+                            <lightning:button label="Home Banking Senza OTP" class="slds-m-top--medium" variant="destructive"
+                            onclick="{!c.gotoURL}" />
+                        </span>
+                    </div>
+            </div>
+    </aura:if>
+
+</aura:component>
+
+
+
+
+<!-- 
+ <p>Sull'allegato sono presenti i seguenti dati?</p>
+
+    <lightning:radioGroup options="{! v.options }" value="{!v.value1}" label="Iban conto da chiudere"
+        variant="label-inline" class="slds-form_line" required="true" />
+    <lightning:radioGroup class="slds-form_line" options="{! v.options }" value="{!v.value2}"
+        label="Iban su cui effettuare rimborso" variant="label-inline" required="true" />
+    <lightning:radioGroup class="slds-form_line" options="{! v.options }" value="{!v.value3}"
+        label="Nuovo Iban su cui trasferire utenze" variant="label-inline" required="true" />
+    <lightning:radioGroup class="slds-form_line" options="{! v.options }" value="{!v.value4}"
+        label="Carta di debito revocata/ritirata" variant="label-inline" required="true" />
+    <lightning:radioGroup class="slds-form_line" options="{! v.options }" value="{!v.value5}"
+        label="Copia documento d'identità" variant="label-inline" required="true" />
+
+ -->

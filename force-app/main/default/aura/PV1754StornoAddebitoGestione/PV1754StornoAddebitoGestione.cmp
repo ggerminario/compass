@@ -1,0 +1,9 @@
+<aura:component controller = "PV1754StornoAddebitoGestione" access="global">
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+    <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni" />
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre" />
+    <aura:attribute name="newStatus" type="String" />
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name='note' type='String' />
+    <aura:attribute name="allegati" type="Attachment[]" />
+</aura:component>

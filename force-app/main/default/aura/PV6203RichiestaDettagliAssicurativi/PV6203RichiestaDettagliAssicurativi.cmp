@@ -1,0 +1,63 @@
+<!--
+  @File Name          : PV6203RichiestaDettagliAssicurativi.cmp
+  @Description        : 
+  @Author             : Adriana Lattanzi
+  @Group              : 
+  @Last Modified By   : Adriana Lattanzi
+  @Last Modified On   : 23/12/2019, 16:30:13
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    17/12/2019     Adriana Lattanzi          Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV6203RichiestaDettagliAssicurativiCtrl'>
+    
+    <!-- attributi per pacchetti associati -->
+    <aura:attribute name="showpack" type="Boolean" default="false"/>
+    <aura:attribute name="pack" type="List" />
+    <aura:attribute name="OCSColumns" type="List" default="[{label: 'Fornitore', fieldName: 'desFornitore', type: 'string'},
+        {label: 'Pacchetto', fieldName: 'codPacchetto', type: 'string' },
+        {label: 'Servizio', fieldName: 'codServizio', type: 'string'},
+        {label: 'Inizio Copertura', fieldName: 'dataInizioCoperturaSlashed', type: 'string', initialWidth: 100},
+        {label: 'Fine Copertura', fieldName: 'dataFineCoperturaSlashed', type: 'string', initialWidth: 100},
+        {label: 'Durata', fieldName: 'durata', type: 'integer'},
+        {label: 'Stato', fieldName: 'stato', type: 'string'}]" />
+    <aura:attribute name="selectedpack" type="string" />
+
+    <!-- attributi per domande relative ai pacchetti -->
+    <aura:attribute name="question" type="List" />
+    <aura:attribute name="QColumns" type="List" default="[{ fieldName: 'nomeDomanda', type: 'string'}]" />
+    <aura:attribute name="showquestion" type="Boolean" default="false" />
+    <aura:attribute name="questionHistory" type="List" />
+
+    <!-- attributi per risposte -->
+    <aura:attribute name="showResponse" type="Boolean" default="false" />
+    <aura:attribute name="responseToShow" type="string" default=""/>
+    <aura:attribute name="selectedquestion" type="string" />
+    
+
+    <!-- stampa pacchetti associati -->
+    <aura:if isTrue="{!v.showpack}">
+        <div class="slds-p-top_medium">
+            <div class="slds-box slds-box_xx-small slds-text-align_center slds-theme_info slds-text-heading_small">
+                Pacchetti Associati</div>
+            <lightning:datatable class="table-pv" data="{!v.pack}" columns="{!v.OCSColumns}"
+                keyField="fornitore" maxRowSelection="1" showRowNumberColumn="false"
+                onrowselection="{!c.callQuestion}" />
+        </div>
+    </aura:if>
+
+
+    <!-- stampa domande -->
+    <aura:if isTrue="{!v.showquestion}">
+        <div class="slds-p-top_xx-large">
+            <div class="slds-box slds-box_xx-small slds-text-align_center slds-theme_info slds-text-heading_small">
+                Domande</div>
+            <lightning:datatable class="table-pv" data="{!v.question}" columns="{!v.QColumns}"
+                keyField="idDomanda" maxRowSelection="1" onrowselection="{!c.callResponse}" />
+        </div>
+        
+        <!-- stampa risposte -->
+        <c:PVResponseModal isQuestionSelected="{!v.showResponse}" response="{!v.responseToShow}"/>   
+    </aura:if>
+
+</aura:component>

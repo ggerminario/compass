@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Occupation_Lvl1__c</fullName>
+    <description>Stato occupazione (ex livello 1)</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Stato occupazione (ex livello 1)</inlineHelpText>
+    <label>Occupation_Lvl1</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>1</fullName>
+                <default>false</default>
+                <label>Autonomo</label>
+            </value>
+            <value>
+                <fullName>2</fullName>
+                <default>false</default>
+                <label>Dipendente</label>
+            </value>
+            <value>
+                <fullName>3</fullName>
+                <default>false</default>
+                <label>Pensionato</label>
+            </value>
+            <value>
+                <fullName>4</fullName>
+                <default>false</default>
+                <label>Altro</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

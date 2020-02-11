@@ -1,0 +1,35 @@
+<aura:component extends="c:PVSubComponentBase" access='global' controller="PV3266ConversioneSaldoRevolvingIns">
+    Conversione Saldo Revolving
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="modCalcoloRataOptions" type="List" />
+    <aura:attribute name="showForm" type="Boolean" default="false" />
+    <aura:attribute name="selectedValue" type="String"/>
+    <aura:attribute name="infoCartaData" type="OCSRecuperaInfoCartaResponse.RecuperaInfoCartaResponse" />
+    <aura:attribute name="minimoPercOrig" type="String" />
+    <aura:attribute name="minimoOrig" type="String" />
+    <aura:attribute name="modCalcRataOriginal" type="String" />
+    
+    <lightning:card class='slds-form_stacked'>
+        <lightning:layout class="slds-wrap slds-form" multipleRows="true">
+
+            <!--<aura:if isTrue="{!v.showForm}">-->
+                <lightning:layoutItem size="12" padding="horizontal-small">   
+                        <lightning:select name="tipo_pagamento" label="Tipo Pagamento:" aura:id="tipo_pagamento" value="{!v.selectedValue}">
+                                <aura:iteration items="{!v.modCalcoloRataOptions}" var="item">
+                                    <option text="{!item.label}" value="{!item.label}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" padding="horizontal-small">
+                        <lightning:input type="number" name="percentuale" min ="0" max="100"
+                        label="Percentuale" value="{!v.cartaDatiFinanziariData.pagamentoMinimoPerc}"/>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12" padding="horizontal-small">
+                        <lightning:input type="number" name="rataMinima" formatter="currency" currencyCode="EUR"
+                        label="Rata Minima" value="{!v.cartaDatiFinanziariData.pagamentoMinimo}"/>
+                </lightning:layoutItem>
+            <!--</aura:if> -->
+                    
+        </lightning:layout>
+</lightning:card>
+</aura:component>

@@ -1,0 +1,28 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	
+    <aura:attribute name="ShowFlowComp" type="Boolean" default="False"/>
+    
+    <lightning:tabset selectedTabId="two">
+        <lightning:tab label="Agenda" id="one">
+            Working in progress
+        </lightning:tab>
+        <lightning:tab label="Attivita Post Vendita" id="two">
+           
+            <c:B2CWAMInserimentoNuovaAttivita />
+            
+        </lightning:tab>       
+    </lightning:tabset>
+    
+    
+  
+    
+    
+	
+    <aura:if isTrue="{!v.ShowFlowComp}">
+        
+    </aura:if>
+        
+
+    
+    
+</aura:component>

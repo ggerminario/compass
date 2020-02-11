@@ -1,0 +1,29 @@
+<aura:component extends="c:PVSubComponentBase" controller="PV2786CpayStorni">
+
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="dataOperazione" type="Date" default="" />
+    <aura:attribute name="importo" type="String" default="" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <lightning:layout class="slds-wrap" multipleRows="true">
+        <lightning:layoutItem size="6" padding="horizontal-small">
+            <lightning:input 
+            name="dataOperazione"
+            type="date" 
+            formatter="date" 
+            value="{!v.dataOperazione}" max="{!v.today}"
+            label="Data operazione"/>
+        </lightning:layoutItem>   
+
+        <lightning:layoutItem size="6" padding="horizontal-small">
+            <lightning:input 
+            name="importo"
+            type="number" 
+            formatter="currency"
+            value="{!v.importo}"
+            label="Importo"/>
+        </lightning:layoutItem>  
+    </lightning:layout>
+
+</aura:component>

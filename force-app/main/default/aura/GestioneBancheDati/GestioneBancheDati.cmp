@@ -1,0 +1,205 @@
+<!--
+  @File Name          : GestioneBancheDati.cmp
+  @Description        : 
+  @Author             : Federico Negro
+  @Group              : 
+  @Last Modified By   : Maurizio Longo
+  @Last Modified On   : 6/2/2020, 14:14:47
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    14/1/2020   Federico Negro     Initial Version
+-->
+<aura:component controller='GestioneBancheDatiController' access="global">
+
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+  <aura:attribute name="parent" type="Aura.Component" required="true"
+    description="componente padre per accedere ai metodi comuni" />
+  <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre">
+  </aura:method>
+
+    <!-- da parent -->
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name="userData" type="PVForm.UserData" default="null" />
+    <aura:attribute name="dispositionSelezionato" type="XCS_Disposition__c" />
+    <aura:attribute name='note' type='String' />
+    <aura:attribute name="allegati" type="Attachment[]" />
+    <aura:attribute name="newStatus" type="String" />
+
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Gestisci', 'value': 'gestisci'},
+    {'label': 'Inoltra Ufficio Reclami', 'value': 'reclami'}
+    ]" />
+    
+    
+
+    <aura:attribute name="value" type="String" default="" />
+    <aura:attribute name="selezione" type="String" default="" />
+    <aura:attribute name="errore" type="String" default="" />
+    <aura:attribute name='selezionaMittente' type='String' />
+
+
+    <aura:attribute name="bancheDati" type="List" default="[
+    {'label': 'Selezionare', 'value': 'selezionare'},
+    {'label': 'Presente', 'value': 'presente'},
+    {'label': 'Non presente', 'value': 'nonPresente'}
+    
+    ]" />
+    <aura:attribute name="aggExp" type="List" default="[
+    {'label': 'Selezionare', 'value': 'selezionare'},
+    {'label': 'Online', 'value': 'online'},
+    {'label': 'E-Mail', 'value': 'email'}
+    
+    ]" />
+
+    <aura:attribute name="mittenteCat" type="List" default="[
+    {'label': 'Cessionaria', 'value': 'Cessionaria'},
+    {'label': 'CRIF', 'value': 'CRIF'},
+    {'label': 'EXPERIAN', 'value': 'EXPERIAN'},
+    {'label': 'CTC', 'value': 'CTC'}
+    ]" />
+
+    <aura:attribute name="sino" type="List" default="[
+                        {'label': 'Selezionare', 'value': 'selezionare'},
+                        {'label': 'Sì', 'value': 'si'},
+                        {'label': 'No', 'value': 'no'}
+                        
+                        ]" />
+
+    <aura:attribute name="emailMittente" type="EmailMessage" />
+    <aura:attribute name="domain" type="banche_dati_sic_domain__c" />
+    <aura:attribute name="tipologiaRichiesta" type="List" />
+    <aura:attribute name="testoStandard" type="List"  /><!--Da controllare-->
+
+    
+
+
+    <!-- non so a cosa serva, ma è commentata perchè mi da errore essendoci un'altra lista con nome options (RIGA 25)    
+                        
+                            <aura:attribute name="options" type="List" default="[
+                            {'label': 'No', 'value': 'no'},
+                            {'label': 'Sì, Online', 'value': 'online'},,
+                            {'label': 'Sì, Email', 'value': 'email'}
+                            ]"/>
+
+    -->
+
+    <!-- main -->
+
+    <lightning:card title="Gestione Banche Dati - IDM" variant="base">
+        <lightning:layout class="slds-wrap" multipleRows="true">
+
+            <lightning:layoutItem size="6" padding="horizontal-small">
+                <span>
+                    <aura:if isTrue="{!v.selezione == ''}">
+                    <lightning:radioGroup name="radioGroup" label="Radio Group" options="{! v.options }"
+                        value="{! v.value }" type="radio" onchange="{! c.associaEmailBancheDati }" />
+                    </aura:if>
+
+                </span>
+                
+                 <!-- messaggio di errore Email non presente-->
+                 <aura:if isTrue="{!v.selezione == 'no email'}">
+                    <ui:message title="Errore" severity="error" closable="false">
+                        <aura:unescapedHtml value="Email non presente" />
+                    </ui:message>
+                </aura:if>
+
+
+                <!-- mostra maschera controlli non riusciti-->
+                <aura:if isTrue="{! v.selezione=='not found'}">
+                    <div
+                        class="slds-m-top_small slds-box slds-box_xx-small slds-text-align_left  slds-theme_info slds-text-heading_small">
+                        <p>L'indirizzo email: "{!v.emailMittente.FromAddress}" non è stato riconosciuto.</p>
+                        <p>Selezionare il mittente a cui agganciare l'indirizzo</p>
+                        
+                    </div>
+                                      
+                    
+
+                    <lightning:combobox name="mittente" label="Mittente" value="{! v.value }" placeholder="Selezionare" onchange="{!c.selezionaMittente}"
+                        options="{! v.mittenteCat }" />
+                        <lightning:radioGroup name="censisciEmail" label="Vuoi associare l'indirizzo solo per questa email?"
+                        options="{! v.sino }" type="radio" />           
+                    <lightning:button label="Continua" title="confermaMittente" onclick="{! c.confermaMittente }" />
+
+                    
+                </aura:if>
+                <!--maschera cessionaria-->
+
+                <aura:if isTrue="{! v.selezione=='Cessionaria'}">
+
+                   
+                        <p>Gestione Banche dati - Email da Cessionaria</p>
+                        <lightning:input name="pratica" label="Inserire il numero della pratica/carta">
+                        </lightning:input>
+                        <lightning:input name="cliente" label="Inserire il nominativo del cliente">
+                        </lightning:input>
+                        <p>Indicare la presenza del nominativo nelle banche dati</p>
+                        
+                        <lightning:radioGroup name="CRIF" label="CRIF" options="{! v.bancheDati }" type="radio" />
+
+                        <lightning:radioGroup name="CTC" label="CTC" options="{! v.bancheDati }" type="radio" />
+
+                        <lightning:radioGroup name="EXPERIAN" label="EXPERIAN" options="{! v.bancheDati }"
+                            type="radio" />
+
+                        <lightning:radioGroup name="aggiornamento" label="Eventuale metodo aggiornamento EXPERIAN"
+                            options="{! v.aggExp }" type="radio" />
+                    
+
+                    <lightning:button label="Continua" title="altraPratica" onclick="{!c.altraPratica}"></lightning:button>
+
+                </aura:if>
+                <aura:if isTrue="{! v.selezione=='altraPratica'}">
+                    <p>La gestione della pratica "" di "" è terminata.</p>
+                    
+
+                    <lightning:radioGroup name="nuovaPratica" label="Ci sono altre posizioni da gestire?"
+                        options="{! v.sino }" type="radio" />
+
+                </aura:if>
+                <!--maschera altri mittenti-->
+                <aura:if isTrue="{! v.selezione=='altroMittente'}">
+                    <lightning:input name="Mittente" label="Mittente" disabled="true" value="{!v.selezionaMittente + ' - ' + v.emailMittente.FromAddress}"></lightning:input>
+                    <lightning:input name="numeroPratica" label="Numero pratica"></lightning:input>
+                    <lightning:input name="nominativoCliente" label="Nominativo cliente"></lightning:input>
+                    
+                   
+                    <lightning:combobox name="tipologiaRichiesta" label="Tipologia richiesta" options="{!v.tipologiaRichiesta }" value="v.value"
+                        onchange="c.setRichiesta"></lightning:combobox>
+
+                    <lightning:combobox name="testoStandard" label="Testo standard" options="{!v.testoStandard}" value="v.value" onchange=""> 
+                    </lightning:combobox> --> <!--MANCA IL NOME DELLA LISTA NEL CAMPO OPTIONS-->
+                    
+                    <!--maschera aggiornata+cancellazione-->
+                    <aura:if isTrue="{! v.opzione=='aggiornaCancella'}">
+                        <lightning:input type="date" name="date" label="Date da sostituire" />
+
+                        <!--<lightning:combobox name="tipologiaPratica" label="Tipologia pratica" options="{! }" 
+                            onchange=""></lightning:combobox> --> <!--MANCA IL NOME DELLA LISTA NEL CAMPO OPTIONS-->
+
+                <!--<lightning:combobox name="esito" label="Esito" options="{! }" onchange=""></lightning:combobox>--> <!--MANCA IL NOME DELLA LISTA NEL CAMPO OPTIONS-->
+                
+                        <p>La presente per informarVi che la richiesta di #TIPOPRT# oggetto di approfondimento è stata
+                            #ESITO# in data #DATA1#: si chiede, pertanto, la cancellazione della posizione dai Vostri
+                            archivi. Cordiali saluti. Compass S.p.A</p>
+                    </aura:if>
+                    <lightning:radioGroup name="aggiornamentoBD" label="Sono state aggiornate altre banche dati?"
+                        options="{! v.sino }" type="radio" />
+                </aura:if>
+                <!--maschera aggiornamento banche dati-->
+                <aura:if isTrue="{! v.opzione=='aggiornamentoBD'}">
+                    
+                    <!-- Da ciclare in base alle banche dati alternative-->
+                    <lightning:radioGroup name="bancheDati" label="i"
+                        options="{! v.bancheDati }" type="radio" />
+                </aura:if>
+
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:card>
+
+    <!-- /main -->
+
+
+</aura:component>

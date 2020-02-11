@@ -1,0 +1,25 @@
+<!--
+  @File Name          : PV1756ContabilitaAltreRichieste.cmp
+  @Description        : 
+  @Author             : Federica Forte
+  @Group              : 
+  @Last Modified By   : Raffaele Prudenzano
+  @Last Modified On   : 23/1/2020, 11:53:26
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    17/12/2019   Federica Forte     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV1756ContabilitaAltreRichieste'>
+
+  <aura:attribute name="importoSel" type="String" default="" />
+  <aura:attribute name="noteObbligatorieStr" type="String"
+    default="Inserire nelle note la descrizione delle operazioni da compiere per sistemare la posizione" />
+
+  <lightning:input type="number" formatter="currency" step="0.01" name="importo" label="Importo"
+    value="{!v.importoSel}" />
+
+  <div class="my-space slds-text-color_error">
+    <p>{!v.noteObbligatorieStr}</p>
+  </div>
+
+</aura:component>

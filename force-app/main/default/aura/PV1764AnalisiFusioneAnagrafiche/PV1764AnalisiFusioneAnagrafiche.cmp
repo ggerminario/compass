@@ -1,0 +1,92 @@
+<!--
+  @File Name          : PV1764AnalisiFusioneAnagrafiche.cmp
+  @Description        : 
+  @Author             : Marco Cutolo
+  @Group              : 
+  @Last Modified By   : Marco Cutolo
+  @Last Modified On   : 18/12/2019, 16:55:41
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    9/12/2019   Marco Cutolo     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" controller="PV1764AnalisiFusioniAnagraficeIns">
+    <aura:attribute name="OCSColunms" type="List" default="[{label: 'Tipo', fieldName: 'tipoForFusione', type: 'text'},
+    {label: 'Nominativo', fieldName: 'denominazioneAzienda', type: 'text', initialWidth: 200},
+    {label: 'Data di nascita', fieldName: 'dataNascitaItaliana', type: 'text' },
+    {label: 'Luogo di Nascita', fieldName: 'luogoNascita', type: 'text'},
+    {label: 'Codice Fiscale', fieldName: 'codFiscale', type: 'text', initialWidth: 200 },
+    {label: 'Codice Cliente', fieldName: 'codCliente', type: 'text'}]" />
+    <aura:attribute name="showClientiSelezionati" type="Boolean" default="true" />
+    <aura:attribute name="OCSClientiSelezionati" type="OCSCliente[]" />
+    <aura:attribute name="clienteSelezionato" type="OCSCliente" />
+    <aura:attribute name="clienteSelezionatoDaMantenere" type="OCSCliente" />
+    <aura:attribute name="isModalOpen" type="boolean" default="false" />
+    <aura:attribute name="isCheckDocumentiNecessary" type="boolean" default="true"/>
+    <aura:attribute name="isAllegatoNecessary" type="boolean" default="false" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="filiali" type="List" />
+    <aura:attribute name="showFiliali" type="Boolean" default="{!v.PVForm.userData.user.Profile.Name == 'Branch Manager'}"/>
+
+    <!--{!v.PVForm.userData.user.Profile.Name} Branch Manager-->
+
+    <!-- START Sezione Filiali-->
+    <aura:if isTrue="{!v.showFiliali}">
+        <lightning:layoutItem size="6" padding="horizontal-small">
+            <lightning:select name="elenco_filiali" label="Unità territoriale su cui operare:" aura:id="elenco_filiali" value="{!v.PVForm.selectedFiliale}" >
+                <aura:iteration items="{!v.filiali}" var="item">
+                    <option text="{!item.Name}" value="{!item.OCS_External_Id__c}"/>
+                </aura:iteration>
+            </lightning:select>
+        </lightning:layoutItem>
+        <br></br>
+        <br></br>
+    </aura:if>
+    <!-- END Sezione Filiali-->
+
+
+    <aura:if isTrue="{!v.OCSClientiSelezionati.length>0}">
+        <div 
+        class="slds-box slds-box_xx-small slds-text-align_center  slds-theme_info slds-text-heading_small">
+        CLIENTI SELEZIONATI PER LA FUSIONE</div>
+        <lightning:datatable class="table-pv" data="{!v.OCSClientiSelezionati}" onrowselection="{!c.selectCliente}" columns="{!v.OCSColunms}" keyField="codCliente"
+            maxRowSelection="1" showRowNumberColumn="false"/>
+        <lightning:button label="Rimuovi" onclick="{!c.rimuoviCliente}" disabled="{!v.clienteSelezionato == null}"/>
+    </aura:if>
+
+    <aura:if isTrue="{!v.isModalOpen}">
+            <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                          onclick="{! c.closeModel }"
+                                          alternativeText="close"
+                                          variant="bare-inverse"
+                                          class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Attenzione</h2>
+                </header>
+        <div class="slds-modal__container">
+            <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <p>
+                <b>
+                    Attenzione, nessuna delle anagrafiche selezionate ha un documento valido.
+                <b>
+                </b>
+                    Hai allegato un documento valido per la fusione?
+                </b>
+                </p>
+            </div>
+            <footer class="slds-modal__footer">
+                <lightning:button variant="neutral"
+                                  label="NO, chiudi "
+                                  title="NO, chiudi "
+                                  onclick="{! c.closeModel }"/>
+                <lightning:button variant="brand"
+                                  label="Si"
+                                  title="Si"
+                                  onclick="{!c.inserisciRichiesta}"/>
+            </footer>
+        </div>
+    </aura:if>
+
+        
+
+</aura:component>

@@ -1,0 +1,476 @@
+<!-- /**
+ * @File Name          : PV3263GestioneAlert.cmp
+ * @Description        :
+ * @Author             : Raffaele Prudenzano
+ * @Group              :
+ * @Last Modified By   : Adriana Lattanzi
+ * @Last Modified On   : 13/12/2019, 16:41:32
+ * @Modification Log   :
+ *====================================================================================
+ * Ver         Date                     Author                        Modification
+ *====================================================================================
+ * 1.0    2019-12-03 12:09:46      Adriana Lattanzi    				 Initial Version
+ **/-->
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV3263GestioneAlert'>    
+ 
+    <!--aura:handler name="init" value="{!this}" action="{!c.doInit}"/-->
+
+    <aura:attribute name="infoSID" type="OCSRecuperaInfoSIDResponse.RecuperaInfoSIDResponseDTO" />
+    <aura:attribute name="newInfoSID" type="OCSRecuperaInfoSIDResponse.RecuperaInfoSIDResponseDTO" />
+    <aura:attribute name="operTelefSel" type="String" default=""/>
+    <aura:attribute name="selectedValueOT" type="String" />
+    <aura:attribute name="emettitore" type="String" /> 
+    <aura:attribute name="showAlert" type="Boolean" default="false" />
+    <aura:attribute name="noAlert" type="Boolean" default="false" />
+    <aura:attribute name="operatori" type="string[]" default="[
+                                                              {'label': '-', 'value': ''}, 
+                                                              {'label': 'TIM', 'value': '1'}, 
+                                                              {'label': 'Vodafone', 'value': '2'},
+                                                              {'label': 'Wind', 'value': '3'},
+                                                              {'label': 'H3G', 'value': '4'},
+                                                              {'label': 'PosteMobile', 'value': '7'}
+                                                              ]" />
+    <aura:attribute name="yesNo" type="string[]" default="[
+                                                          {'label': '-', 'value': ''}, 
+                                                          {'label': 'S', 'value': 'S'}, 
+                                                          {'label': 'N', 'value': 'N'}
+                                                          ]" />
+    <aura:attribute name="freq" type="string[]" default="[
+                                                          {'label': '-', 'value': ''}, 
+                                                          {'label': '1', 'value': '1'}, 
+                                                          {'label': '2', 'value': '2'},
+                                                          {'label': '3', 'value': '3'}
+                                                          ]" />
+
+    <aura:if isTrue="{!v.showAlert}">
+        <div class="slds-grid slds-grid--pull-padded">
+
+            <div class="slds-col--padded-large slds-size_1-of-6 my-title">
+                <p>Situazione Attuale</p>
+            </div>
+
+            <aura:if isTrue="{!v.noAlert}">
+                <div class="slds-col--padded-large slds-size_5-of-6 my-title">
+                    <p class="slds-p-horizontal slds-text-color_error">
+                        Nessun alert precedentemente impostato.
+                    </p>
+                </div>
+
+                <aura:set attribute="else">
+                    <div class="slds-col--padded-large slds-size_4-of-5">
+                        <div class="slds-text-longform">
+                            <div class="my-inline">
+                                <p class="my-label">Modalità inoltro</p>
+                                <p class="my-label">{!v.infoSID.modalitaInoltro}</p>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Numero cellulare</p>
+                                <p class="my-label">{!v.infoSID.cellulare}</p>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Operatore Telefonico</p>
+                                <p class="my-label">{!v.infoSID.operTelef} {!v.infoSID.catbopteDescrizione}</p>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Attesa Attivazione</p>
+                                <p class="my-label">{!v.infoSID.attesaAttivazione}</p>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Aggiornamento E/C</p>
+                                <p class="my-label">{!v.infoSID.servizioAggEc}</p>
+                                <aura:if isTrue="{!v.infoSID.servizioAggEc == 'S'}">
+                                    <p class="my-label2 my-align">Attivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.dataAttAggEc == '' || v.infoSID.dataAttAggEc == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.dataAttAggEc != ''}">
+                                        <aura:if isTrue="{!v.infoSID.dataAttAggEc != '0'}">
+                                            <p class="my-campo">{!v.infoSID.dataAttAggEc}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.infoSID.servizioAggEc == 'N'}">
+                                    <p class="my-label2 my-align">Disattivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.dataDisAggEc == '' || v.infoSID.dataDisAggEc == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.dataDisAggEc != ''}">
+                                        <aura:if isTrue="{!v.infoSID.dataDisAggEc != '0'}">
+                                            <p class="my-campo">{!v.infoSID.dataDisAggEc}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Avvenuta Rateizzazione</p>
+                                <p class="my-label">{!v.infoSID.protCampServizio}</p>
+                                <aura:if isTrue="{!v.infoSID.protCampServizio == 'S'}">
+                                    <p class="my-label2 my-align">Attivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.protCampDataAtt == '' || v.infoSID.protCampDataAtt == '0'}">
+                                       <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.protCampDataAtt != ''}">
+                                        <aura:if isTrue="{!v.infoSID.protCampDataAtt != '0'}">
+                                            <p class="my-campo">{!v.infoSID.protCampDataAtt}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.infoSID.protCampServizio == 'N'}">
+                                    <p class="my-label2 my-align">Disattivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.protCampDataDis == '' || v.infoSID.protCampDataDis == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.protCampDataDis != ''}">
+                                        <aura:if isTrue="{!v.infoSID.protCampDataDis != '0'}">
+                                            <p class="my-campo">{!v.infoSID.protCampDataDis}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Blocco/Sblocco</p>
+                                <p class="my-label">{!v.infoSID.bloccoServizio}</p>
+                                <aura:if isTrue="{!v.infoSID.bloccoServizio == 'S'}">
+                                    <p class="my-label2 my-align">Attivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.bloccoDataAtt == '' || v.infoSID.bloccoDataAtt == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.bloccoDataAtt != ''}">
+                                        <aura:if isTrue="{!v.infoSID.bloccoDataAtt != '0'}">
+                                            <p class="my-campo">{!v.infoSID.bloccoDataAtt}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.infoSID.bloccoServizio == 'N'}">
+                                    <p class="my-label2 my-align">Disattivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.bloccoDataDis == '' || v.infoSID.bloccoDataDis == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.bloccoDataDis != ''}">
+                                        <aura:if isTrue="{!v.infoSID.bloccoDataDis != '0'}">
+                                            <p class="my-campo">{!v.infoSID.bloccoDataDis}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Saldo Carta</p>
+                                <p class="my-label">{!v.infoSID.servizioSaldo}</p>
+                                <p class="my-label">Freq/Costo {!v.infoSID.frequenzaSaldo}/</p>
+                                <aura:if isTrue="{!v.infoSID.servizioSaldo == 'S'}">
+                                    <p class="my-label2 my-align">Attivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.dataAttSaldo == '' || v.infoSID.dataAttSaldo == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.dataAttSaldo != ''}">
+                                        <aura:if isTrue="{!v.infoSID.dataAttSaldo != '0'}">
+                                            <p class="my-campo">{!v.infoSID.dataAttSaldo}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.infoSID.servizioSaldo == 'N'}">
+                                    <p class="my-label2 my-align">Disattivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.dataDisSaldo == '' || v.infoSID.dataDisSaldo == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.dataDisSaldo != ''}">
+                                        <aura:if isTrue="{!v.infoSID.dataDisSaldo != '0'}">
+                                            <p class="my-campo">{!v.infoSID.dataDisSaldo}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Super.Soglia Aut.Sing</p>
+                                <p class="my-label">{!v.infoSID.avvisoAut}</p>
+                                <p class="my-label">Imp.soglia {!v.infoSID.impSogliaAut}</p>
+                                <aura:if isTrue="{!v.infoSID.avvisoAut == 'S'}">
+                                    <p class="my-label2 my-align">Attivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.dataAttAut == '' || v.infoSID.dataAttAut == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.dataAttAut != ''}">
+                                        <aura:if isTrue="{!v.infoSID.dataAttAut != '0'}">
+                                            <p class="my-campo">{!v.infoSID.dataAttAut}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.infoSID.avvisoAut == 'N'}">
+                                    <p class="my-label2 my-align">Disattivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.dataDisAut == '' || v.infoSID.dataDisAut == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.dataDisAut != ''}">
+                                        <aura:if isTrue="{!v.infoSID.dataDisAut != '0'}">
+                                            <p class="my-campo">{!v.infoSID.dataDisAut}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Presenza</p>
+                                <p class="my-label">{!v.infoSID.presSogliaAut}</p>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Super.Soglia Aut.Tot</p>
+                                <p class="my-label">{!v.infoSID.avvisoAutTot}</p>
+                                <p class="my-label">Imp.soglia {!v.infoSID.impSogliaAutTot}</p>
+                                <aura:if isTrue="{!v.infoSID.avvisoAutTot == 'S'}">
+                                    <p class="my-label2 my-align">Attivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.dataAttAutTot == '' || v.infoSID.dataAttAutTot == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.dataAttAutTot != ''}">
+                                        <aura:if isTrue="{!v.infoSID.dataAttAutTot != '0'}">
+                                            <p class="my-campo">{!v.infoSID.dataAttAutTot}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.infoSID.avvisoAutTot == 'N'}">
+                                    <p class="my-label2 my-align">Disattivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.dataDisAutTot == '' || v.infoSID.dataDisAutTot == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.dataDisAutTot != ''}">
+                                        <aura:if isTrue="{!v.infoSID.dataDisAutTot != '0'}">
+                                            <p class="my-campo">{!v.infoSID.dataDisAutTot}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                            <div class="my-inline">
+                                <p class="my-label">Superamento linea 1</p>
+                                <p class="my-label">{!v.infoSID.risPrincServizio}</p>
+                                <aura:if isTrue="{!v.infoSID.risPrincServizio == 'S'}">
+                                    <p class="my-label2 my-align">Attivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.risPrincDataAtt == '' || v.infoSID.risPrincDataAtt == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.risPrincDataAtt != ''}">
+                                        <aura:if isTrue="{!v.infoSID.risPrincDataAtt != '0'}">
+                                            <p class="my-campo">{!v.infoSID.risPrincDataAtt}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                                <aura:if isTrue="{!v.infoSID.risPrincServizio == 'N'}">
+                                    <p class="my-label2 my-align">Disattivo dal </p>
+                                    <aura:if isTrue="{!v.infoSID.risPrincDataDis == '' || v.infoSID.risPrincDataDis == '0'}">
+                                        <p class="my-campo">-</p>
+                                    </aura:if>
+                                    <aura:if isTrue="{!v.infoSID.risPrincDataDis != ''}">
+                                        <aura:if isTrue="{!v.infoSID.risPrincDataDis != '0'}">
+                                            <p class="my-campo">{!v.infoSID.risPrincDataDis}</p>
+                                        </aura:if>
+                                    </aura:if>
+                                </aura:if>
+                            </div>
+                        </div>
+                    </div>
+
+                </aura:set>
+            </aura:if>
+
+        </div>
+
+        <div class="slds-grid slds-grid--pull-padded">
+            <div class="slds-col--padded-large slds-size_1-of-6">
+            </div>
+            <div class="slds-col--padded-large slds-size_4-of-5 slds-text-color_error">
+                <p>E’ necessario variare il cellulare? Premere f5 e selezionare Variazione Cellulare.</p>
+            </div>
+        </div>
+
+        <!-- stampa form di modifica alert -->
+
+        <aura:if isTrue="{!v.emettitore=='3'}">
+            <div class="slds-grid slds-grid--pull-padded">
+
+                <div class="slds-col--padded-large slds-size_1-of-6 my-title">
+                    <p>Nuovi Dati</p>
+                </div>
+        
+                <div class="slds-col--padded-large slds-size_4-of-5">
+        
+                    <lightning:select name="opTelef" label="Operatore telefonico" onchange="{!c.changeOpTel}" aura:id="opTelef">
+                        <aura:iteration items="{!v.operatori}" var="operatori">
+                            <option text="{!operatori.label}" value="{!operatori.value}" selected="{!operatori.value == v.operTelefSel}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                    
+                    <lightning:select name="aggEC" label="Aggiornamento E/C" value="{!v.newInfoSID.servizioAggEc}">
+                        <aura:iteration items="{!v.yesNo}" var="yesNo">
+                            <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.servizioAggEc}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                    
+                    <lightning:select name="avvRateiz" label="Avvenuta rateizzazione" value="{!v.newInfoSID.protCampServizio}">
+                        <aura:iteration items="{!v.yesNo}" var="yesNo">
+                            <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.protCampServizio}" />
+                        </aura:iteration>
+                    </lightning:select>
+                    
+                    <lightning:select name="bloccoSblocco" label="Blocco/Sblocco" value="{!v.newInfoSID.bloccoServizio}">
+                        <aura:iteration items="{!v.yesNo}" var="yesNo">
+                            <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.bloccoServizio}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                    
+                    <div class="my-inline">
+                        <lightning:select name="saldoCarta" label="Saldo carta" value="{!v.newInfoSID.servizioSaldo}">
+                            <aura:iteration items="{!v.yesNo}" var="yesNo">
+                                <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.servizioSaldo}"/>
+                            </aura:iteration>
+                        </lightning:select>
+
+                        <lightning:select name="frequenza" label="Frequenza" value="{!v.newInfoSID.frequenzaSaldo}">
+                            <aura:iteration items="{!v.freq}" var="freq">
+                                <option text="{!freq.label}" value="{!freq.value}" selected="{!freq.value == v.infoSID.frequenzaSaldo}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                    </div>  
+                    
+                    <div class="my-inline">
+                        <lightning:select name="superSogliaSign" label="Super.Soglia Aut.Sign" value="{!v.newInfoSID.avvisoAut}">
+                            <aura:iteration items="{!v.yesNo}" var="yesNo">
+                                <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.avvisoAut}"/>
+                            </aura:iteration>
+                        </lightning:select>
+
+                        <aura:if isTrue="{!v.newInfoSID.avvisoAut=='S'}">
+                            <div class="slds-text-title">
+                                <p>Imp.Soglia 180,0</p>
+                            </div>
+                            <aura:set attribute="else">
+                                <div class="slds-text-title">
+                                    <p>Imp.Soglia 0</p>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    
+                    <div class="my-inline">
+                        <lightning:select name="presenza" label="Presenza" value="{!v.newInfoSID.presSogliaAut}">
+                            <aura:iteration items="{!v.yesNo}" var="yesNo">
+                                <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.presSogliaAut}"/>
+                            </aura:iteration>
+                        </lightning:select>
+
+                        <div class="slds-text-color_error my-text">
+                            <p>Selezionare N se il cliente vuole ricevere anche le notifiche per importi sotto la soglia.
+                                <u>Tali notifiche saranno a pagamento.</u>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="my-inline">
+                        <lightning:select name="superSogliaTot" label="Super.Soglia Aut.Tot" value="{!v.newInfoSID.avvisoAutTot}">
+                            <aura:iteration items="{!v.yesNo}" var="yesNo">
+                                <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.avvisoAutTot}"/>
+                            </aura:iteration>
+                        </lightning:select>
+
+                        <aura:if isTrue="{!v.newInfoSID.avvisoAutTot=='S'}">
+                            <lightning:input type="string" name="impSogliaAut" label="Imp.Soglia" value="{!v.newInfoSID.impSogliaAutTot}" />
+                            <aura:set attribute="else">
+                                <div class="slds-text-title">
+                                    <p>Imp.Soglia 0</p>
+                                </div>
+                            </aura:set>
+                        </aura:if>
+                    </div>
+                    
+                    <lightning:select name="superLinea1" label="Superamento linea 1" value="{!v.newInfoSID.risPrincServizio}">
+                        <aura:iteration items="{!v.yesNo}" var="yesNo">
+                            <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.risPrincServizio}"/>
+                        </aura:iteration>
+                    </lightning:select>
+                        
+                </div>
+        
+            </div>
+
+            <aura:set attribute="else">
+                <div class="slds-grid slds-grid--pull-padded">
+
+                    <div class="slds-col--padded-large slds-size_1-of-6 my-title">
+                        <p>Nuovi Dati</p>
+                    </div>
+            
+                    <div class="slds-col--padded-large slds-size_4-of-5">
+                        <div class="slds-text-longform">
+
+                        <div class="my-inline">
+                            <p class="my-label">Operatore telefonico</p>
+                            <p class="my-label">{!v.infoSID.operTelef}</p>
+                        </div>
+                        
+                        <lightning:select name="aggEC2" label="Aggiornamento E/C" value="{!v.newInfoSID.servizioAggEc}">
+                            <aura:iteration items="{!v.yesNo}" var="yesNo">
+                                <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.servizioAggEc}"/>
+                            </aura:iteration>
+                        </lightning:select>
+
+                        <br/>
+
+                        <div class="my-inline">
+                            <p class="my-label">Avvenuta Rateizzazione</p>
+                            <p class="my-label">{!v.infoSID.protCampServizio}</p>
+                        </div>
+
+                        <div class="my-inline">
+                            <p class="my-label">Blocco/Sblocco</p>
+                            <p class="my-label">{!v.infoSID.bloccoServizio}</p>
+                        </div>
+
+                        <div class="my-inline">
+                            <p class="my-label">Saldo carta</p>
+                            <p class="my-label">{!v.infoSID.servizioSaldo}</p>
+                            <p class="my-label">Frequenza</p>
+                            <p class="my-label">{!v.infoSID.frequenzaSaldo}</p>
+                        </div>
+                        
+                        <div class="my-inline">
+                            <lightning:select name="superSogliaSign2" label="Super.Soglia Aut.Sign" value="{!v.newInfoSID.avvisoAut}">
+                                <aura:iteration items="{!v.yesNo}" var="yesNo">
+                                    <option text="{!yesNo.label}" value="{!yesNo.value}" selected="{!yesNo.value == v.infoSID.avvisoAut}"/>
+                                </aura:iteration>
+                            </lightning:select>
+
+                            <p class="my-campo"></p>
+
+                            <aura:if isTrue="{!v.newInfoSID.avvisoAut=='S'}">
+                                <lightning:input type="string" name="impSoglia2" label="Imp.Soglia" value="{!v.newInfoSID.impSogliaAut}" />
+                                <aura:set attribute="else">
+                                    <p class="my-label">Imp.Soglia 0</p>
+                                </aura:set>
+                            </aura:if>
+                        </div>
+                        
+                        <br/>
+
+                        <div class="my-inline">
+                            <p class="my-label">Presenza</p>
+                            <p class="my-label">{!v.infoSID.presSogliaAut}</p>
+                        </div>
+
+                        <div class="my-inline">
+                            <p class="my-label">Super.Soglia Aut.Tot</p>
+                            <p class="my-label">{!v.infoSID.avvisoAutTot}</p>
+                            <p class="my-label">Imp.Soglia {!v.infoSID.impSogliaAutTot}</p>
+                        </div>
+
+                        <div class="my-inline">
+                            <p class="my-label">Superamento linea 1</p>
+                            <p class="my-label">{!v.infoSID.risPrincServizio}</p>
+                        </div>
+                        </div>
+                    </div>
+            
+                </div>
+
+            </aura:set>
+    
+        </aura:if>
+    </aura:if>
+    
+</aura:component>

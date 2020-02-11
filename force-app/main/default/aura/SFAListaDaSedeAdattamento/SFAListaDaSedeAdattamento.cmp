@@ -1,0 +1,41 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                controller = "SFAListaDaSedeAttivitaAdattamentoCtrl" access="global" >
+
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="toastMsg" type="String"/>
+    <aura:attribute name="showSpinner" type="Boolean" default="false"/>
+    <aura:attribute name="case" type="Object"/>
+    <aura:attribute name="showUtenzeNominative" type="Boolean" default="false" />    
+    <aura:attribute name="showEsitazione" type="Boolean" default="true" />
+                
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+
+    <br/>
+ 
+    <aura:if isTrue ="{!and(v.case.Id,v.showUtenzeNominative)}">
+        <div class="slds-col slds-size_1-of-1 ">
+            <div class="slds-box backWhite">
+                     <c:SFAListaDaSedeAdattamentoUtNom caseChildSelected="{!v.case}"  ></c:SFAListaDaSedeAdattamentoUtNom>
+                     <br/>
+                     <lightning:button title="conferma" variant="brand" label="Conferma" onclick="{!c.conferma}"/>
+            </div>
+        
+        </div>
+    
+    </aura:if>
+
+
+    <br/>
+    <aura:if isTrue ="{!(v.case.Status != 'Chiuso')}">
+        <aura:if isTrue ="{!and(v.case.Id,v.showEsitazione)}">
+            <c:SFAListaDaSedeAdattamentoEsitazione caseChildSelected="{!v.case}"  ></c:SFAListaDaSedeAdattamentoEsitazione>
+        </aura:if>
+    </aura:if>
+<!--    <lightning:button onclick="{!c.goBack}">Chiudi</lightning:button>-->
+
+    <div class="slds-box">
+        <lightning:button title="Chiudi" label="Chiudi" onclick="{!c.goBack}" variant="destructive" />
+    </div>
+
+</aura:component>

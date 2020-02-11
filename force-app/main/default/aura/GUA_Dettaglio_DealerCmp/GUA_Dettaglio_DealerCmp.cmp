@@ -1,0 +1,94 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" controller="GUA_Dettaglio_DealerCnt" access="global">
+    <!--handler -->
+    <aura:handler name="init" value="this" action="{!c.init}" />
+    <!--handler End-->
+    <aura:attribute name="isFoundDealer" type="Boolean" default="false" />
+    <aura:attribute type="String" name="accId" default="" />
+    <aura:attribute name="caseDealer" type="Case" />
+    <aura:attribute type="Account" name="filialeCase" default="" />
+    <aura:attribute name="recordId" type="String" default="" />
+    <div  class="slds-p-bottom_xxx-small slds-p-left_medium" >
+        <a href="https://compassiap-col.int.compassonline.it/biap/GrantedAccessController?appName=SCHDL" target="_blank">Scheda Dealer</a>
+    </div>
+    
+
+    <lightning:card variant="base" class="slds-m-bottom_small">
+        <div class="slds-card__body_inner">
+            <lightning:layout multipleRows="true">
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Cod OCS: &nbsp;{!v.caseDealer.Account.getCodice_Cliente__c}</span></div>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Ragione Sociale : &nbsp;{!v.caseDealer.Account.Name}</span></div>
+                    </div>
+                </lightning:layoutItem>
+                
+                
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Stato :  &nbsp;{!v.caseDealer.Account.Status__c}</span></div>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Tipo Intermediario : &nbsp;{!v.caseDealer.Account.Tipo_Intermediario__c}</span></div>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Macroarea : &nbsp;{!v.caseDealer.Account.Macroarea__c}</span></div>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Prodotto dominante : &nbsp;{!v.caseDealer.Account.ProdottoDominanteMacroarea__c}</span></div>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Data Attivazione : &nbsp;{!v.caseDealer.Account.DataInizioAttivita__c}</span></div>
+                    </div>
+                </lightning:layoutItem>              
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Partita IVA : &nbsp;{!v.caseDealer.Account.Partita_IVA__c}</span></div>
+                    </div>
+                </lightning:layoutItem>
+                
+               <!-- <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Ultima Visita : &nbsp;{!v.caseDealer.Account.LastViewedDate}</span></div>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static">Ritiro contratti presso Dealer</span></div>
+                    </div>
+                </lightning:layoutItem>
+                <lightning:layoutItem size="12">
+                    <div class="slds-form-element slds-m-around_xx-small">
+                        <div class="slds-form-element__control"><span class="slds-form-element__static"></span></div>
+                    </div>
+                </lightning:layoutItem>-->
+            </lightning:layout>
+            
+        </div>
+    </lightning:card>
+    <div class="slds-m-around_small slds-theme_default slds-page-header">
+        <div class="slds-media">
+            <div class="slds-media__figure">
+                <lightning:icon iconName="utility:home" size="medium" alternativeText="Dealer Name"></lightning:icon>
+            </div>
+            <div class="slds-media__body">
+                <div style="font-size: 0.75rem;">Catena Intermediazione</div>
+                <div style="font-size: 1rem;"><b>{!v.caseDealer.Account.Name}</b></div>
+            </div>
+            <div class="slds-media__figure slds-media__figure_reverse"></div>
+        </div>
+    </div>
+
+
+</aura:component>

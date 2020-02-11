@@ -1,0 +1,23 @@
+<aura:component  controller="Gua_DatiaggiuntiviCnt" implements="flexipage:availableForAllPageTypes,force:appHostable,force:lightningQuickAction">
+	
+    <!-- attributes of the component -->
+    <aura:attribute name="idCase" type="String" />
+    <aura:attribute name="script" type="String"/>
+    <aura:attribute name="campaignName" type="String"/>
+    <!-- handler --> 
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <div class="container">
+        <div class="demo-only slds-size_1-of-1">
+            <div class="slds-media slds-media_center">
+                <div class="slds-media__figure">
+                    <lightning:icon iconName="standard:campaign" alternativeText="Campaign" />
+                </div>
+                <div class="slds-media__body">
+                    <p class="slds-text-title_caps">{!v.campaignName}</p>
+                </div>
+            </div>
+            <div class="slds-text-title">{!v.script}</div>
+        </div>
+    </div> 
+</aura:component>

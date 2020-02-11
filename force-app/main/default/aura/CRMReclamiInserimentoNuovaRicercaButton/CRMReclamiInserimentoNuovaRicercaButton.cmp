@@ -1,0 +1,19 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" 
+                access="global" 
+                >
+    
+    <aura:attribute name="stepInserimentoCliente" type="Integer"/>
+    <aura:attribute name="listaClienti" type="OCSCliente[]"/>
+    <aura:attribute name="clienteSelezionato" type="OCSCliente"/>
+    <aura:attribute name="clienteSelezionatoContainer" type="OCSCliente"/>
+    <aura:attribute name="listaPratiche" type="List"/>
+    <aura:attribute name="praticaSelezionata" type="Object"/> <!--OCSPratica oppure OCSPraticaFuturo-->
+    <aura:attribute name="infoPraticaSelezionata" type="Object"/>
+    <aura:attribute name="praticaSelezionataContainer" type="Object"/><!--OCSPratica oppure OCSPraticaFuturo-->
+    <aura:attribute name="listaInfoPratiche" type="List"/>
+    <aura:attribute name="isDisabled" type="Boolean" default="false"/>
+    <aura:attribute name="case" type="Object"/>
+
+	<lightning:button label="Nuova Ricerca" variant="brand" disabled="{!v.isDisabled}" onclick="{!c.nuovaRicerca}"/>
+
+</aura:component>

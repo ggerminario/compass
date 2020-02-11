@@ -1,0 +1,70 @@
+<!--
+  @File Name          : PV2875RichiestaDocumentazioneAssicurativa.cmp
+  @Description        : 
+  @Author             : Marco Cutolo
+  @Group              : 
+  @Last Modified By   : Marco Cutolo
+  @Last Modified On   : 6/2/2020, 14:17:15
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    11/12/2019   Marco Cutolo     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" controller="PV2875RichiestaDocAssIns" >
+    <!--Pacchetti-->
+    <aura:attribute name="pacchettiTableColumns" type="List" default="[{label: 'Cod Fornitore', fieldName: 'codFornitore', type: 'text'},
+                                                                      {label: 'Desc Fornitore', fieldName: 'desFornitore', type: 'text'},
+                                                                      {label: 'Servizio', fieldName: 'codServizio', type: 'text'},
+                                                                      {label: 'Pacchetto', fieldName: 'codPacchetto', type: 'text'},
+                                                                      {label: 'Inizio', fieldName: 'dataInizioCoperturaSlashed', type: 'text'},
+                                                                      {label: 'Fine', fieldName: 'dataFineCoperturaSlashed', type: 'text'},
+                                                                      {label: 'Durata', fieldName: 'durata', type: 'text'},
+                                                                      {label: 'Assicurazione', fieldName: 'assicurazioneAttivaFinanziata', type: 'text', initialWidth: 120}]"/>
+    <aura:attribute name="pacchettiList" type="OCSRecuperaDatiRimborsoPostEAInvoker.PacchettoServizioDTO[]"/>
+    <aura:attribute name="pacchettiSelezionati" type="List" />
+    <aura:attribute name="pacchettiSelezionatiMap" type="Map" default="{}"/>
+    <!--END Pacchetti-->
+    <!--Checkbox-->
+    <!--END Checkbox-->
+    <lightning:card class='slds-form_stacked'>
+        <!--START Sezione Pacchetti-->
+        <aura:if isTrue="{!v.pacchettiList.length>0}">
+            <div
+                 class="slds-m-top_small slds-box slds-box_xx-small slds-text-align_center  slds-theme_info slds-text-heading_small">
+                Pacchetti Associati</div>
+            <lightning:datatable class="table-pv" onrowselection="{!c.selectPacchetto}" data="{!v.pacchettiList}" columns="{!v.pacchettiTableColumns}" keyField="codServizio"/>
+        </aura:if>
+        <!-- END Sezione Pacchetti-->
+        <br></br>
+        <br></br>
+        <!-- START Fascicoli-->
+        <aura:if isTrue="{!v.pacchettiSelezionati.length>0}">
+            <aura:iteration items="{!v.pacchettiSelezionati}" var="item">
+                <lightning:layout class="slds-wrap slds-form" multipleRows="true" >
+                    <lightning:layoutItem size="6">
+                        <option text="{!item.codServizio}" value="{!item.codServizio}"/>
+                    </lightning:layoutItem>
+                    <lightning:layoutItem size="6">
+                        <lightning:layout class="slds-wrap slds-form" multipleRows="true">
+                            <lightning:layoutItem size="2">
+                                <ui:inputCheckbox aura:id="fascicoliInformativi" name="{!item.codServizio}" change="{!c.handleChangeFascicoliInformativi}"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="10">
+                                <p>Fascicoli Informativi</p>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="2">
+                                <ui:inputCheckbox aura:id="vademecum" name="{!item.codServizio}" change="{!c.handleChangeVademecum}"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="10">
+                                <p>Vademecum</p>
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </lightning:layoutItem>
+                </lightning:layout>
+                <br></br>
+            </aura:iteration>
+        </aura:if>
+        <!-- END Fascicoli-->
+    </lightning:card>
+    
+    
+</aura:component>

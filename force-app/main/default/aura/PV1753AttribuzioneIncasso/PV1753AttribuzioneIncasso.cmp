@@ -1,0 +1,32 @@
+<aura:component extends="c:PVSubComponentBase" controller="PV1753AttribuzioneIncassoInserimento">
+    
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="dataIncasso" type="Date" default="" />
+    <aura:attribute name="importoIncasso" type="String" default="" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <lightning:layout class="slds-wrap" multipleRows="true">
+        <lightning:layoutItem size="6" padding="horizontal-small">
+            <lightning:input 
+            name="DataIncasso"
+            type="date" 
+            formatter="date" 
+            value="{!v.dataIncasso}" max="{!v.today}"
+            label="Data incasso"/>
+        </lightning:layoutItem>   
+
+        <lightning:layoutItem size="6" padding="horizontal-small">
+            <lightning:input 
+            name="ImportoIncasso"
+            type="number" 
+            formatter="currency"
+            value="{!v.importoIncasso}"
+            label="Importo incasso"/>
+        </lightning:layoutItem>  
+    </lightning:layout>
+
+
+
+    
+</aura:component>

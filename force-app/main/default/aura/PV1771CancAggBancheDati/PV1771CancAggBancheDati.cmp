@@ -1,0 +1,21 @@
+<!--
+  @File Name          : PV1771CancAggBancheDati.cmp
+  @Description        : 
+  @Author             : Nicola Musicco
+  @Group              : 
+  @Last Modified By   : Nicola Musicco
+  @Last Modified On   : 7/1/2020, 16:02:33
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    7/1/2020   Nicola Musicco     Initial Version
+-->
+
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV1771CancAggBancheDati'>
+
+    <aura:attribute name="dataEstinzione" type="Date"/>
+    <aura:if isTrue="{!notequals(v.PVForm.pratica, null)}">
+
+        <ui:inputDate label="Eventuale data estinzione postazione" 
+                displayDatePicker="true" value="{!v.dataEstinzione}"/>
+    </aura:if>
+</aura:component>

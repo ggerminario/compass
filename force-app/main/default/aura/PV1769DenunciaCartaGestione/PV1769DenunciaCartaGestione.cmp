@@ -1,0 +1,93 @@
+<!--
+  @Component Name     : PV1769DenunciaCartaGestione.cmp
+  @Description        : 
+  @Author             : Adriana Lattanzi
+  @Group              : 
+  @Last Modified By   : Adriana Lattanzi
+  @Last Modified On   : 14/11/2019, 11:34:00
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    2019-11-14 11:34:00        Adriana Lattanzi          New version
+-->
+<aura:component controller='PV1769DenunciaCartaGestione' access='global'>
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+    <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni" />
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre" />
+    
+    <!-- attribute -->
+    <aura:attribute name="stopList" type="List" default="[
+    {'label': 'No', 'value': 'no'},
+    {'label': 'Sì per furto', 'value': 'furto'},
+    {'label': 'Sì per smarrimento', 'value': 'smarrimento'}
+    ]" />
+    <aura:attribute name="resultStopList" type="String"/>
+    <!--Riconoscimento o disconoscimento-->
+    <aura:attribute name="RicDisc" type="List" default="[
+    {'label': 'Riconoscimento', 'value': 'ric'},
+    {'label': 'Disconoscimento', 'value': 'dis'}
+    ]" />
+    <aura:attribute name="resultRicDisc" type="String"/>
+    <!-- attributi comunicazione OCS -->
+    <aura:attribute name="dataList" type="OCSRecuperaCircuitoCartaResponse.CircuitoPanCartaDTO" />
+    <!-- attributi email -->
+    <aura:attribute name="address" type="List" />
+    <aura:attribute name="email" type="String" />
+
+    <!-- da parent -->
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name="dispositionSelezionato" type="XCS_Disposition__c" />
+    <aura:attribute name='note' type='String' />
+    <aura:attribute name="allegati" type="Attachment[]" />
+    <aura:attribute name="newStatus" type="String" />
+
+    <!-- main -->
+    <lightning:card class="slds-form_stacked">
+        <lightning:layoutItem size="6" padding="horizontal-small">
+            <span>
+                <lightning:radioGroup name="StopList" label="Inserire in stop list?" options="{! v.stopList }" 
+                                        value="{! v.resultStopList }" type="radio" required="true" onchange="{! c.emailcomposerwithaddress }"/>
+            </span>
+            <span>
+                <lightning:radioGroup name="ricon_discon" label="Si tratta di riconoscimento o disconoscimento?" options="{! v.RicDisc }" 
+                                        value="{! v.resultRicDisc }" type="radio" required="true"/>
+            </span>
+        </lightning:layoutItem>
+    </lightning:card>
+
+    <lightning:card class='slds-form_stacked'>
+        <aura:if isTrue="{!v.dataList}">
+                <div class="slds-p-top_small slds-p-left_large">
+                    <div class="slds-grid slds-gutters slds-m-bottom--medium">
+                        <!--div class="slds-col"-->
+                            <span>
+                                <lightning:input name='pan' aura:id='pan' label='PAN'
+                                                 value='{!v.dataList.pan}' type='String' onchange="{! c.emailcomposerwithaddress }" />
+                            </span>
+                            <span>
+                                <lightning:input name='circuito' aura:id='circuito' label='Circuito' 
+                                                 value='{!v.dataList.circuito}' type='String' onchange="{! c.emailcomposerwithaddress }"/>
+                            </span>
+                        <!--/div--> 
+                    </div>
+                </div>
+        </aura:if>                    
+    </lightning:card>
+
+    <lightning:card class="slds-form_stacked">
+        <aura:if isTrue="{! !or(v.resultStopList == 'no', v.resultStopList == '')}">
+            <div class="slds-p-top_x-small slds-p-left_small">
+                <span>
+                    <lightning:textarea name='IndirizzoEmail' aura:id='address' label='Indirizzo Email'
+                                     value='{!v.address}' placeholder='address@email.com'/>
+                </span>
+                <span>
+                    <lightning:textarea name="email" label="Testo Email" value="{!v.email}" placeholder="Inserire testo email.."/>
+                </span>
+            </div>
+        </aura:if>
+        <br /><br /><br />
+    </lightning:card>
+
+</aura:component>

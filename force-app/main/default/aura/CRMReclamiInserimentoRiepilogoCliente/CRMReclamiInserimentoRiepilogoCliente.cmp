@@ -1,0 +1,63 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" 
+                access="global" 
+                >
+    
+    <aura:attribute name="aziendaSelezionata" type="String"/>
+    <aura:attribute name="clienteSelezionato" type="OCSCliente"/>
+    <aura:attribute name="praticaSelezionata" type="Object"/>
+    <aura:attribute name="infoPraticaSelezionata" type="Object"/>
+    <aura:attribute name="praticaSelezionataContainer" type="Object"/>
+    <aura:attribute name="reclamoSelezionato" type="Case"/>
+    <aura:attribute name="stepInserimentoCliente" type="Integer"/>
+    <aura:attribute name="numeroReclamo" type="String"/>
+    <aura:attribute name="showCambiaProdotto" type="Boolean" default="true"/>
+    <aura:attribute name="filiale" type="String"/>
+    <aura:attribute name="isDisabled" type="Boolean" default="false"/>
+    <aura:attribute name="isSconosciuto" type="Boolean" default="false"/>
+ 
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+    
+    <c:CRMReclamiInserimentoRiepilogoHeader clienteSelezionato="{!v.clienteSelezionato}"/>
+    <div style="margin-left:15px;margin-right:15px;margin-top:8px">
+       	 <aura:if isTrue="{!v.aziendaSelezionata!='MBCredit Solutions'}">
+       		 <aura:if isTrue="{!v.showCambiaProdotto}">
+            	<lightning:button label="Cambia prodotto"
+                            variant="brand"
+                            onclick="{!c.cambiaProdotto}"
+                            />
+       		 </aura:if>
+        </aura:if>
+    </div>
+    <br/>
+  
+    <c:CRMReclamiInserimentoRiepilogoPratica aura:id="InserimentoRiepilogoPratica"	
+                                             aziendaSelezionata="{!v.aziendaSelezionata}"
+                                             praticaSelezionata="{!v.praticaSelezionata}"
+                                             infoPraticaSelezionata="{!v.infoPraticaSelezionata}"
+                                             clienteSelezionato="{!v.clienteSelezionato}"
+                                             praticaSelezionataContainer="{!v.praticaSelezionataContainer}"
+                                             filiale="{!v.filiale}"
+                                             />
+   
+    <aura:if isTrue="{!and(v.aziendaSelezionata=='Compass',v.isSconosciuto==false)}">
+        <!--Tabella Compass per cliente e coobbligati-->
+        <br/>
+        <c:CRMReclamiInserimentoRiepilogoTabellaClienteCoobbligati praticaSelezionata="{!v.praticaSelezionata}"
+                                                                   clienteSelezionato="{!v.clienteSelezionato}"
+                                                                   />
+    </aura:if>
+    
+    <aura:if isTrue="{!v.clienteSelezionato!=null || !v.aziendaSelezionata=='MBCredit Solutions'}">
+        <br/>
+        <c:CRMReclamiInserimentoReclamiPrecedenti clienteSelezionato="{!v.clienteSelezionato}"
+                                                  praticaSelezionata="{!v.praticaSelezionata}"
+                                                  reclamoSelezionato="{!v.reclamoSelezionato}"
+                                                  numeroReclamo="{!v.numeroReclamo}"
+                                                  aziendaSelezionata="{!v.aziendaSelezionata}"
+                                                  isDisabled="{!v.isDisabled}"
+                                                  />
+    </aura:if>
+    
+</aura:component>

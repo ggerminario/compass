@@ -1,0 +1,88 @@
+<aura:component extends="c:PVSubComponentBase" access='global' controller="PV1761CopiaEstrattoConto">
+
+   <aura:attribute name="destinatari" type="string[]" default="[
+      {'label': 'Selezionare', 'value': 'Selezionare'}, 
+      {'label': 'Cliente', 'value': 'Cliente'}, 
+      {'label': 'Filiale', 'value': 'Filiale'}]" />
+
+   <aura:attribute name="selectedDestinatario" type="string" />
+
+   <aura:attribute name="AMColumns" type="List" default="[{label: 'Mese', fieldName: 'mese', type: 'string'},
+        {label: 'Anno', fieldName: 'anno', type: 'string'}]" />
+
+   <aura:attribute name="MeseAnnoList" type="List[]" />
+
+   <aura:attribute name="listaMesi" type="List" default="[{'label': 'Gennaio', 'value': 'Gennaio'},
+      {'label': 'Febbraio', 'value': 'Febbraio'},
+      {'label': 'Marzo', 'value': 'Marzo'},
+      {'label': 'Aprile', 'value': 'Aprile'},
+      {'label': 'Maggio', 'value': 'Maggio'},
+      {'label': 'Giugno', 'value': 'Giugno'},
+      {'label': 'Luglio', 'value': 'Luglio'},
+      {'label': 'Agosto', 'value': 'Agosto'},
+      {'label': 'Settembre', 'value': 'Settembre'},
+      {'label': 'Ottobre', 'value': 'Ottobre'},
+      {'label': 'Novembre', 'value': 'Novembre'},
+      {'label': 'Dicembre', 'value': 'Dicembre'}]" />
+
+   <aura:attribute name="selectedMese" type="List" />
+
+   <aura:attribute name="selectedAnno" type="string" />
+
+   <aura:attribute name="destIndirizzo" type="string" />
+   <aura:attribute name="destCap" type="string" />
+   <aura:attribute name="destProvincia" type="string" />
+   <aura:attribute name="destLocalita" type="string" />
+
+   <lightning:select label="Destinatario" class="my-dimension" name="destinatario" value="{!v.selectedDestinatario}">
+      <aura:iteration items="{!v.destinatari}" var="destinatari">
+         <option text="{!destinatari.label}" value="{!destinatari.value}"
+            selected="{!destinatari.value == !v.selectedDestinatario}" />
+      </aura:iteration>
+   </lightning:select>
+
+   <br></br>
+
+   <div class="slds-box slds-box_xx-small slds-text-align_center slds-theme_info slds-text-heading_small">
+      LISTA E/C (SELEZIONARE PER ELIMINARE)</div>
+   <lightning:datatable aura:id="linesTable" class="table-pv" columns="{!v.AMColumns}" keyField="id"
+      data="{!v.MeseAnnoList}" maxRowSelection="1" showRowNumberColumn="false" onrowselection="{!c.deleteRow}" />
+
+   <br></br>
+
+   <lightning:input aura:id="annoInput" label="Anno" class="my-dimension" pattern="[0-9]{4}"
+      messageWhenPatternMismatch="L'anno inserito non è valido." name="anno" value="{!v.selectedAnno}" />
+
+   <br></br>
+
+   <p>Mesi
+      <lightning:checkboxGroup name="mesi" options="{!v.listaMesi}" value="{!v.selectedMese}"
+         onchange="{!c.handleChange}" />
+   </p>
+
+   <lightning:button label="Seleziona tutti" class="slds-m-top--medium" variant="destructive"
+      onclick="{!c.selectAll}" />
+
+   <lightning:button label="Aggiungi" class="slds-m-top--medium" variant="destructive" onclick="{!c.insertEC}" />
+
+   <aura:if isTrue="{!v.selectedDestinatario == 'Cliente'}">
+
+      <div
+         class="slds-box slds-box_xx-small slds-text-align_center slds-theme_info slds-text-heading_small slds-m-top--medium">
+         INDIRIZZO SPEDIZIONE</div>
+
+      <div class="slds-grid slds-gutters slds-m-bottom--medium">
+
+         <div class="slds-col">
+            <lightning:input class="my-input" type="string" label="Indirizzo" name="indirizzo" value="{!v.destIndirizzo}" />
+            <lightning:input class="my-input" type="string" label="CAP" name="cap" value="{!v.destCap}" />
+         </div>
+         <div class="slds-col">
+            <c:PVProvinciaCombo provinciaSelection="{!v.destProvincia}" label='Provincia'></c:PVProvinciaCombo>
+            <c:PVComuneCombo provinciaSelection="{!v.destProvincia}" comuneSelection="{!v.destLocalita}" label='Località'></c:PVComuneCombo>
+         </div>
+
+      </div>
+   </aura:if>
+
+</aura:component>

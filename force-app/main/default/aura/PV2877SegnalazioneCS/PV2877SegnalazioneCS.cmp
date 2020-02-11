@@ -1,0 +1,132 @@
+<!--
+  @File Name          : PV2877SegnalazioneCS.cmp
+  @Description        : 
+  @Author             : Marco Cutolo
+  @Group              : 
+  @Last Modified By   : Marco Cutolo
+  @Last Modified On   : 10/12/2019, 14:57:48
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    10/12/2019   Marco Cutolo     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" controller="PV2877SegnalazioneCSInserimento">
+
+        <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+        <!--Filiali-->
+        <aura:attribute name="options" type="List" />
+        <aura:attribute name="showFiliali" type="Boolean" />
+        <aura:attribute name = "codiceSottotipologiaFiliale" type="Integer" default="103" />
+        <!-- END Filiali-->
+        
+
+        <!--Picklist-->
+        <aura:attribute name="categorieList" type="List" default="PREVENDITA,
+            POSTVENDITA,
+            DEALER" />
+        <aura:attribute name="prodottiList"  type="List" default="CARTA DI CREDITO,
+            CREDITO CLASSICO,
+            STORE CREDIT,
+            ASSICURAZIONI STAND ALONE, 
+            COMPASS-PAY CONTO CARTA,
+            COMPASS PAY - LINEA DI FIDO, 
+            COMPASS PAY - E WALLET, 
+            COMPASS PAY - WESTERN UNION, 
+            COMPASS PAY - PREPAGATA"/>
+        <aura:attribute name="mappaArgomenti" type="Map"/>
+        <aura:attribute name="argomentiList" type="List"/>
+        <aura:attribute name="selectedTemplate" type="String" />
+        <!--End Picklist-->
+
+        <!--Pratiche-->
+        <aura:attribute name="praticheTableColumns" type="List" default="[{label: 'Numero Pratica', fieldName: 'numPratica', type: 'text'},
+        {label: 'Tipologia', fieldName: 'tipoPratica', type: 'text' },
+        {label: 'Stato', fieldName: 'statoPratica', type: 'text'},
+        {label: 'Prodotto', fieldName: 'prodotto', type: 'text'},
+        {label: 'Modalità Pagamento', fieldName: 'tipoPagamento', type: 'text'},
+        {label: 'Dealer', fieldName: 'dealerCode', type: 'text'},
+        {label: 'Canale', fieldName: 'canale', type: 'text'}]" />
+        <aura:attribute name="praticheList" type="OCSPratica[]" />
+        <aura:attribute name="praticaSelezionata" type="OCSPratica" />
+
+        
+        <!--To DO Segnalazioni CS: {!v.sottoTipologia} 
+        Motivo: {!v.motivoSelezionato}
+        Arg: {!v.PVForm.argomento} -->
+
+
+        <lightning:card class='slds-form_stacked'>
+                <!--START Sezione Pratiche-->
+                <aura:if isTrue="{!v.praticheList.length>0}">
+                        <div
+                            class="slds-m-top_small slds-box slds-box_xx-small slds-text-align_center  slds-theme_info slds-text-heading_small">
+                            PRATICHE SELEZIONATE</div>
+                        <lightning:datatable class="table-pv" onrowselection="{!c.selectPratica}" maxRowSelection="1" data="{!v.praticheList}" columns="{!v.praticheTableColumns}" keyField="numPratica"/>
+                        <br></br>
+                        <lightning:button label="Rimuovi" onclick="{!c.rimuoviPratica}" disabled="{!v.praticaSelezionata == null}"/>
+                </aura:if>
+                <!-- END Sezione Pratiche-->
+                
+                <lightning:layout class="slds-wrap slds-form" multipleRows="true">
+                    <!-- START Sezione Filiali-->
+                    <aura:if isTrue="{!v.showFiliali}">
+                        <lightning:layoutItem size="6" padding="horizontal-small">
+                            <lightning:select name="elenco_filiali" label="Filiale destinataria:" aura:id="elenco_filiali" value="{!v.PVForm.selectedFiliale}" >
+                                <aura:iteration items="{!v.options}" var="item">
+                                    <option text="{!item.Name}" value="{!item.OCS_External_Id__c}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <!-- END Sezione Filiali-->
+
+                    <!-- START Sezione Categoria-->         
+                    <lightning:layoutItem size="6" padding="horizontal-small">
+                        <lightning:select name="elenco_categorie" label="Categoria:" aura:id="elenco_categorie" value="{!v.PVForm.categoria}">
+                            <aura:iteration items="{!v.categorieList}" var="item">
+                                <option text="{!item}" value="{!item}"/>
+                            </aura:iteration>
+                        </lightning:select>
+                    </lightning:layoutItem>
+                    <!--END Sezione Categoria--> 
+
+                    <!--START Sezione Prodotto-->
+                    <lightning:layoutItem size="6" padding="horizontal-small">
+                            <lightning:select name="elenco_prodotti" label="Prodotto:" aura:id="elenco_prodotti" value="{!v.PVForm.prodotto}">
+                                <aura:iteration items="{!v.prodottiList}" var="item">
+                                    <option text="{!item}" value="{!item}"/>
+                                </aura:iteration>
+                            </lightning:select>
+                    </lightning:layoutItem>
+                    <!--END Sezione Prodotto-->
+
+                        
+                    <lightning:layoutItem size="6" padding="horizontal-small">
+                            <lightning:input name="oggetto" label="Oggetto:" value="{!v.PVForm.oggetto}"/>
+                    </lightning:layoutItem>
+
+                    <!-- START Sezione Argomento-->
+                    <aura:if isTrue="{!v.argomentiList.length>0}">
+                        <lightning:layoutItem size="12" padding="horizontal-small">
+                                <lightning:select name="argomento" label="Argomento" aura:id="elenco_argomenti" value="{!v.PVForm.argomento}" onchange="{!c.handleChangeArgomento}">
+                                    <option text="" value="" />    
+                                    <aura:iteration items="{!v.argomentiList}" var="item">
+                                            <option text="{!item.Descrizione__c}" value="{!item.Descrizione__c}"/>
+                                        </aura:iteration>
+                                    </lightning:select>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <!-- END Sezione Argomento-->
+                           
+                    <!-- Start Template Body-->
+                    <aura:if isTrue="{!v.PVForm.templateBody}">
+                        <lightning:layoutItem size="12" padding="horizontal-small">
+                                    <lightning:textarea name="template" value="{!v.PVForm.templateBody}"
+                                    label=""/>
+                        </lightning:layoutItem>
+                    </aura:if>
+                    <!-- END Template Body-->
+                </lightning:layout>
+        
+        </lightning:card>
+
+</aura:component>

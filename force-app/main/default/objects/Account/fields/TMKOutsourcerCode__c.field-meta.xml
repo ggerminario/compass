@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>TMKOutsourcerCode__c</fullName>
+    <caseSensitive>false</caseSensitive>
+    <description>Codice (sigla) degli Outsourcer gestiti dal processo Telemarketing</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Codice (sigla) degli Outsourcer gestiti dal processo Telemarketing</inlineHelpText>
+    <label>TMKOutsourcerCode</label>
+    <length>10</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

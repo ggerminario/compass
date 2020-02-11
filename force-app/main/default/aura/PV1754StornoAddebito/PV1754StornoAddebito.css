@@ -1,0 +1,7 @@
+.THIS .input-somma span.slds-assistive-text, .THIS .input-somma label.slds-form-element__label {
+    display: none;
+}
+
+.THIS .storno-row {
+    border: 1px solid #A9A9A9;
+}

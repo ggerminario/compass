@@ -1,0 +1,16 @@
+.THIS .my-dimension {
+    width: 80% !important;
+}
+.THIS .slds-form-element__control {
+    /* display: inline-flex;
+    word-break: break-word; */
+    column-count: 3;
+}
+.THIS .my-input {
+    width: 200% !important;
+}
+.THIS .slds-p-horizontal_medium {
+    padding-left: 0% !important;
+    padding-right: 0% !important;
+     width: 200%;
+}

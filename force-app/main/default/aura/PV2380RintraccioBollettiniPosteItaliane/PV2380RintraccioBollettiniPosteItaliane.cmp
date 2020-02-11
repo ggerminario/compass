@@ -1,0 +1,102 @@
+<!--
+  @File Name          : PV2380RintraccioBollettiniPosteItaliane.cmp
+  @Description        : 
+  @Author             : Marco Cutolo
+  @Group              : 
+  @Last Modified By   : Cristiano
+  @Last Modified On   : 17/1/2020, 14:21:24
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    20/12/2019   Marco Cutolo     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" controller="PV2380RintraccioBollPosteItalianeIns">
+    TO DO Rintraccio Bollettini Poste Italiane
+
+    <aura:attribute name="importo" type="String" default=""/>
+    <aura:attribute name="contoCorrente" type="String" default=""/>
+    <aura:attribute name="bollettino" type="String" default=""/>
+    <aura:attribute name="dataValuta" type="Date" default="" />
+    <aura:attribute name="provincia" type="String" default=""/>
+    <aura:attribute name="ufficio" type="String" default=""/>
+    <aura:attribute name="sportello" type="String" default=""/>
+    <aura:attribute name="showForm" type="Boolean" default="false" />
+    <aura:attribute name="today" type="Date" />
+    <aura:attribute name="descriptionSottotipologia" type="String" default="{!v.PVForm.sottotipologiaMdt.Descrizione__c}" />
+                 
+    <aura:attribute name="contoCorrenteList" type="List" default=""/>
+<!--prova-->
+    <aura:attribute name="isModalOpen" type="boolean" default="false" />
+    <aura:attribute name="isCheckDocumentiNecessary" type="boolean" default="true"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    {!v.descriptionSottotipologia}
+
+    <lightning:card>
+      <!--<aura:if isTrue="{!v.showForm}">-->
+        <lightning:layout  multipleRows="true">
+          <lightning:layoutItem size="6" padding="horizontal-small">
+            <lightning:input type="number" name="Importo" formatter="currency" currencyCode="EUR" label="Importo" value="{!v.importo}"/>
+          </lightning:layoutItem>
+          <lightning:layoutItem size="6" padding="horizontal-small">
+            <lightning:select aura:id="contoCorrenteSelect" name="select1" label="Conto Corrente" onchange="{!c.changeContoCorrente}">
+              <option value=""></option>
+            <aura:iteration items="{!v.contoCorrenteList}" var="item"> 
+                <option value="{!item.C_C__c}">{!item.Descrizione__c}</option>
+              </aura:iteration>
+          </lightning:select>
+          </lightning:layoutItem>
+          <lightning:layoutItem size="2" padding="horizontal-small" >
+            <br/>
+            <div class="slds-p-vertical_small slds-p-left_large" >
+              VCY/VCYL
+            </div>
+        </lightning:layoutItem>
+          <lightning:layoutItem size="4" padding="horizontal-small" >
+            <lightning:input type="string" maxlength="30" name="Bollettino" formatter="string" label="Bollettino" value="{!v.bollettino}"/>
+          </lightning:layoutItem>
+          <lightning:layoutItem size="6" padding="horizontal-small" >
+            <lightning:input type="date" name="DataValuta" formatter="date" label="Data Valuta" value="{!v.dataValuta}" max="{!v.today}"/>
+          </lightning:layoutItem>
+          <lightning:layoutItem size="2" padding="horizontal-small" >
+            <lightning:input type="string" maxlength="2" name="Provincia" formatter="string" label="Provincia" value="{!v.provincia}"/>
+          </lightning:layoutItem>
+          <lightning:layoutItem size="4" padding="horizontal-small" >
+            <lightning:input type="string" maxlength="3" name="Ufficio" formatter="string" label="Ufficio" value="{!v.ufficio}"/>
+          </lightning:layoutItem>
+          <lightning:layoutItem size="6" padding="horizontal-small"  >
+            <lightning:input type="string" maxlength="2" name="Sportello" formatter="string" label="Sportello" value="{!v.sportello}"/>
+          </lightning:layoutItem>
+        </lightning:layout>
+        <br/>
+        <lightning:layoutItem size="12">
+          <div class="slds-text-color_error slds-text-title_bold">
+              <table class="slds-table">
+                  <tbody>
+                      <tr class="slds-hint-parent">
+                          <td colspan="3" class="slds-cell-buffer_left">
+                              <aura:if isTrue="{!v.descriptionSottotipologia == 'Ordinario'}">
+                                <p class="slds-p-horizontal_small slds-text-color_error slds-text-title_bold ">
+                                  <center>
+                                    Allegare un singolo file contenente la scansione del bollettino mancante.
+                                  </center>
+                                </p>
+                              </aura:if>
+                              <aura:if isTrue="{!v.descriptionSottotipologia == 'Multipla'}">
+                                <p class="slds-p-horizontal_small slds-text-color_error slds-text-title_bold ">
+                                    <center>
+                                      La tipologia multipla deve essere selezionata solo in presenza
+                                      <br/>
+                                      di più bollettini versati nella medesima data.
+                                    </center>
+                                </p>
+                              </aura:if>
+                          </td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </lightning:layoutItem>
+      <!--</aura:if> -->
+    </lightning:card>
+
+</aura:component>

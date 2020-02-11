@@ -1,0 +1,15 @@
+.THIS .my-radio {
+    margin-left: auto;
+ }
+ 
+ .THIS .my-inline {
+    display: flex !important;
+ }
+ 
+ .THIS .slds-form-element__control{
+     display: flex !important;
+ }
+
+ .THIS .my-red{
+     color: red;
+ }

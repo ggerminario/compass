@@ -1,0 +1,19 @@
+.THIS .slds-form-element{
+    display: inline-block;
+}
+.THIS .slds-form-element__control{
+    display: -webkit-inline-box;
+}
+.THIS .slds-checkbox_faux{
+    float: right;
+}
+.THIS .slds-radio_faux{
+    float: right;
+}
+.THIS .my-space{
+    padding-bottom: 3%;
+}
+.THIS .my-text{
+    width: 50%;
+    display: inline-block;
+}

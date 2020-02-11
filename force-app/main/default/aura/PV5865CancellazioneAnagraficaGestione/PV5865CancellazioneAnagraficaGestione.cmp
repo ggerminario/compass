@@ -1,0 +1,59 @@
+<!--
+  @File Name          : PV5865CancellazioneAnagraficaGestione.cmp
+  @Description        : 
+  @Author             : Adriana Lattanzi
+  @Group              : 
+  @Last Modified By   : Adriana Lattanzi
+  @Last Modified On   : 21/1/2020, 10:56:36
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    15/1/2020   Adriana Lattanzi     Initial Version
+-->
+<aura:component controller="PV5865CancellazioneAnagraficaGesCtrl" access='global'>
+    
+    <aura:registerEvent name="PVSubComponentEvents" type="c:PVSubComponentEvents" />
+
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+    <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni" />
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre" />
+    
+    <!-- attributi -->
+    
+    <!-- da parent -->
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name="dispositionSelezionato" type="XCS_Disposition__c" />
+    <aura:attribute name='note' type='String' />
+    <aura:attribute name="allegati" type="Attachment[]" />
+    <aura:attribute name="newStatus" type="String" />
+
+    <!-- gestione-->
+    <aura:attribute name="messaggiErrore" type="String" access="Global"/>
+    <aura:attribute name="userData" type="PVForm.UserData" default="" />
+
+    <!-- main -->
+    <lightning:card class="slds-form_stacked">
+        <lightning:layoutItem size="6">
+            <div class="slds-p-vertical_medium">
+                <span>
+                    <lightning:button variant="destructive" label="Verifica se l'anagrafica è cancellabile" title="verifica" onclick="{! c.controlloAnagrafica }"/>
+                </span>
+            </div>
+        </lightning:layoutItem>
+    </lightning:card>
+    
+
+    
+    <!-- checkbox reinvio al mittente -->
+    
+    <aura:if isTrue="{!v.theCase.Branch__c != v.userData.accountOffice.Id}">     
+        <div class="slds-grid slds-container_medium slds-align_left slds-wrap">
+            <div class="slds-size_6-of-12">
+                <div class="slds-p-vertical_medium">
+                    <lightning:input type="checkbox" aura:id='checkboxRinviaAlMittente'
+                        label='Rinvia al mittente' name='checkbox'/>
+                </div>
+            </div>
+        </div>    
+    </aura:if>
+    
+</aura:component>

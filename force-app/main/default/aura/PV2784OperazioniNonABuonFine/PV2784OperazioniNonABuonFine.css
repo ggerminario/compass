@@ -1,0 +1,10 @@
+.THIS .slds-form-element{
+    display: inline-block;
+}
+.THIS .my-space{
+    padding-bottom: 3%;
+}
+.THIS .my-text{
+    width: 30%;
+    display: inline-block;
+}

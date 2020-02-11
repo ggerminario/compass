@@ -1,0 +1,240 @@
+<!--
+  @File Name          : PV1764AnalisiFusioniAnagraficheGestione.cmp
+  @Description        : 
+  @Author             : Matteo Gobbo
+  @Group              : 
+  @Last Modified By   : Matteo Gobbo
+  @Last Modified On   : 10/1/2020, 16:46:12
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    9/12/2019   Matteo Gobbo     Initial Version
+--> 
+<aura:component controller="PV1764AnalisiFusioniAnagraficheGestione" access="global" >
+    <aura:attribute name="currentUser" type="user" default="{'sobjectType' : 'User'}" />
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name="dispositionSelezionato" type="XCS_Disposition__c" />
+    <aura:attribute name='note' type='String' default=""/>
+    <aura:attribute name="allegati" type="Attachment[]" />
+    <aura:attribute name="newStatus" type="String" />
+    <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni" />
+    <aura:attribute name="clientiMap" type="Map" />
+    <aura:attribute name="carteAttive" type="OCSPratica[]" />
+    <aura:attribute name="testVariable" type="String" />
+    <aura:attribute name="hasCarteAttive" type="Boolean" default="false"/>
+    <aura:attribute name="flagRinvia" type="Boolean" default="false" />
+    <aura:attribute name="optionsAnnullamento" type="List" default="[                                                                                                                                                                                                        
+                                                                    {'label': 'Fisico', 'value': 'Fisico'},
+                                                                    {'label': 'Logico', 'value': 'Logico'},]" />
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre"></aura:method>
+    <!-- attributes -->
+    <aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="options" type="List" default="[
+                                                        {'label': 'Selezionare', 'value': 'SEL'},
+                                                        {'label': 'Si', 'value': 'SI'},
+                                                        {'label': 'No', 'value': 'NO'},
+                                                        ]"/>
+    <aura:attribute name="riconsegna" type="String" default=""/>
+    <aura:attribute name="codCliSel" type="String" default=""/>
+    <aura:attribute name="clienteSelezionato" type="OCSCliente" default=""/>
+    <aura:attribute name="tipoAnnullamento" type="String" default=""/>
+    <aura:attribute name="codDaAnnullare" type="String" default="" />
+    <aura:attribute name="carteDaRiconsegnare" type="OCSPratica[]" default="" />
+    <aura:attribute name="createdNote" type="String" default="" />
+    <aura:attribute name="clientiNDG" type="List" default="[]" />
+    
+    <lightning:card class='slds-form_stacked'>
+        <lightning:layout>
+            <aura:if isTrue="{!v.currentUser.Branch_Or_Office__c == 'BACK'}">
+                <lightning:layoutItem flexibility="auto" padding="around-small" title="Elenco Pratiche">
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col">
+                            <span>Elenco pratiche</span>
+                        </div>
+                        <div class="slds-col">
+                            <aura:iteration items="{!v.clientiMap}" var="cliente" indexVar="key">
+                                <span>Cliente: {!cliente.codCliente} - {!cliente.nome}&nbsp;{!cliente.cognome}</span><br></br>
+                                <aura:iteration items="{!cliente.pratiche}" var="pratica">
+                                    <span>{!pratica.tipoPratica}&nbsp;{!pratica.numPratica}&nbsp;{!pratica.statoPratica}&nbsp;{!pratica.desAttributoPratica}</span><br></br>
+                                </aura:iteration> 
+                            </aura:iteration> 
+                        </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col form-inline">
+                            <span>Annullamento</span>
+                        </div>
+                        <div class="slds-col" style="margin-top: -25px;margin-left: 20px;">
+                            <lightning:combobox name="Annullamento" required="true" value="{!v.tipoAnnullamento}" variant="standard" dropdownAlignment="Left" options="{!v.optionsAnnullamento}" label='' aura:id="Annullamento"/>
+                        </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col"> 
+                            Codice anagrafica<br></br> mantenute
+                        </div>
+                        <div class="slds-col" style="margin-top: -25px;"> 
+                            <lightning:input name="daMantenere" value="{!v.codCliSel}" placeholder="inserisci anagrafica" label="" required="true"/>
+                        </div>
+                        <div class="slds-col" style="margin-top: -5px;"> 
+                            <lightning:button variant="Brand" label="Carica dati variazione anagrafica" title="Base action" onclick="{!c.caricaDatiAnagrafica }"/>
+                        </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col"> 
+                            Codici anagrafica<br></br> cancellate
+                        </div>
+                        <div class="slds-col" style="margin-top: -25px;margin-left: 4px;"> 
+                            <lightning:input name="daCancellare" value="{!v.codDaAnnullare}" placeholder="inserisci anagrafiche" label="" required="true"/>
+                        </div>
+                        
+                    </div>
+                    <br></br>
+                    <br></br>
+                    
+                    <div class="slds-grid slds-gutters">
+                        <div class="slds-col"> 
+                            Segnalazioni
+                        </div>
+                        <div class="slds-col"> 
+                            <aura:iteration items="{!v.clientiMap}" var="cliente" indexVar="key">
+                                <span>Cliente: {!cliente.denominazione} - CIP {!cliente.codCliente}</span><br></br>
+                                <span>Tipo Anagrafica: {!cliente.tipoAnagrafica}</span><br></br>
+                                <aura:if isTrue="{!and(cliente.ndg != '',cliente.ndg != '0')}">
+                                    <span>Ha codice NDG</span><br></br>
+                                </aura:if>
+                                <aura:if isTrue="{!cliente.tipoControparte == 'FIR'}">
+                                    <span>Cliente Firmatario</span><br></br>
+                                </aura:if>
+                                <aura:if isTrue="{!cliente.tipoControparte == 'DEL'}">
+                                    <span>Cliente Delegato</span><br></br>
+                                </aura:if>
+                                <aura:if isTrue="{!cliente.prottiTerzi == 'SI'}">
+                                    <span style="color:red;">Presenza di un prodotto terzo</span><br></br>
+                                </aura:if> 
+                                <aura:if isTrue="{!cliente.prottiCPAY == 'SI'}">
+                                    <span style="color:red;">Presenza di un prodotto CPAY</span><br></br>
+                                </aura:if>
+                                <aura:if isTrue="{!cliente.movContabile == 'SI'}">
+                                    <span>Presenza di una Carta di credito CF con movimentazione contabile</span><br></br>
+                                </aura:if>
+                            </aura:iteration> 
+                        </div>
+                    </div>
+                    <br></br>
+                    <br></br>
+                    <aura:if isTrue="{!v.currentUser.Branch_Or_Office__c == 'BACK'}">
+                        <lightning:input type="checkbox" label="Rinvia al mittente" name="rinvia" checked="{!v.flagRinvia}"/>
+                    </aura:if>
+                    <br></br>
+                    <br></br>
+                    <aura:if isTrue="{!v.clienteSelezionato !=''}">
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col"> 
+                                Variazioni
+                            </div>
+                            <div class="slds-col"> 
+                                <span style="display: block;margin-top:-18px;color:red;">Segnalare i dati variati.</span>
+                                <span style="display: block;margin-bottom: 5px;margin-top:20px;">Denominazione azienda</span>
+                                <span style="display: block;margin-bottom: 5px;">Forma giuridica</span>
+                                <span style="display: block;margin-bottom: 5px;">Cognome</span>
+                                <span style="display: block;margin-bottom: 5px;">Nome</span>
+                                <span style="display: block;margin-bottom: 5px;">Codice fiscale</span>                      
+                                <span style="display: block;margin-bottom: 5px;">Sesso</span>                    
+                                <span style="display: block;margin-bottom: 5px;">Data di nascita</span>                    
+                                <span style="display: block;margin-bottom: 5px;">Provincia di nascita</span>                    
+                                <span style="display: block;margin-bottom: 5px;">Luogo di nascita</span>                    
+                                <span style="display: block;margin-bottom: 15px;">Tipo anagrafica</span>                    
+                                <span style="display: block;margin-bottom: 5px;">Documento</span>                    
+                                <span style="margin-left: 10px;display: block;margin-bottom: 5px;">Tipo</span>                    
+                                <span style="margin-left: 10px;display: block;margin-bottom: 5px;">Numero</span>                    
+                                <span style="margin-left: 10px;display: block;margin-bottom: 5px;">Data rilascio</span>                    
+                                <span style="margin-left: 10px;display: block;margin-bottom: 5px;">Data scadenza</span>                    
+                                <span style="margin-left: 10px;display: block;margin-bottom: 5px;">Provincia rilascio</span>                    
+                                <span style="margin-left: 10px;display: block;margin-bottom: 5px;">Luogo rilascio</span>                    
+                            </div>
+                            <div class="slds-col"> 
+                                <span style="display: block;margin-bottom: 5px;">Attuale</span>
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.denominazioneAzienda}&nbsp;</span>
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.formaGiuridica}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.cognome}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.nome}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.codFiscale}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.sesso}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.dataNascitaItaliana}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.provNascita}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.luogoNascita}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 35px;">{!v.clienteSelezionato.tipoAnagrafica}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.tipoDocumento}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.numDocumento}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.dataRilascioDate}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.dataScadenzaSlashed}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.provRilascio}&nbsp;</span>                    
+                                <span style="display: block;margin-bottom: 5px;">{!v.clienteSelezionato.luogoRilascio}&nbsp;</span>                    
+                            </div>
+                            <div class="slds-col"> 
+                                <span style="display: block;margin-bottom: 8px;">Variazione</span>
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="denominazione" label="" change="{!c.listaVariazioni}"/></span>
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="forma" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="cognome" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="nome" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="codfiscale" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="sesso" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="datnascita" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="provnascita" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="luogonascita" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 38px;"><ui:inputCheckbox aura:id="tipoana" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="tipodoc" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="numerodoc" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="dataril" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="datascad" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="provli" label="" change="{!c.listaVariazioni}"/></span>                  
+                                <span style="display: block;margin-bottom: 8px;"><ui:inputCheckbox aura:id="luogoril" label="" change="{!c.listaVariazioni}"/></span>                  
+                            </div>
+                        </div>
+                        <aura:if isTrue="{!v.hasCarteAttive}">
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col"> 
+                                    Carte attive
+                                </div>
+                                <div class="slds-col">
+                                    <div style="width: 350px;height: 100;">
+                                        <lightning:datatable
+                                                             columns="{! v.columns }"
+                                                             data="{! v.carteAttive }"
+                                                             keyField="id"
+                                                             onrowselection="{!c.carteDaRiconsegnare}"/>
+                                    </div>
+                                </div>
+                                
+                            </div> 
+                            <br></br>
+                            <br></br>
+                            <div class="slds-grid slds-gutters">
+                                <div class="slds-col">
+                                    Invia la richiesta di riconsegna per le carte selezionate? 
+                                </div>
+                                <div class="slds-col">
+                                    <lightning:radioGroup name="radioGroupRequired"
+                                                          label=""
+                                                          options="{!v.options}"
+                                                          value="{!v.riconsegna}"
+                                                          type="radio"
+                                                          required="true"/>
+                                    
+                                </div>
+                            </div>
+                        </aura:if>
+                    </aura:if>        
+                </lightning:layoutItem>
+            </aura:if>
+        </lightning:layout>
+    </lightning:card>
+</aura:component>

@@ -1,0 +1,223 @@
+<aura:component controller="GD_Mail_ReportCnt" 
+                implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                access="global">
+    
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:attribute name="profiles" type="List" default="[]" />
+    <aura:attribute name="value" type="List" default="" />
+
+
+    <aura:attribute name="mappaTemp" type="Map"  />
+
+
+    <aura:attribute name="activeSections" type="List" default="[]" />
+    <aura:attribute name="activeSections2" type="List" default="[]" />
+    <aura:attribute name="activeSections3" type="List" default="[]" />
+    <aura:attribute name="activeSections4" type="List" default="[]" />
+    <aura:attribute name="activeSections5" type="List" default="[]" />
+    <aura:attribute name="sec1" type="List" default="['A','B','C']" />
+    <aura:attribute name="sec2" type="List" default="['A1','A2']" />
+    <aura:attribute name="sec3" type="List" default="['A1A','A1B','A1C']" />
+    <aura:attribute name="sec4" type="List" default="['A2A','A2B']" />
+    <aura:attribute name="sec5" type="List" default="['B1','B2']" />
+    
+    <aura:attribute name="mappaFiliali" type="Map"   />
+    <aura:attribute name="listFiliali" type="List"   />
+    
+    <aura:attribute name="Parent" type="Map" />
+    <aura:attribute name="Child" type="Map" />
+    <aura:attribute name="firstStart" type="boolean"  />
+    <aura:attribute name="flag1" type="boolean"  />
+    <aura:attribute name="activeSectionsMessage" type="String" default="" />
+    <aura:attribute name="volume" type="decimal" default="0.000" />
+    <aura:attribute name="type" type="String"  />
+    <aura:attribute name="disable" type="boolean"  />
+    
+    <!-- RA Booleani --> 
+    <aura:attribute name="Check_RA" type="boolean" default="false"/>
+    <aura:attribute name="Check_RA_16_a" type="boolean" default="false"/>    
+    <aura:attribute name="Check_RA_16_b" type="boolean" default="false"/>  
+    <aura:attribute name="Check_RA_17_a" type="boolean" default="false"/>    
+    <aura:attribute name="Check_RA_17_b" type="boolean" default="false"/>    
+    <aura:attribute name="Check_RA_18_a" type="boolean" default="false"/>    
+    <aura:attribute name="Check_RA_18_b" type="boolean" default="false"/>    
+    <aura:attribute name="Check_RA_19_a" type="boolean" default="false"/>    
+    <aura:attribute name="Check_RA_19_b" type="boolean" default="false"/>    
+    <aura:attribute name="Check_RA_20_a" type="boolean" default="false"/>    
+    <aura:attribute name="Check_RA_20_b" type="boolean" default="false"/>    
+
+    <aura:attribute name="Check_RC" type="boolean" default="false"/>
+    <aura:attribute name="Check_RE" type="boolean" default="false"/>
+    <aura:attribute name="Check_RO" type="boolean" default="false"/>
+    <aura:attribute name="Check_RS" type="boolean" default="false"/>
+    <aura:attribute name="Check_RT" type="boolean" default="false"/>
+    
+    <aura:attribute name="Checked_Area_Manager" type="boolean" default="false"/>
+    <aura:attribute name="Checked_Branch_Manager" type="boolean" default="false"/>
+    <aura:attribute name="Checked_Branch_Employer" type="boolean" default="false"/>
+    <aura:attribute name="Checked_Trainer" type="boolean" default="false"/>
+    <aura:attribute name="Checked_Region_Manager" type="boolean" default="false"/>
+    <aura:attribute name="Checked_Borg" type="boolean" default="false"/>
+
+    <aura:attribute name="Value_Area_Manager" type="String" default='Area Manager' />
+    <aura:attribute name="Value_Branch_Manager" type="String" default='Branch Manager' />
+    <aura:attribute name="Value_Branch_Employer" type="String" default='Branch Employer' />
+    <aura:attribute name="Value_Trainer" type="String" default='Trainer' />
+    <aura:attribute name="Value_Region_Manager" type="String" default='Trainer' />
+    <aura:attribute name="Value_Borg" type="String" default='Borg' />
+
+   
+    <lightning:card title="Testo Mail Report Filiali">
+       <div class="slds-m-bottom_x-small slds-p-left_x-small slds-p-right_x-small slds-p-top_small">
+           <lightning:layout>
+               <lightning:layoutItem padding="around-small" size="6">
+                    <lightning:textarea name="esitoNote" class="textnote" label="Inserire il testo della mail da inviare alle filiali" aura:id="noteText" />
+               </lightning:layoutItem>
+               <lightning:layoutItem padding="around-small" size="6">
+               </lightning:layoutItem>
+           </lightning:layout>
+           <lightning:layout>
+             <lightning:layoutItem padding="around-small" size="6">
+                <fieldset class="slds-box slds-theme--default slds-container--small">
+                   <lightning:card title="Seleziona i destinatari"  class="slds-text-title_bold"></lightning:card>
+                     <!--Modal Body-->  
+                     <div class="slds-modal__content   slds-size_1-of-1 slds-is-relative contenitore" style="">
+                        <form class="slds-form--stacked">
+                        <lightning:accordion
+                                 allowMultipleSectionsOpen="true"
+                                 onsectiontoggle="{! c.handleSectionToggle }"
+                                 activeSectionName="{! v.activeSections }"
+                                 >
+                       <!-- livello 1 -->
+                       <ul class="slds-list_horizontal level1 ">
+                           <li class="li-check ">    
+                               <lightning:input type="checkbox" disabled="true" /></li>
+                               <li class="grande">
+                                   <lightning:accordionSection name="A" label="ND"> 
+                                   <aura:if isTrue="{!and( v.Parent.A1== false , v.Parent.A2 ==false ) }">
+                                         <c:FormattoComponent Valore="{!v.Child.A}" name="A"  disable2="{!v.disable}" SectionToView="ND" />
+                                   </aura:if>
+                                   </lightning:accordionSection>
+                              </li>
+                       </ul>
+                       <!-- livello 1 -->
+                       <ul class="slds-list_horizontal level1">
+                           <li class="li-check">    
+                        	  <lightning:input type="checkbox" checked="{!v.Parent.Check_RA}" onchange="{!c.onchangeEvent_RA}"/>
+                           </li>
+                               <li class="grande">
+                                   <lightning:accordionSection name="B" label="RA">
+                                       <c:FormattoComponent name="B" disable2="{!v.disable}" SectionToView="RA"    Valore = "{!v.Parent}" listFiliali="{!v.listFiliali}"
+                                                            aura:id="compChild_RA" 
+                                                            />
+                                   </lightning:accordionSection>
+                               </li>
+                       </ul>
+                       <!-- livello 1 -->
+                       <ul class="slds-list_horizontal level1">
+                           <li class="li-check">
+                               <lightning:input type="checkbox" checked="{!v.Parent.Check_RC}" onchange="{!c.onchangeEvent_RC}"/></li>
+                           <li>
+                               <lightning:accordionSection name="C" label="RC">
+                               <!-- <aura:if isTrue="{!v.Parent.C}">-->
+                                    <c:FormattoComponent name="C" disable2="{!v.disable}" SectionToView="RC"  Valore = "{!v.Parent}"  listFiliali="{!v.listFiliali}"
+                                    aura:id="compChild_RC"/>
+                               <!-- </aura:if> -->
+                               </lightning:accordionSection>
+                           </li>
+                       </ul>
+                       <!-- livello 1 -->
+                       <ul class="slds-list_horizontal level1">
+                           <li class="li-check">    
+                               <lightning:input type="checkbox" checked="{!v.Parent.Check_RE}" onchange="{!c.onchangeEvent_RE}"/></li>
+                           <li>
+                               <lightning:accordionSection name="E" label="RE">
+                               <!--  <aura:if isTrue="{!v.Parent.C}"> -->
+                                     <c:FormattoComponent name="D" disable2="{!v.disable}" SectionToView="RE" Valore = "{!v.Parent}" listFiliali="{!v.listFiliali}"
+                                     aura:id="compChild_RE"/>
+                               <!-- </aura:if> -->
+                               </lightning:accordionSection>
+                           </li>
+                       </ul>
+                       <!-- livello 1 -->
+                       <ul class="slds-list_horizontal level1">
+                          <li class="li-check">    
+                                <lightning:input type="checkbox" checked="{!v.Parent.Check_RO}" onchange="{!c.onchangeEvent_RO}"/>
+                          </li>
+                          <li>
+                                <lightning:accordionSection name="F" label="RO">
+                                   <!--   <aura:if isTrue="{!v.Parent.C}"> -->
+                                            <c:FormattoComponent name="F" disable2="{!v.disable}" SectionToView="RO" Valore="{!v.Parent}"  listFiliali="{!v.listFiliali}"
+                                            aura:id="compChild_RO"/>
+                                   <!--   </aura:if> -->
+                                </lightning:accordionSection>
+                          </li>
+                       </ul>
+                       <!-- livello 1 -->
+                       <ul class="slds-list_horizontal level1">
+                           <li class="li-check">    
+                               <lightning:input type="checkbox" checked="{!v.Parent.Check_RS}" onchange="{!c.onchangeEvent_RS}"/>
+                           </li>
+                           <li>
+                               <lightning:accordionSection name="G" label="RS">
+                                  <!-- <aura:if isTrue="{!v.Parent.C}"> -->
+                                      <c:FormattoComponent name="G" disable2="{!v.disable}" SectionToView="RS" Valore="{!v.Parent}" listFiliali="{!v.listFiliali}"
+                                      aura:id="compChild_RS"/>
+                                  <!--  </aura:if> -->
+                               </lightning:accordionSection>
+                           </li>
+                       </ul>
+                       <!-- livello 1 -->
+                       <ul class="slds-list_horizontal level1">
+                           <li class="li-check">    
+                               <lightning:input type="checkbox" checked="{!v.Parent.Check_RT}" onchange="{!c.onchangeEvent_RT}"/>
+                           </li>
+                           <li >
+                               <lightning:accordionSection name="H" label="RT">
+                                 <!-- <aura:if isTrue="{!v.Parent.C}">-->
+                                     <c:FormattoComponent name="H" disable2="{!v.disable}" SectionToView="RT" Valore="{!v.Parent}"  listFiliali="{!v.listFiliali}"
+                                     aura:id="compChild_RT"/>
+                                  <!--</aura:if>-->
+                               </lightning:accordionSection>
+                           </li>
+                       </ul>
+            </lightning:accordion>
+        </form> 
+    </div>
+    <!--End of Modal Body-->
+          
+    </fieldset>
+        <fieldset class="slds-box slds-theme--default slds-container--small">
+            <div class="slds-p-top_medium"></div>
+            <lightning:card title="Seleziona le operazioni da effettuare" class="slds-text-title_bold"></lightning:card>
+            <!--Modal Footer-->
+            <lightning:input type="checkbox" label="Invia Area Manager" value="{!v.Value_Area_Manager}" checked="{!v.Checked_Area_Manager}"/> 
+            <lightning:input type="checkbox" label="Invia Branch Manager" value="{!v.Value_Branch_Manager}" checked="{!v.Checked_Branch_Manager}" /> 
+            <lightning:input type="checkbox" label="Invia a tutti i Trainer" value="{!v.Value_Trainer}" checked="{!v.Checked_Trainer}"/> 
+            <lightning:input type="checkbox" label="Invia a tutti i Region Manager" value="{!v.Value_Region_Manager}" checked="{!v.Checked_Region_Manager}"/> 
+            <lightning:input type="checkbox" label="Invia a tutti i Branch Employee" value="{!v.Value_Branch_Employer}" checked="{!v.Checked_Branch_Employer}"/> 
+            <lightning:input type="checkbox" label="Invia a tutti i Borg" value="{!v.Value_Borg}" checked="{!v.Checked_Borg}"/> 
+ 
+            <div class="slds-p-top_medium"></div>
+            <div class="slds-p-top_medium"></div>
+
+            <div class="modal-footer slds-modal__footer slds-size_1-of-1">
+                 <div>
+                        <lightning:button aura:id="invia" onclick="{!c.send}" variant="success" label="Invia" />
+                        <lightning:button aura:id="annulla" onclick="{!c.annulla}" variant="brand" label="Annulla" />
+                 </div>
+            </div>
+            
+            
+    <!--End of Modal Footer-->
+           <lightning:spinner aura:id="csvSpinner" class="slds-hide" variant="brand" size="large" alternativeText="Loading" title="Processing.."/>
+
+         </fieldset>
+         <!--</lightning:layoutItem>-->
+         </lightning:layoutItem>
+            
+         </lightning:layout>
+       </div>
+    </lightning:card>
+
+</aura:component>

@@ -1,0 +1,170 @@
+<!--
+@File Name          : PV2380RintraccioBollettiniPosteItalianeGest.cmp
+@Description        : 
+@Author             : Matteo Gobbo
+@Group              : 
+@Last Modified By   : Matteo Gobbo
+@Last Modified On   : 20/1/2020, 11:15:01
+@Modification Log   : 
+Ver       Date            Author      		    Modification
+1.0    7/1/2020   Matteo Gobbo     Initial Version
+-->
+<aura:component controller="PV2380RintraccioBollPosteItalianeGest" access="global"> 
+  
+    <!--Parametri componetn PVGestione-->
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name="dispositionSelezionato" type="XCS_Disposition__c" />
+    <aura:attribute name='note' type='String' default="" />
+    <aura:attribute name="allegati" type="Attachment[]" />
+    <aura:attribute name="newStatus" type="String" />
+    <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni" />
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre"></aura:method>
+    <!--Atttributi aggiuntivi-->
+    <aura:attribute name="currentUser" type="user" default="{'sobjectType' : 'User'}" />
+    <aura:attribute name="optionEsitoSBF" type="List" default="[
+                                                  {'label': 'accredito SBF eseguito', 'value': 'OK'},
+                                                  {'label': 'accredito SBF non eseguito', 'value': 'KO'},
+                                                  ]" />
+    <aura:attribute name="optionEsitoPI" type="List" default="[
+                                                  {'label': 'rintraccio positivo', 'value': 'OK'},
+                                                  {'label': 'rintraccio negativo', 'value': 'KO'},
+                                                  ]" />
+    <aura:attribute name="optionEsitoST" type="List" default="[
+                                                  {'label': 'storno effettuato', 'value': 'OK'},
+                                                  {'label': 'storno non effettuato', 'value': 'KO'},
+                                                  ]" />
+    <aura:attribute name="esitoSBF" type="String" default=""/>
+    <aura:attribute name="esitoPIT" type="String" default=""/>
+    <aura:attribute name="esitoSTO" type="String" default=""/>
+    <aura:attribute name="sceltaRate" type="String" default=""/>
+    <aura:attribute name="sceltaTotale" type="String" default=""/>
+    <aura:attribute name="flagRinvia" type="Boolean" default="false" />
+    <aura:attribute name="sbf" type="Boolean" default="false" />
+    <aura:attribute name="pi" type="Boolean" default="false" />
+    <aura:attribute name="piCondition" type="Boolean" default="false" />
+
+
+    <lightning:card class='slds-form_stacked'>
+        <lightning:layout>
+            <lightning:layoutItem flexibility="auto" padding="around-small" title="Gestione post vendita rintraccio bollettini">
+               <aura:if isTrue="{!or(and(v.theCase.Step_PV__c == '3', v.theCase.Owner__c == 'PV Rintraccio Pagamenti'),and(v.theCase.Step_PV__c == '3', v.piCondition))}">  
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        Le rate indicate nel bollettino da rintracciare sono minori o uguali a 3?
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters"> 
+                  <div style="margin-left: 10px;margin-top: 5px;" class="slds-col">
+                      <ui:inputRadio aura:id="r0" name="rata" label="" change="{!c.onSelectchoices}" disabled="false" />
+                  </div>
+                  <div style="margin-left: -15px;margin-top: 3px;" class="slds-col">
+                    Selezionare
+                  </div>
+                 <div style="margin-left: -15px;margin-top: 3px;" class="slds-col">
+                      <ui:inputRadio aura:id="r1" name="rata" label="" change="{!c.onSelectchoices}" disabled="false" />
+                  </div>
+                  <div style="margin-left: -15px;margin-top: 3px;" class="slds-col">
+                    Si
+                  </div>
+                   <div style="margin-left: -15x;margin-top: 3px;"  class="slds-col">                    
+                      <ui:inputRadio aura:id="r2" name="rata" label="" change="{!c.onSelectchoices}" disabled="false" />
+                  </div>
+                  <div style="margin-left: -15px;margin-top: 3px;" class="slds-col">
+                    No
+                  </div>
+                 
+              </div>
+                <br></br>
+                <br></br>
+                <div class="slds-grid slds-gutters">
+                    <div class="slds-col">
+                        Il totale del numero di rate è minore di 1500 Euro?
+
+                    </div>
+                </div>
+                <div class="slds-grid slds-gutters"> 
+                  <div style="margin-left: 10px;margin-top: 5px;" class="slds-col">
+                      <ui:inputRadio aura:id="r3" name="totale" label="" change="{!c.onSelectchoices}" disabled="false"/>
+                  </div>
+                  <div style="margin-left: -15px;margin-top: 3px;" class="slds-col">
+                    Selezionare
+                  </div>
+                 <div style="margin-left: -15px;margin-top: 3px;" class="slds-col">
+                      <ui:inputRadio aura:id="r4" name="totale" label="" change="{!c.onSelectchoices}" disabled="false" />
+                  </div>
+                  <div style="margin-left: -15px;margin-top: 3px;" class="slds-col">
+                    Si
+                  </div>
+                   <div style="margin-left: -15x;margin-top: 3px;"  class="slds-col">                    
+                      <ui:inputRadio aura:id="r5" name="totale" label="" change="{!c.onSelectchoices}" disabled="false" />
+                  </div>
+                  <div style="margin-left: -15px;margin-top: 3px;" class="slds-col">
+                    No
+                  </div>
+              </div>
+                                                             
+                <br></br>
+                <br></br>
+
+                <div class="slds-grid slds-gutters">
+                <div class="slds-col">
+                    Richiesta Accredito SBF
+                </div>
+                <div class="slds-col">
+                    <ui:inputCheckbox aura:id="SBF" label="" change="{!c.onSelectchoices}" disabled="false"/>
+                </div>
+                <div class="slds-col">
+                  Richiesta rintraccio Poste Italiane
+                </div>
+                <div class="slds-col">
+                    <ui:inputCheckbox aura:id="PI" label="" change="{!c.onSelectchoices}" disabled="false"/>
+                </div>
+               
+              </div> 
+              <br></br>
+              <br></br>
+              <div class="slds-grid slds-gutters">
+                    <div class="slds-col"> 
+                        <lightning:input type="checkbox" label="Rinvia al mittente" name="rinvia" checked="{!v.flagRinvia}"/>
+                    </div>
+                </div>                  
+           </aura:if>
+                                                                        <!-- Seconda sezione -->
+               <br></br>
+               <br></br>
+          <aura:if isTrue="{!and(v.theCase.Step_PV__c == '5', v.theCase.Owner__c == 'PV Contabilità Clienti')}">
+              <div class="slds-grid slds-gutters">
+                <div style="margin-top: 24px;" class="slds-col">
+                  Esito SBF
+                </div>
+              <div class="slds-col">
+                  <lightning:combobox name="Esito" required="false" value="{!v.esitoSBF}" variant="standard" dropdownAlignment="Left" options="{!v.optionEsitoSBF}" label='' aura:id="EsitoSBF"/>
+              </div>
+            </div>
+          </aura:if>
+          <aura:if isTrue="{!and(v.theCase.Step_PV__c == '4', v.theCase.Owner__c == 'PV Rintraccio Pagamenti')}"> 
+            <div class="slds-grid slds-gutters">
+              <div style="margin-top: 24px;" class="slds-col">
+                Esito PI
+              </div>
+            <div class="slds-col">
+                <lightning:combobox name="EsitoPI" required="false" value="{!v.esitoPIT}" variant="standard" dropdownAlignment="Left" options="{!v.optionEsitoPI}" label='' aura:id="EsitoPI"/>
+            </div>
+          </div>
+          </aura:if>
+          <aura:if isTrue="{!and(v.theCase.Step_PV__c == '6', v.theCase.Owner__c == 'PV Rintraccio Pagamenti')}">
+          <div class="slds-grid slds-gutters">
+            <div style="margin-top: 24px;" class="slds-col">
+              Esito Storno
+            </div>
+          <div class="slds-col">
+              <lightning:combobox name="EsitoST" required="false" value="{!v.esitoSTO}" variant="standard" dropdownAlignment="Left" options="{!v.optionEsitoST}" label='' aura:id="EsitoST"/>
+          </div>
+        </div>  
+        </aura:if>  
+            </lightning:layoutItem>
+        </lightning:layout>
+    </lightning:card>
+
+</aura:component>

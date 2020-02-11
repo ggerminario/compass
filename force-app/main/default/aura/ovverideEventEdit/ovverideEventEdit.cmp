@@ -1,0 +1,43 @@
+<aura:component controller="ovverideEventEditController" 
+                implements="force:appHostable,lightning:actionOverride,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" 
+                access="global" >
+    <lightning:workspaceAPI aura:id="workspace" />
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/> 
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="eventRecord" type="Event" />
+    <aura:attribute name="dateActuel" type="datetime" default=""/> 
+    <aura:attribute name="DataglioProductValues" type="Product2" default="" />
+    <aura:attribute name="filialeEvent" type="Object"  />
+    <aura:attribute name="ModifyEvent" type="boolean" default="false"/>
+    <aura:attribute name="showEsito" type="boolean" default="false"/>
+    <aura:attribute name="showMotivazione" type="boolean" default="false"/>
+
+    <lightning:navigation aura:id="navService"/>
+    <aura:if isTrue="{!v.eventRecord}">
+            <lightning:card >
+                <aura:set attribute="footer">
+                        <lightning:button label="Annulla" onclick="{!c.closeAction}"/>
+                        <lightning:button label="Salva" onclick="{!c.saveEvent}"/>
+                </aura:set>
+            <lightning:layout multipleRows="true">
+                  
+                    <lightning:layoutItem size="12" padding="around-small">
+                            <c:DettaglioAppuntamento aura:id="DettaglioAppuntamento" 
+                            detailEvent="{!v.eventRecord}" 
+                            ModifyEvent="{!v.ModifyEvent}"
+                            showEsito="{!v.showEsito}"
+                            showMotivazione="{!v.showMotivazione}"
+                            filialeEvent="{!v.filialeEvent}"
+                            DataglioProductValues="{!v.DataglioProductValues}"
+                            showDetail="true"/>
+                    </lightning:layoutItem>
+                    
+                </lightning:layout>
+        </lightning:card>
+    	
+        <!--c:DettaglioAppuntamento detailEvent="{!v.eventRecord}" dateActuel="{!v.eventRecord.ActivityDateTime}"
+                                 filialeEvent="{!v.filialeEvent}" 
+                                 DataglioProductValues="{!v.DataglioProductValues}" 
+                                 showDetail="true"/-->
+    </aura:if>
+</aura:component>

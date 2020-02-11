@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Region_Name__c</fullName>
+    <externalId>false</externalId>
+    <label>Region Name</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>ND</fullName>
+                <default>false</default>
+                <label>Non disponibile</label>
+            </value>
+            <value>
+                <fullName>OU</fullName>
+                <default>false</default>
+                <label>Outsourcer</label>
+            </value>
+            <value>
+                <fullName>RC</fullName>
+                <default>false</default>
+                <label>Regione CENTRO</label>
+            </value>
+            <value>
+                <fullName>RS</fullName>
+                <default>false</default>
+                <label>Regione SUD</label>
+            </value>
+            <value>
+                <fullName>RA</fullName>
+                <default>false</default>
+                <label>Regione ADRIATICA</label>
+            </value>
+            <value>
+                <fullName>RE</fullName>
+                <default>false</default>
+                <label>Regione NORD EST</label>
+            </value>
+            <value>
+                <fullName>RO</fullName>
+                <default>false</default>
+                <label>Regione NORD OVEST</label>
+            </value>
+            <value>
+                <fullName>RT</fullName>
+                <default>false</default>
+                <label>Regione TIRRENICA</label>
+            </value>
+            <value>
+                <fullName>RN</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>RN</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

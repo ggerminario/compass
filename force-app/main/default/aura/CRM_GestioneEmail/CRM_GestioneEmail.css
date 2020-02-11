@@ -1,0 +1,8 @@
+.THIS {
+    background-color:#FFF;
+}
+
+.THIS.container > .margine{
+    margin-left:3%;
+    margin-right:3%;
+}

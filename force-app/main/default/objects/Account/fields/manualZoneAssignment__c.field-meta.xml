@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>manualZoneAssignment__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Questa checkbox, indica su di un account di tipo dealer, se l&#39;assegnazione alla zona é stata sovrascritta manualmente.</description>
+    <externalId>false</externalId>
+    <label>Manual zone assignment</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

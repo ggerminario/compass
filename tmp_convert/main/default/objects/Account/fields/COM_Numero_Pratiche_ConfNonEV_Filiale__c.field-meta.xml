@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>COM_Numero_Pratiche_ConfNonEV_Filiale__c</fullName>
+    <description>Numero interviste Commodity Chiuse Conforme non EV</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Numero interviste Commodity Chiuse Conforme non EV</inlineHelpText>
+    <label>Chiuse Conforme Non EV</label>
+    <summarizedField>COM_Intervista__c.Com_Intervista_Number__c</summarizedField>
+    <summaryFilterItems>
+        <field>COM_Intervista__c.COM_Interview_Utils__c</field>
+        <operation>equals</operation>
+        <value>True</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>COM_Intervista__c.COM_Current_Period_Filiale__c</field>
+        <operation>equals</operation>
+        <value>True</value>
+    </summaryFilterItems>
+    <summaryFilterItems>
+        <field>COM_Intervista__c.COM_C_prod__c</field>
+        <operation>notEqual</operation>
+        <value>EV</value>
+    </summaryFilterItems>
+    <summaryForeignKey>COM_Intervista__c.COM_MD_Filiale__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

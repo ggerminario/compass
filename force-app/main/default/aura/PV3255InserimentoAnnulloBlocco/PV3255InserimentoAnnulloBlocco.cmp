@@ -1,0 +1,38 @@
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV3255InserimentoAnnulloBlocco'>
+
+    <aura:attribute name="showDetails" type="Boolean" default="false"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="blocchiCarte" type="List" default="[]"/>
+
+    <div class="slds">
+
+        <aura:if isTrue="{!v.showDetails}">
+
+            <div class="slds-p-vertical_small">
+
+                
+
+                
+
+                <div class="slds-p-vertical_xx-small">
+                    <aura:if isTrue="{!empty(v.blocchiCarte)}">
+
+                        <span class="slds-text-title_bold">Non sono presenti blocchi</span>
+
+                        <aura:set attribute="else">
+                            <lightning:select aura:id="blocchiCarte" name="blocchiCarte" label="Selezionare un blocco"  value="" required="true" onchange="{!c.onChangeBloccoCarte}">
+                                <option value="" style="display: none;"></option>
+                                <aura:iteration items="{!v.blocchiCarte}" var="blocco">
+                                    <option value="{!blocco.keyCode}">{!empty(blocco.descrizione) ? blocco.keyCode : (blocco.keyCode + ' - ' + blocco.descrizione)}</option>
+                                </aura:iteration>
+                            </lightning:select>
+                        </aura:set>
+
+                    </aura:if>
+                </div>
+
+            </div>
+        </aura:if>
+    </div>
+
+</aura:component>

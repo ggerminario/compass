@@ -1,0 +1,23 @@
+<aura:component controller="NuovoDossierDealerController" implements="flexipage:availableForAllPageTypes,force:hasRecordId,lightning:availableForFlowScreens,force:lightningQuickAction">
+    
+    <aura:attribute name='recordId' type='String'/>
+    <lightning:navigation aura:id="navService"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="messaggio" type="string"/>
+    <aura:attribute name="controllo" type="boolean" default="false"/>
+    
+    <aura:if isTrue="{!v.controllo}">
+    <div>
+         <br/>
+        <p style="text-align:center; width:100%;">
+            <span class="message">
+                  	{!v.messaggio}
+            </span>
+        </p>
+      </div>
+    </aura:if>
+    
+    
+    
+    
+</aura:component>

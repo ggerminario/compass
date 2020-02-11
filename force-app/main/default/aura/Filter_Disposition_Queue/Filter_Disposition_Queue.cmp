@@ -1,0 +1,36 @@
+<aura:component implements="force:hasRecordId,flexipage:availableForAllPageTypes" controller="Filter_Disposition_QueueCtrl">
+    <!--SCELTA ESITO IN BASE ALLA CODA DEL CASE-->
+    <aura:attribute name="showComponent" type="Boolean" default="false"/>
+    <aura:attribute name="disposition1Preselection" type="String" default=""/>
+    <aura:attribute name="disposition2Preselection" type="String" default=""/>
+    <aura:attribute name="disposition3Preselection" type="String" default=""/>
+    <aura:attribute name="disposition4Preselection" type="String" default=""/>
+    <aura:attribute name="disposition5Preselection" type="String" default=""/>
+    <aura:attribute name="disposition6Preselection" type="String" default=""/>
+    <aura:attribute name="rootExternalId" type="String" default="DP3864"/>
+    <!--prefisso utilizzato in base ai processi:
+        FDQ1_ -> EASY CM
+    -->
+    <aura:attribute name="prefix" type="String" default="FDQ1_"/> 
+    <aura:attribute name="queue" type="String" default=""/>
+    <aura:attribute name="caseRecord" type="Object" />    
+    <c:SpinnerComponent aura:id="spinnerComponent"/>
+    <force:recordData aura:id="forceRecord"
+                      recordId="{!v.recordId}"
+                      targetFields="{!v.caseRecord}"
+                      fields="Id,CTI_Queue__c"
+                      recordUpdated="{!c.doInit}"
+                      mode="EDIT" 
+                      />
+    <aura:handler name="init" value="{!this}" action="{!c.startSpinner}"/>
+    <aura:if isTrue="{!v.showComponent}">
+        <c:XCS_DispositionForAppBuilder rootExternalId="{!v.rootExternalId}" doRefresh="true" recordId="{!v.recordId}" 
+                        hideLevel1 = "{!v.disposition1Preselection!=''}"  disposition1Preselection = "{!v.disposition1Preselection}"
+                        hideLevel2 = "{!v.disposition2Preselection!=''}"  disposition2Preselection = "{!v.disposition2Preselection}"
+                        hideLevel3 = "{!v.disposition3Preselection!=''}"  disposition3Preselection = "{!v.disposition3Preselection}"
+                        hideLevel4 = "{!v.disposition4Preselection!=''}"  disposition4Preselection = "{!v.disposition4Preselection}"
+                        hideLevel5 = "{!v.disposition5Preselection!=''}"  disposition5Preselection = "{!v.disposition5Preselection}"
+                        hideLevel6 = "{!v.disposition6Preselection!=''}"  disposition6Preselection = "{!v.disposition6Preselection}"
+                        />
+    </aura:if>
+</aura:component>

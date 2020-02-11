@@ -1,0 +1,35 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" 
+                access="global" >
+    <!--controller="CRMReclamiInserimentoAllegatiCTRL"-->
+    <aura:attribute name="showList" type="Boolean" default="true"/>
+    <aura:attribute name="isNotSelectable" type="Boolean" default="true"/>
+    <aura:attribute name="canDelete" type="Boolean" default="true"/>
+    <aura:attribute name="canUpload" type="Boolean" default="true"/>
+    <aura:attribute name="fileList" type="Attachment[]" default="[]"/>
+    <aura:attribute name="allegatiSelezionati" type="Attachment[]" access="Public"/>
+    <!--<aura:attribute name="allegatiSelezionati" type="ContentVersion[]" />-->
+    <aura:attribute name="recordId" type="String"/>
+    <aura:attribute name="isDisabled" type="Boolean" default="false"/> 
+    <!--<aura:handler name="init" value="{!this}" action="{!c.doInit}" />-->
+    <aura:attribute name="listaFile" type="List" />
+    <aura:attribute name="isCloned" type="Boolean"/>
+    <aura:attribute name="isGestito" type="Boolean"/>
+    <aura:method name="resetMethod" action="{!c.reset}" access="PUBLIC"/>
+    
+    
+    
+    
+    <c:XCSGestioneAllegati aura:id="xcsAllegati"
+                           showList="{!v.showList}"
+                           isNotSelectable="{!v.isNotSelectable}"
+                           canDelete="{!v.canDelete}"
+                           canUpload="{!v.canUpload}"
+                           fileList="{!v.fileList}"
+                           allegatiSelezionati="{!v.allegatiSelezionati}"
+                           recordId = "{!v.recordId}"
+                           isCloned="{!v.isCloned}"
+                           isGestito="{!v.isGestito}"
+                           isDisabled="{!v.isDisabled}"
+                           />
+   
+</aura:component>

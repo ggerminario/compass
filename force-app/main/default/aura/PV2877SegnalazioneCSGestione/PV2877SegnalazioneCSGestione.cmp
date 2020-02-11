@@ -1,0 +1,39 @@
+<aura:component controller='PV2877SegnalazioneCSGestione' access='global'>
+Gestione CS
+<aura:attribute name="theCase" type="Case" />
+<aura:attribute name="dispositionSelezionato" type="XCS_Disposition__c" />
+<aura:attribute name='note' type='String' />
+<aura:attribute name="allegati" type="Attachment[]" />
+<aura:attribute name="newStatus" type="String" />
+<aura:attribute name="parent" type="Aura.Component" required="true"
+  description="componente padre per accedere ai metodi comuni" />
+<aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre">
+</aura:method>
+
+<!-- Attributi -->
+<aura:attribute name="optionsTrovato" type="List" default="[                                                                                                                      
+  {'label': 'Si', 'value': 'Si'},                                                                                  
+  {'label': 'No', 'value': 'No'},]" />
+<aura:attribute name="disabler" type="Boolean" />
+<aura:attribute name="codOCS" type="String" default="" />
+<aura:attribute name="dataList" type="PV1760CopiaContrattoGestione.ComunicazioniOCSListDTO[]" />
+
+<lightning:card class='slds-form_stacked'>
+    <aura:if isTrue="{!v.theCase.Owner__c  == 'strategie.str@compass.it'}">
+    <lightning:layoutItem size="6" padding="horizontal-small">
+        <span>
+            <lightning:combobox name="trovato" value="{!v.theCase.Esito__c}" variant="standard"
+              dropdownAlignment="Left" options="{!v.optionsTrovato}" label='E’ possibile procedere con il rinnovo manuale?' aura:id="trovato"/>
+          </span>
+        </lightning:layoutItem>
+        </aura:if>
+      <aura:if isTrue="{!v.theCase.Owner__c  == 'PV IDM'}">
+      <lightning:layoutItem size="6" padding="horizontal-small">
+        <span>
+          <lightning:combobox name="trovato" value="{!v.theCase.Esito__c}" variant="standard"
+            dropdownAlignment="Left" options="{!v.optionsTrovato}" label='E’ presente la denuncia?' aura:id="trovato" />
+        </span>
+      </lightning:layoutItem>
+    </aura:if>
+</lightning:card>
+</aura:component>

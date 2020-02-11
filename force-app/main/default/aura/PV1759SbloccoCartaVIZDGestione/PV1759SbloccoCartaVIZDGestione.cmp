@@ -1,0 +1,20 @@
+<!--
+  @File Name          : PV1759SbloccoCartaVIZDGestione.cmp
+  @Description        : 
+  @Author             : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 20/12/2019, 13:03:07
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    20/12/2019   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component access ='global' controller ='PV1759SbloccoCartaVIZDGestione'>
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+    <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni" />
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre" />
+    <aura:attribute name="newStatus" type="String" />
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name='note' type='String' />
+    <aura:attribute name="allegati" type="Attachment[]" />
+</aura:component>

@@ -1,0 +1,146 @@
+<!--
+  @Component Name     : PV3267VariazioneIndirizzi.cmp
+  @Description        : 
+  @Author             : Raffaele Prudenzano
+  @Group              : 
+  @Last Modified By   : Raffaele Prudenzano
+  @Last Modified On   : 19/11/2019,  16:30:00
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.0    2019-11-11 09:43:00   Raffaele Prudenzano     Initial Version
+-->
+
+<aura:component extends="c:PVSubComponentBase" access="global" controller="PV3267VariazioneIndirizzi">
+
+    <aura:handler name="change" value="{!v.PVForm.cliente.codCliente}" action="{!c.recuperaIndirizziCliente}" />
+    <aura:attribute name="OCSIndirizzi" type="OCSIndirizzo[]" />
+    <aura:attribute name="thisIndirizzoSelected" type="OCSIndirizzo" />
+    <aura:attribute name="thisTipoIndirizzoSelected" type="String" />
+    <aura:attribute name="normalizzaIsClicked" type="Boolean" />
+    <aura:attribute name="OCSIndirizziNorm" type="List" />
+    <aura:attribute name="OCSIndirizziRiep" type="List" />
+    <aura:attribute name="thisTipoIndirizzoRiepSelected" type="String" />
+    <aura:attribute name="thisActionIndirizzoRiepSelected" type="String" />
+    <aura:attribute name="normResponse" type="Object" />
+    <aura:attribute name="lastCodCliente" type="String" />
+
+    <aura:attribute name="spinnerCounter" type="Integer" default="0"/>
+
+
+    <aura:attribute name="checkResponse" type="Object" />
+    <aura:attribute name="isFaxRicevuto" type="Boolean" />
+
+    <aura:attribute name="OCSColumns" type="List" default="[{label: 'Tipo', fieldName: 'tipoIndirizzo', type: 'text'},
+        {label: 'Indirizzo', fieldName: 'indirizzo', type: 'text', initialWidth: 200 },
+        {label: 'CAP', fieldName: 'cap', type: 'text'},
+        {label: 'Località', fieldName: 'localita', type: 'text', initialWidth: 200 },
+        {label: 'Provincia', fieldName: 'provincia', type: 'text'}]" />
+
+    <aura:attribute name="OCSColumnsNorm" type="List" default="[{label: 'Tipo', fieldName: 'tipoIndirizzo', type: 'text'},
+        {label: 'Indirizzo', fieldName: 'indirizzo', type: 'text', initialWidth: 200 },
+        {label: 'Civico', fieldName: 'civico', type: 'text'},
+        {label: 'CAP', fieldName: 'cap', type: 'text'},
+        {label: 'Località', fieldName: 'localita', type: 'text', initialWidth: 200 },
+        {label: 'Provincia', fieldName: 'provincia', type: 'text'}]" />
+
+    <aura:attribute name="OCSColumnsRiep" type="List" default="[{label: 'Tipo', fieldName: 'tipoIndirizzo', type: 'text'},
+        {label: 'Indirizzo', fieldName: 'indirizzo', type: 'text', initialWidth: 200 },
+        {label: 'CAP', fieldName: 'cap', type: 'text'},
+        {label: 'Località', fieldName: 'localita', type: 'text', initialWidth: 200 },
+        {label: 'Provincia', fieldName: 'provincia', type: 'text'},
+        {label: 'Azione', fieldName: 'azione', type: 'text'}]" />
+
+    <!-- ALERT che blocca la variazione-->
+    <aura:if isTrue="{! and(v.checkResponse.resultCode == 1, v.checkResponse.showFax == false) }">
+        <div class="slds-text-color_destructive slds-text-heading_small slds-p-bottom_small slds-p-top_small">
+            {!v.checkResponse.errorMessage}
+        </div>
+    </aura:if>
+
+    <!-- ALERT DI AVVISO STATICO -->
+    <div class="slds-text-color_destructive slds-text-heading_small slds-p-bottom_small slds-p-top_small">Se solo
+        cliente BP+ rimandare cliente in ufficio postale. Se anche cliente
+        Compass proseguire.
+    </div>
+
+
+    <div class="slds-box slds-box_xx-small slds-text-align_center slds-theme_info slds-text-heading_small">
+        INDIRIZZI</div>
+    <lightning:datatable class="table-pv" data="{!v.OCSIndirizzi}" columns="{!v.OCSColumns}" keyField="tipoIndirizzo"
+        maxRowSelection="1" showRowNumberColumn="false" onrowselection="{!c.selectIndirizzo}" />
+
+    <!-- FORM DI VARIAZIONE INDIRIZZO -->
+
+    <aura:if isTrue="{! or(v.checkResponse.resultCode == 0, v.checkResponse.showFax == true) }">
+        <aura:if isTrue="{!v.thisIndirizzoSelected}">
+            <div class="slds-p-top_small">
+                <div class="slds-box slds-box_xx-small slds-text-align_center slds-theme_info slds-text-heading_small">
+                    VARIAZIONE</div>
+                <div class="slds-p-top_small">
+                    <strong>Tipo Indirizzo </strong> {!v.thisIndirizzoSelected.tipoIndirizzo}</div>
+                <div class="slds-grid slds-gutters slds-m-bottom--medium">
+                    <!-- indirizzo cap -->
+                    <!-- provincia -->
+                    <!-- localita -->
+
+                    <div class="slds-col">
+                        <lightning:input type="string" label="Indirizzo" name="indirizzo"
+                            value="{!v.thisIndirizzoSelected.indirizzo}" />
+                        <lightning:input type="string" label="Provincia" name="provincia"
+                            value="{!v.thisIndirizzoSelected.provincia}" />
+                        <lightning:button label="Normalizza" class="slds-m-top--medium" variant="destructive"
+                            onclick="{!c.normalizza}" />
+                    </div>
+                    <div class="slds-col">
+                        <lightning:input type="string" label="CAP" name="cap" value="{!v.thisIndirizzoSelected.cap}" />
+                        <lightning:input type="string" label="Località" name="localita"
+                            value="{!v.thisIndirizzoSelected.localita}" />
+                        <lightning:button label="Cancella" class="slds-m-top--medium" variant="neutral"
+                            onclick="{!c.cancella}" />
+                    </div>
+
+                </div>
+            </div>
+        </aura:if>
+
+        <aura:if isTrue="{!v.OCSIndirizziNorm.length>0}">
+
+            <div class="slds-box slds-box_xx-small slds-text-align_center slds-theme_info slds-text-heading_small">
+                NORMALIZZAZIONE</div>
+            <lightning:datatable class="table-pv" data="{!v.OCSIndirizziNorm}" columns="{!v.OCSColumnsNorm}"
+                keyField="tipoIndirizzo" maxRowSelection="1" showRowNumberColumn="false"
+                onrowselection="{!c.processaIndirizzoNorm}" />
+        </aura:if>
+
+        <aura:if isTrue="{!v.OCSIndirizziRiep.length>0}">
+            <div class="slds-p-top_small">
+                <div class="slds-box slds-box_xx-small slds-text-align_center slds-theme_info slds-text-heading_small">
+                    RIEPILOGO</div>
+                <lightning:datatable class="table-pv" data="{!v.OCSIndirizziRiep}" columns="{!v.OCSColumnsRiep}"
+                    keyField="tipoIndirizzo" maxRowSelection="1" showRowNumberColumn="false"
+                    onrowselection="{!c.selectIndirizzoRiep}" />
+                <lightning:button label="Annulla variazione indirizzo" class="slds-m-top--medium" variant="destructive"
+                    onclick="{!c.annullaVariazioneIndirizzo}" />
+            </div>
+        </aura:if>
+
+        <!-- ALERT FAX-->
+        <aura:if isTrue="{! and(v.checkResponse.resultCode == 1, v.checkResponse.showFax == true) }">
+            <div class="slds-p-bottom_small slds-p-top_small">{!v.checkResponse.errorMessage}</div>
+            <div class="slds-grid slds-wrap">
+                <div class="slds-col slds-size_1-of-13 slds-p-right_x-small">
+                    <p>Il fax è stato ricevuto?</p>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:input type="checkbox" checked="{!v.isFaxRicevuto}" />
+                </div>
+            </div>
+        </aura:if>
+
+    </aura:if>
+</aura:component>
+
+<!-- selectedRows="{!v.idOCSClienteSelezionato}" onrowselection="{!c.selectCliente}"  -->
+<!-- <lightning:button label="Cerca" class="slds-m-top-\-medium" variant="destructive" onclick="{!c.recuperaIndirizziClienteController}" /> -->

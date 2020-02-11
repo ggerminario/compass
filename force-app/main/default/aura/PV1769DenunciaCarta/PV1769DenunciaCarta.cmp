@@ -1,0 +1,46 @@
+<!--
+  @Component Name     : PV1769DenunciaCarta.cmp
+  @Description        : 
+  @Author             : 
+  @Group              : 
+  @Last Modified By   : Adriana Lattanzi
+  @Last Modified On   : 28/11/2019, 12:08:11
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author      		      Modification
+  ==============================================================================
+  1.1    2019-11-13 11:34:00        Adriana Lattanzi          New version
+-->
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV1769DenunciaCarta'>
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+
+    <!-- Attributi del PV -->
+    <aura:attribute name="cartaSostitutiva" type="List" default="[
+    {'label': 'Cliente chiede revoca', 'value': 'revoca'},
+    {'label': 'Cliente chiede duplicato', 'value': 'duplicato'}
+    ]" />
+    <aura:attribute name="value" type="String" />
+    <!-- Attributi del PV in maschera -->
+    <!-- main -->
+    <lightning:card class='slds-form_stacked'>
+        <table class="slds-table slds-table_bordered slds-table_col-bordered">
+            <tbody>
+                <tr class="slds-hint-parent">
+                    <td colspan="3" class="slds-cell-buffer_left">
+                        <p class="slds-p-horizontal_small slds-text-color_error">
+                            Indicare se il cliente desidera una carta sostitutiva o meno.
+                        </p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- selezione dell'operazione desiderata obbligatoria -->
+        <lightning:layoutItem size="6" padding="horizontal-small">
+            <span>
+                <lightning:radioGroup name="radioGroup" label="Carta Sostitutiva" options="{! v.cartaSostitutiva }"
+                    value="{! v.value }" type="radio" required="true" />
+            </span>
+        </lightning:layoutItem>
+    </lightning:card>
+</aura:component>

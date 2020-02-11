@@ -1,0 +1,17 @@
+<!--
+  @File Name          : PV1759SbloccoCartaVIZD.cmp
+  @Description        : 
+  @Author             : Michele Renda
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 5/2/2020, 17:31:37
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    20/12/2019      Michele Renda            Initial Version
+-->
+
+<aura:component extends="c:PVSubComponentBase" access='global' controller= 'PV1759SbloccoCartaVIZD'>
+
+  
+
+</aura:component>

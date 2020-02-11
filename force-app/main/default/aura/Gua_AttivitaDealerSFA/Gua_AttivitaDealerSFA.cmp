@@ -1,0 +1,37 @@
+<aura:component controller="Gua_AttivitaDealerSFACnt"
+    implements="flexipage:availableForAllPageTypes,force:appHostable,force:lightningQuickAction,force:hasRecordId"
+    access="global">
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}" />
+    <aura:attribute name="case" type="Case" default="{}" />
+    <aura:attribute name="cases" type="Case[]" />
+
+    <!-- PAGINATION -->
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="numberOfCasesToDisplay" type="Case[]" />
+    <aura:attribute name="pageSize" type="Integer" default="5" />
+    <aura:attribute name="totalSize" type="Integer" />
+    <aura:attribute name="start" type="Integer" />
+    <aura:attribute name="end" type="Integer" />
+
+    <div>
+        <span>Attività Dealer SFA - Report</span>
+        <div class="slds-m-top_small">
+            <lightning:datatable keyField="id" data="{!v.numberOfCasesToDisplay}" columns="{!v.columns}"
+                onrowaction="{!c.handleRowAction}" hideCheckboxColumn="true" class="myTable" />
+        </div>
+        <!--Pagination-->
+        <div class="slds-grid slds-wrap" style="margin-top: 1%">
+            <div class="slds-size_1-of-3">
+                <div class="padding-top" style="margin-top: 1%">
+                    <p class="slds-truncate">&nbsp;&nbsp;</p>
+                </div>
+            </div>
+            <div class="slds-size_1-of-3">
+                <div class=" slds-text-align_center slds-m-around_x-small">
+                    <c:Gua_Pagination objects="{!v.cases}" numberOfLinesToDisplay="{!v.numberOfCasesToDisplay}"
+                        pageSize="{!v.pageSize}" start="{!v.start}" end="{!v.end}" totalSize="{!v.totalSize}" />
+                </div>
+            </div>
+        </div>
+    </div>
+</aura:component>

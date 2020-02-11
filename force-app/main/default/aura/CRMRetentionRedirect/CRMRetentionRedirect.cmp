@@ -1,0 +1,21 @@
+<aura:component controller="CRMRetentionRedirectController" implements="flexipage:availableForAllPageTypes,force:hasRecordId,lightning:availableForFlowScreens,force:lightningQuickAction">
+    
+    <aura:attribute name='recordId' type='String'/>
+    <lightning:navigation aura:id="navService"/>
+    <aura:attribute name="spinnerCounter" type="Integer" default="0"/>
+    <c:SpinnerComponent aura:id="spinnerComponent" spinnerCounter="{!v.spinnerCounter}"/>   
+    <p style="text-align:left; width:100%;">
+            <span class="message">
+                Seleziona una Tipologia di Retention
+            </span>
+        </p>
+    
+        <br/><br/>
+    <lightning:button variant="destructive" label="Retention Carte" title="avanti" onclick="{! c.redirectCarte }"/>
+    <br/>
+    <br/>
+    <lightning:button variant="destructive" label="Retention - Consolidamento Richiesto" title="avanti" onclick="{! c.redirectPrestiti }"/>
+    
+    
+   
+</aura:component>

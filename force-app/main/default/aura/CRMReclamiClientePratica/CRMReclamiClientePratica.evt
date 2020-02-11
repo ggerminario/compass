@@ -1,0 +1,4 @@
+<aura:event type="COMPONENT">
+    <aura:attribute name="cliente" type="OCSCliente"/>
+     <aura:attribute name="pratica" type="Object"/>
+</aura:event>

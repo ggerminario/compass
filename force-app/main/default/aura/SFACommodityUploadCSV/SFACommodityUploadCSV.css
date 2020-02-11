@@ -1,0 +1,48 @@
+.THIS .notUploading {
+    visibility: hidden;
+}
+
+.THIS .uploading {
+    visibility: visible;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.THIS .errorRow{
+    background : #FFFFFF;
+    color : black;
+}
+
+.THIS .okRow{
+    background : #FFFFFF;
+    color : black;
+}
+
+.THIS .hiddenRow{
+    background : #FFFFFF;
+    color : #FFFFFF;
+    width: 2px;
+}
+
+
+.THIS .modal_detail_row{
+    flex-direction: row;
+    max-width:  100%;
+    width: auto;
+}
+
+.THIS .scroll_detail_row{
+    overflow-x: scroll;
+}
+
+
+.THIS .riepilogo_records{
+    width: 40%;
+    border-style: solid;
+    border-bottom-width: thin;
+    border-left-width: thin;
+    border-right-width: thin;
+    border-top-width: thin;
+    border-color: grey;
+    color : black;
+}

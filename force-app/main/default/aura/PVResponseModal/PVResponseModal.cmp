@@ -1,0 +1,53 @@
+<!--
+  @File Name          : PVResponseModal.cmp
+  @Description        : 
+  @Author             : Adriana Lattanzi
+  @Group              : 
+  @Last Modified By   : Adriana Lattanzi
+  @Last Modified On   : 23/12/2019, 13:08:32
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    23/12/2019   Adriana Lattanzi     Initial Version
+-->
+<aura:component implements="flexipage:availableForAllPageTypes">
+
+    <!-- attributi passati da componente esterno -->
+    <aura:attribute name="isQuestionSelected" type="Boolean" default="false" />
+    <aura:attribute name="response" type="string" />
+    
+    <!--Use "slds-m-around_xx-large" class to add standard X-Large padding to the component--> 
+
+    <!--Use aura:if tag to display Model Box, on the bese of conditions. [isOpen boolean attribute] -->   
+    <aura:if isTrue="{!v.isQuestionSelected}">
+        
+        <!--###### MODAL BOX Start######--> 
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- ###### MODAL BOX HEADER Start ######-->
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                            onclick="{! c.closeModel }"
+                                            alternativeText="close"
+                                            variant="bare-inverse"
+                                            class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Response</h2>
+                </header>
+                <!--###### MODAL BOX BODY Part Start######-->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <p><b>{!v.response}</b></p>
+                </div>
+                <!--###### MODAL BOX FOOTER Part Start ######-->
+                <footer class="slds-modal__footer">
+                    <lightning:button variant="brand" 
+                                        label="Close"
+                                        title="Cancel"
+                                        onclick="{! c.closeModel }"/>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+        <!--###### MODAL BOX Part END Here ######-->
+        
+    </aura:if>
+
+</aura:component>

@@ -1,0 +1,4 @@
+<aura:component >
+    <lightning:quickActionAPI aura:id="quickActionAPI" />
+    <lightning:button variant="brand" label="Crea Ticket Customer Service" class="buttonMaxWidth" title="Crea Ticket Customer Service" onclick="{!c.creaTicketCS}"/>
+</aura:component>

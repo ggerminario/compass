@@ -1,0 +1,105 @@
+<!--
+  @File Name          : PV1754StornoAddebito.cmp
+  @Description        : 
+  @Author             : m.renda@balanceconsulting.it
+  @Group              : 
+  @Last Modified By   : ChangeMeIn@UserSettingsUnder.SFDoc
+  @Last Modified On   : 21/1/2020, 10:43:40
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    9/12/2019   m.renda@balanceconsulting.it     Initial Version
+  1.1    21/01/2020  m.renda@balanceconsulting.it     Mantis 0002760
+-->
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV1754StornoAddebito'>
+
+    <aura:method name="doValidityCheck" action="{!c.doValidityCheck}"/>
+
+    <aura:attribute name="options" type="List" default="[
+    {'label': 'Si', 'value': 'Si'},
+    {'label': 'No', 'value': 'No'}
+    ]"/>
+    <aura:attribute name="valueRimborso" type="String" default=""/>
+    <aura:attribute name="showDetails" type="Boolean" default="false"/>
+    <aura:attribute name="modalitaPagamentoSelected" type="String" default=""/>
+    <aura:attribute name="optionsModalitaPagamento" type="List" default="[
+                                                        {'label': 'Assegno', 'value': 'Assegno'},
+                                                        {'label': 'Bonifico', 'value': 'Bonifico'},
+                                                        ]"/>
+    <aura:attribute name="labelOptions" type="String" default="Modalità di rimborso"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:attribute name="OCSClienteSelezionato" type="OCSCliente"/>
+    <aura:attribute name="praticaSelezionata" type="OCSPratica"/>
+    <aura:attribute name="sottoTipologia" type="string"/>
+    <aura:attribute name="erroriModRimborso" type="String"/>
+    <aura:attribute name="notaModalitaRimborso" type="String"/>
+    <aura:attribute name="modalitaRimborso" type="String"/>
+
+    <aura:attribute name="tipoRimborso" type="List" default="[]"/>
+    <aura:attribute name="sommaStorni" type="double" default="0"/>
+
+
+    <div class="slds">
+
+        <aura:if isTrue="{!v.showDetails}">
+
+            
+
+            <div class="slds-p-vertical_small">
+                Per ogni storno da richiedere, inserirne l'importo nella riga corrispondente
+            </div>
+
+            <div class="slds-grid slds-wrap slds-grid_vertical-align-center slds-theme_info slds-text-heading_small">
+                <div class="slds-p-around_small slds-col slds-size_1-of-1 slds-medium-size_8-of-12 slds-large-size_9-of-12">
+                    Tipo
+                </div>
+                <div class="slds-p-around_small slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                    Importo
+                </div>
+            </div>
+
+            <aura:iteration items="{!v.tipoRimborso}" var="rimborso">
+                <div class="slds-grid slds-wrap slds-grid_vertical-align-center storno-row">
+                    <div class="slds-p-around_small slds-col slds-size_1-of-1 slds-medium-size_8-of-12 slds-large-size_9-of-12">
+                        {!rimborso.id + ' - ' + rimborso.descrizione}
+                    </div>
+                    <div class="slds-p-around_small slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                        <lightning:input formatter="currency" aura:id="inputSomma" type="number" step="0.01" name="{!rimborso.id}" label="" value="{!rimborso.value}" onchange="{!c.sommaTotali}" class="input-somma"/>
+                    </div>
+                </div>
+            </aura:iteration>
+
+            <div class="slds-grid slds-wrap slds-grid_vertical-align-center storno-row">
+                <div class="slds-p-around_small slds-col slds-size_1-of-1 slds-medium-size_8-of-12 slds-large-size_9-of-12">
+                    Totale
+                </div>
+                <div class="slds-p-around_small slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_3-of-12">
+                    <lightning:input formatter="currency" value="{!v.sommaStorni}" type="number" step="0.01" disabled="true" label="" class="input-somma"/>
+                </div>
+            </div>
+
+            <div class="slds-p-vertical_small">
+                <lightning:radioGroup name="flagRimborso"
+                                      label="Con rimborso"
+                                      options="{! v.options }"
+                                      value="{! v.valueRimborso }"
+                                      type="radio"
+                                      required="true"
+                                      aura:id="flagRimborso"
+                />
+            </div>
+        </aura:if>
+        <aura:if isTrue="{!v.valueRimborso =='Si'}">
+            <c:PVModalitaRimborso labelOptions="{!v.labelOptions}"
+                                  OCSClienteSelezionato="{!v.PVForm.cliente}"
+                                  praticaSelezionata="{!v.PVForm.pratica}"
+                                  aura:id="modRimborso"
+                                  errori="{!v.erroriModRimborso}"
+                                  modalitaPagamentoSelected="{!v.modalitaRimborso}"
+                                  note="{!v.notaModalitaRimborso}"
+                                  required="true">
+            </c:PVModalitaRimborso>
+        </aura:if>
+    </div>
+
+
+</aura:component>

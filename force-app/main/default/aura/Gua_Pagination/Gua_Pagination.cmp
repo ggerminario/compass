@@ -1,0 +1,40 @@
+<!--
+  @Component Name     : Gua_Pagination
+  @Description        : 
+  @Author             : Youssouph Niaouba Diedhiou
+  @Group              : 
+  @Last Modified By   : 
+  @Last Modified On   : 13/12/2019 
+  @Modification Log   : 
+  ==============================================================================
+  Ver         Date                     Author                 Modification
+  ==============================================================================
+  1.0    13/12/2019 à 10:42:14   ChangeMeIn@UserSettingsUnder.SFDoc     Initial Version
+-->
+<aura:component access="global" implements="flexipage:availableForAllPageTypes">
+
+  <aura:attribute name="objects" type="Object[]" />
+  <aura:attribute name="numberOfLinesToDisplay" type="Object[]" />
+  <aura:attribute name="pageSize" type="Integer" default="5" />
+  <aura:attribute name="totalSize" type="Integer" />
+  <aura:attribute name="start" type="Integer" />
+  <aura:attribute name="end" type="Integer" />
+
+  <div class="slds-grid slds-wrap">
+    <div class="slds-col slds-size_1-of-1 slds-large-size_3-of-3 " style="text-align:center;font-size:14px">
+      <p class="slds-truncate" id="paginazione">Risultati {!v.currentPage} - {!v.totalPage} Pagine</p>
+      <!-- Record totali: {!v.totalRecord}</p> -->
+    </div>
+    <div style="width:100%!Important" class="slds-col slds-size_1-of-1 slds-large-size_3-of-3 stylePag">
+      <lightning:button class="slds-button slds-button_brand buttonPage" onclick="{!c.first}" disabled="{!v.start == 0}"
+        label="Prima Pagina" />
+      <lightning:button class="slds-button slds-button_brand arrow" onclick="{!c.previous}" disabled="{!v.start == 0}"
+        label="&lt;" />
+      <lightning:button aura:id="nextbtn" class="slds-button slds-button_brand arrow" onclick="{!c.next}"
+        disabled="{!v.end >= v.totalSize-1}" label="&gt;" />
+      <lightning:button onclick="{!c.last}" class="slds-button slds-button_brand buttonPage"
+        disabled="{!v.end >= v.totalSize}" label="Ultima Pagina" />
+    </div>
+  </div>
+
+</aura:component>

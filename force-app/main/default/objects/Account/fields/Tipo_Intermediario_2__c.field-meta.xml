@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tipo_Intermediario_2__c</fullName>
+    <description>Secondo campo sul tipo intermediario creato per il dealer in quanto può essere censito con due tipi di accordo diversi</description>
+    <externalId>false</externalId>
+    <label>Tipo Intermediario 2</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>CV</fullName>
+                <default>false</default>
+                <label>CV</label>
+            </value>
+            <value>
+                <fullName>SA</fullName>
+                <default>false</default>
+                <label>SA</label>
+            </value>
+            <value>
+                <fullName>PV</fullName>
+                <default>false</default>
+                <label>PV</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

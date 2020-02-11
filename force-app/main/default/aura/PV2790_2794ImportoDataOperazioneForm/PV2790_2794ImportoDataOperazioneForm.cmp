@@ -1,0 +1,31 @@
+<aura:component controller="PV2790_2794ImportoDataOperazioneForm">
+    <aura:method name="doValidityCheck" action="{!c.doValidityCheck}" />
+
+    <aura:attribute name="numPratica" type="string" />
+    <aura:attribute name="dataOperazione" type="string" />
+    <aura:attribute name="importo" type="Decimal" />
+    <aura:attribute name="errori" type="string" />
+
+    <aura:attribute name="showlink" type="List" />
+
+
+    <div class="slds-grid slds-gutters slds-m-bottom--medium">
+
+        <div class="slds-col">
+            <lightning:input type="date" label="Data operazione" aura:id="dataOperazione" name="dataOperazione"
+                required="true" value="{!v.dataOperazione}" />
+        </div>
+
+        <div class="slds-col">
+            <lightning:input type="number" label="Importo" aura:id="importo" name="importo" value="{!v.importo}"
+                step="0.01" />
+        </div>
+
+        <div class="slds-col slds-m-top_x-small">
+                <lightning:button label="Calcola saldo" class="slds-m-top--medium" variant="destructive"
+                onclick="{!c.calcolaSaldo}" />
+        </div>
+    </div>
+
+
+</aura:component>

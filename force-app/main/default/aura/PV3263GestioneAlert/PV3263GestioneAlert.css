@@ -1,0 +1,30 @@
+.THIS .my-title{
+    align-self: center !important;
+}
+.THIS .my-inline{
+    display: flex;
+}
+.THIS .slds-form-element{
+    padding-right: 10%;
+    width: 40%;
+}
+.THIS .my-text{
+    width: 60%;
+    align-self: center;
+}
+.THIS .slds-text-title{
+    align-self: center;
+}
+.THIS .my-label{
+    padding-right: 2%;
+    width: 25%;
+}
+.THIS .my-align{
+    margin-left: auto;
+}
+.THIS .my-label2{
+    width: 15%;
+}
+.THIS .my-campo{
+    width: 10%;
+}

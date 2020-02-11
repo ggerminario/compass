@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Canweb__c</fullName>
+    <description>Indica il canale web di acquisizione del dealer, è un dato che arriva da OCS e che ci salviamo. Non è utilizzato nel processo di convenzionamento ma ad esempio nelle liste è un dato che può essere fornito</description>
+    <externalId>false</externalId>
+    <inlineHelpText>Indica il canale web di acquisizione del dealer, è un dato che arriva da OCS e che ci salviamo. Non è utilizzato nel processo di convenzionamento ma ad esempio nelle liste è un dato che può essere fornito</inlineHelpText>
+    <label>Canweb</label>
+    <length>255</length>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

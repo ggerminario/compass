@@ -1,0 +1,41 @@
+<!--
+  @File Name          : PV1763VariazioneAnagraficaGestione.cmp
+  @Description        : 
+  @Author             : sabrina vitali
+  @Group              : 
+  @Last Modified By   : Nicola Musicco
+  @Last Modified On   : 15/1/2020, 09:43:20
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    22/11/2019   sabrina vitali     Initial Version
+-->
+<aura:component controller='PV1771CancAggBancheDatiGestione' implements="flexipage:availableForAllPageTypes,force:hasRecordId" access='global'>
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+    <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni"/>
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre"></aura:method>    
+    
+    <!-- Attributi -->
+    <!-- da parent -->
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name='note' type='String' />    
+    <aura:attribute name="newStatus" type="String"/>    
+    <aura:attribute name="allegati" type="Attachment[]"/>
+    <!-- Attributi gestione-->
+    <aura:attribute name="messaggiErrore" type="String" access="Global"/>
+    <aura:attribute name="userData" type="PVForm.UserData" default="" />                                                                                             
+
+    <!-- main --> 
+    <lightning:card class='slds-form_stacked'>
+        
+        <!-- visualizzato solo se è gestito da reclami --> 
+        <aura:if isTrue="{!v.theCase.Branch__c != v.userData.accountOffice.Id}">     
+                <div class="slds-grid slds-container_medium slds-align_left slds-wrap">
+                    <div class="slds-size_6-of-12">
+                        <lightning:input type="checkbox" aura:id='checkboxRinviaAlMittente'
+                            label='Reinvia al mittente' name='checkbox'/>
+                    </div>
+                </div>    
+        </aura:if>    
+    </lightning:card> <!-- /main -->
+
+</aura:component>

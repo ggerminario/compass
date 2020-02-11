@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Dealer</fullName>
+    <columns>ACCOUNT.NAME</columns>
+    <columns>OCS_External_Id__c</columns>
+    <columns>getCodice_Cliente__c</columns>
+    <columns>Partita_IVA__c</columns>
+    <columns>Zone__c</columns>
+    <columns>ACCOUNT.ADDRESS2_CITY</columns>
+    <columns>ACCOUNT.ADDRESS2_ZIP</columns>
+    <columns>Status__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>ACCOUNT.RECORDTYPE</field>
+        <operation>equals</operation>
+        <value>Account.Dealer</value>
+    </filters>
+    <label>Dealer</label>
+    <sharedTo>
+        <roleAndSubordinates>REGIONE_ADRIATICA</roleAndSubordinates>
+        <roleAndSubordinates>REGIONE_CENTRO</roleAndSubordinates>
+        <roleAndSubordinates>REGIONE_NORD_EST</roleAndSubordinates>
+        <roleAndSubordinates>REGIONE_NORD_OVEST</roleAndSubordinates>
+        <roleAndSubordinates>REGIONE_SUD</roleAndSubordinates>
+        <roleAndSubordinates>REGIONE_TIRRENICA</roleAndSubordinates>
+    </sharedTo>
+</ListView>

@@ -1,0 +1,38 @@
+<aura:component controller='PV2133InadempimentoVerbaleFornitoreGest'>
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+    <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni"/>
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre"></aura:method>    
+    
+    <!-- Attributi -->
+    <!-- da parent -->
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name='note' type='String' />    
+    <aura:attribute name="newStatus" type="String"/>    
+    <aura:attribute name="allegati" type="Attachment[]"/>
+    <!-- Attributi gestione-->
+    <aura:attribute name="messaggiErrore" type="String" access="Global"/>
+    <aura:attribute name="userData" type="PVForm.UserData" default="" />   
+
+    <aura:attribute name="esitoSelezionato" type="String" />
+
+    <!-- main --> 
+    <lightning:card class='slds-form_stacked'>
+
+        <lightning:select name="esito" label="Esito:" aura:id="esito" value="{!v.esitoSelezionato}">
+            <option text="" value="" />
+            <option text="Poco Rilevante" value="Poco Rilevante" />
+            <option text="Rilevante" value="Rilevante" />
+        </lightning:select>
+         
+        <!-- visualizzato solo se è Monitoraggio Dealer --> 
+        <aura:if isTrue="{!v.userData.user.UserRole.DeveloperName == 'Monitoraggio_Dealer'}">
+            <div class="slds-grid slds-container_medium slds-align_left slds-wrap">
+                <div class="slds-size_6-of-12">
+                    <lightning:input type="checkbox" aura:id='checkboxRinviaAlMittente'
+                        label='Reinvia al mittente' name='checkbox'/>
+                </div>
+            </div>    
+        </aura:if>
+    </lightning:card>
+    <!-- /main -->
+</aura:component>

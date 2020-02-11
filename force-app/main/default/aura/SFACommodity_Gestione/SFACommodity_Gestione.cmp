@@ -1,0 +1,1075 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" 
+                controller = "SFACommodity_Controller" access="global" >
+
+    <aura:attribute name="selectedActivity" type="Object"/>
+    <aura:attribute name="recDatiPratica" type="Object"/>
+    <aura:attribute name="recDatiCarta" type="Object"/>
+    
+    <aura:attribute name="showSpinner" type="Integer" default="0" />    
+    <aura:attribute name="msg" type="String"/>
+    <aura:attribute name="elencoNote" type="List"/>
+    <aura:attribute name="optionsChiusura" type="List" default="[]"/>
+    <aura:attribute name="opzioneChiusura" type="String" default=""/>
+    <aura:attribute name="sNota" type="String" default="" />
+    <aura:attribute name="vNota" type="String" default="" />
+
+    <aura:attribute name="dataRichiesta" type="String" default="" />
+    <aura:attribute name="dataLiquidazione" type="String" default="" />
+
+    <aura:attribute name="tipoPAPF" type="Boolean" default="false"/>
+    <aura:attribute name="tipoCARTA" type="Boolean" default="false"/>
+    <aura:attribute name="tipoPP" type="Boolean" default="false"/>
+    <aura:attribute name="tipoVA" type="Boolean" default="false"/>
+    <aura:attribute name="NumPratica" type="String"/>
+    <aura:attribute name="categoria" type="Boolean" default="true" />
+
+    <aura:attribute name="mapUser" type="Object"/>
+    <aura:attribute name="mapFile" type="Object"/>
+    <aura:attribute name="userId" type="String"/>
+    <aura:attribute name="userProfile" type="String"/>
+    <aura:attribute name="userFiliale" type="String"/>
+    <aura:attribute name="userIsBO" type="Boolean" default=""/>
+    <aura:attribute name="userAdm" type="Boolean" default="true"/>
+    <aura:attribute name="inadempimento" type="Boolean" default="true"/>
+    <aura:attribute name="descAll" type="String"/>
+    <aura:attribute name="nuovaData" type="String"/>
+
+    <aura:attribute name="question1Options" type="List" default="[
+                                                                     {'label': 'Si', 'value': 'Si'},
+                                                                     {'label': 'No', 'value': 'No'},
+                                                                     ]"/>
+    <aura:attribute name="question1Value" type="String" default=""/>
+
+    <aura:attribute name="question2Options" type="List" default="[
+                                                                     {'label': 'Casa', 'value': 'Casa'},
+                                                                     {'label': 'Cell', 'value': 'Cell'},
+                                                                     {'label': 'Lavoro', 'value': 'Lavoro'},
+                                                                     {'label': 'Nessuno', 'value': 'Nessuno'},
+                                                                     ]"/>
+    <aura:attribute name="question2Value" type="String" default=""/>
+    
+    <aura:attribute name="question3Options" type="List" default="[
+                                                                     {'label': 'Si', 'value': 'Si'},
+                                                                     {'label': 'No', 'value': 'No'},
+                                                                     ]"/>
+    <aura:attribute name="question3Value" type="String" default=""/>
+    <aura:attribute name="options" type="List" default="[
+                                                                    {'label': 'Ritardo da imputare al dealer', 'value': 'rit'}]"/>
+    <aura:attribute name="valueR" type="String" default=""/>
+    <aura:attribute name="optionsEsito" type="List" default="[
+                                                                    {'label': 'Return to Branch', 'value': 'Return to Branch'},
+                                                                    {'label': 'Activity Complete', 'value': 'Activity Complete'}
+                                                                    ]"/>
+    <aura:attribute name="valueEsito" type="String" default=""/>
+    <aura:attribute name="myBool" type="Boolean" default="true"/>
+    <aura:attribute name="file" type="Object"/>
+    <aura:attribute name="elencoF" type="List"/>
+    <aura:attribute name="elencoC" type="List"/>
+    <aura:attribute name="elencoFile" type="List"/>
+    <aura:attribute name="accept" type="List" default="['.pdf','.log']"/>
+    <aura:attribute name="multiple" type="Boolean" default="false"/>
+    <aura:attribute name="disabled" type="Boolean" default="true"/>    
+    <aura:attribute name="refresh" type="Boolean" default="true" />
+    <aura:attribute name="attrSummary" type="String" />
+
+    <aura:handler name="init" value="{!this}" action="{!c.init}" />
+    
+    <lightning:notificationsLibrary aura:id="notifLib" />    
+    <div class="bold slds-text-heading_medium slds-box_small">
+        <lightning:formattedText value="Commodity Check"/>
+    </div>
+    <div class="slds-border_bottom ">
+    </div>
+    <br/>
+
+    <!-- INIZIO CONTROLLO TIPOLOGIA PRODOTTO  PAPF -->
+
+    <aura:if isTrue="{!v.tipoPAPF}">
+        <aura:if isTrue="{!v.userIsBO}">
+            <div class="bold slds-text-heading_small slds-box_small">
+                <lightning:formattedText value="DATI PRATICA"/>
+            </div>
+        
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Numero Pratica"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.selectedActivity[0].Num_Pratica__c}"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Data liquidazione"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.dataLiquidazione}"/>
+<!--                        <lightning:formattedText value="{!v.recDatiPratica.dataLiquidazione}"/>-->
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Tipo Prodotto"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.tipoProdotto}"/>
+                </div>
+            </div>
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Codice Destinazione Finanziamento"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.codDestFinanziamento}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Descrizione destinazione Finanziamento"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.descDestFinanziamento}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Descrizione bene"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.descrizioneBene}"/>
+                </div>
+            </div>
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Importo Finanziato (euro)"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedNumber value="{!v.recDatiPratica.finanziato}" style="currency" currencyCode="EUR" currencyDisplayAs="name"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Numero Rate"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.numRata}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Importo Rate (euro)"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedNumber value="{!v.recDatiPratica.importoRata}" style="currency"
+                    currencyCode="EUR" currencyDisplayAs="symbol"/>
+                </div>
+            </div>
+            <br/>
+            <div class="bold slds-text-heading_small slds-box_small">
+                <lightning:formattedText value="DATI INTERMEDIARIO"/>
+            </div>
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Codice Dealer"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.codDealer}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Ragione Sociale Dealer"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.ragioneSocialeDealer}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Stato Dealer"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.statoDealer}"/>
+                </div>
+            </div>
+            <br/>
+            <div class="bold slds-text-heading_small slds-box_small">
+                <lightning:formattedText value="DATI CLIENTE/COOBBLIGATO"/>
+            </div>
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Codice Cliente"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.codCliente}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Cliente"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.cognome + ' ' + v.recDatiPratica.nome}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Telefono casa"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.telefonoCasa}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Telefono cellulare"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.telCellulare}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Telefono datore"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.telDatore}"/>
+                </div>
+            </div>
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Codice Coobbligato"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.codClienteCoob}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Coobbligato"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.cognomeCoob + ' ' + v.recDatiPratica.nomeCoob}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Telefono casa coobbligato"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.telefonoCasaCoob}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Telefono cellulare coobbligato"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.telCellulareCoob}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Telefono datore coobbligato"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiPratica.telDatoreCoob}"/>
+                </div>
+            </div>
+        </aura:if>
+
+        <div class="bold slds-text-heading_small slds-box_small">
+            <lightning:formattedText value="Commodity Check Esiti PAPF/CARTE"/>
+        </div>
+        <div class="slds-box" >
+            <table >
+                <thead>
+                    <tr class="slds-text-heading--label">
+                        <th class="th" scope="col"><center>Pratica/Carta</center></th>
+                        <th class="th" scope="col"><center>Dip</center></th>
+                        <th class="th" scope="col"><center>Soc</center></th>
+                        <th class="th" scope="col"><center>Debitore</center></th>
+                        <th class="th" scope="col"><center>Codice Convenzionato</center></th>
+                        <th class="th" scope="col"><center>Convenzionato</center></th>
+                        <th class="th" scope="col"><center>Codice Punto Vendita</center></th>
+                        <th class="th" scope="col"><center>Punto Vendita</center></th>
+                        <th class="th" scope="col"><center>Categoria</center></th>
+                        <th class="th" scope="col"><center>Codice Esito</center></th>
+                        <th class="th" scope="col"><center>Descrizione Esito</center></th>
+                        <th class="th" scope="col"><center>Note Società Esterna</center></th>
+                        <th class="th" scope="col"><center>Data Notifica</center></th>
+                        <th class="th" scope="col"><center>Data Verifica</center></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="slds-text" >
+                        <td class="td" scope="col">{!v.selectedActivity[0].Num_Pratica__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Dipendente__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Societa__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Debitore__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Cod_agente_convenzionato__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Rag_sociale_agente_convenzionato__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Cod_subagente_pv__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Rag_sociale_subagente_pv__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Categoria__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Cod_esito__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Esito__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Nota_societa_esterna__c}</td>
+                        <td class="td" scope="col">
+                            <lightning:formattedDateTime
+                                value="{!v.selectedActivity[0].Data_notifica__c}"
+                                year="numeric"
+                                month="2-digit"
+                                day="2-digit"/>
+                        </td>
+                            <td class="td" scope="col">
+                            <lightning:formattedDateTime
+                                value="{!v.selectedActivity[0].Data_verifica__c}"
+                                year="numeric"
+                                month="2-digit"
+                                day="2-digit"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </aura:if>
+
+    <!-- TIPO PRODOTTO CARTA-->
+
+    <aura:if isTrue="{!v.tipoCARTA}">
+        <aura:if isTrue="{!v.userIsBO}">
+            <div class="bold slds-text-heading_small slds-box_small">
+                <lightning:formattedText value="DATI CARTA"/>
+            </div>
+        
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Numero Carta"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.selectedActivity[0].Num_Pratica__c}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Data Richiesta"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.dataRichiesta}"/>
+<!--                    <lightning:formattedText value="{!v.recDatiCarta.dataRichiesta}"/>-->
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Tipo Prodotto"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.selectedActivity[0].Tipo_Prodotto__c}"/>
+                </div>
+            </div>
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Codice Destinazione Finanziamento"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.codDestFinanziamento}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Descrizione destinazione Finanziamento"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiPratica.descDestFinanziamento}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Fido"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedNumber value="{!v.recDatiCarta.fido}" style="currency" currencyCode="EUR" currencyDisplayAs="name"/>
+                </div>
+            </div>
+            <br/>
+            <div class="bold slds-text-heading_small slds-box_small">
+                <lightning:formattedText value="DATI INTERMEDIARIO"/>
+            </div>
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Codice Dealer"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiCarta.codDealer}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Ragione Sociale Dealer"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiCarta.ragioneSocialeDealer}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="Stato Dealer"/>
+                </div>
+                <div class="slds-col slds-size_1-of-6">
+                    <lightning:formattedText value="{!v.recDatiCarta.statoDealer}"/>
+                </div>
+            </div>
+            <br/>
+            <div class="bold slds-text-heading_small slds-box_small">
+                <lightning:formattedText value="DATI CLIENTE"/>
+            </div>
+            <div class="slds-grid slds-box slds-box_small slds-theme_default">
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Codice Cliente"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiCarta.codCliente}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Cliente"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiCarta.ragioneSociale}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Telefono casa"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiCarta.telCase}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Telefono cellulare"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiCarta.telCellulare}"/>
+                </div>
+                <div class="bold slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="Telefono datore"/>
+                </div>
+                <div class="slds-col slds-size_1-of-12">
+                    <lightning:formattedText value="{!v.recDatiCarta.telDatore}"/>
+                </div>
+            </div>
+        </aura:if>
+        <div class="bold slds-text-heading_small slds-box_small">
+                <lightning:formattedText value="Commodity Check Esiti PAPF/CARTE"/>
+            </div>
+        <div class="slds-box" >
+            <table >
+                <thead>
+                    <tr>
+                        <th class="th"><center>Pratica/Carta</center></th>
+                        <th class="th"><center>Dip</center></th>
+                        <th class="th"><center>Soc</center></th>
+                        <th class="th"><center>Debitore</center></th>
+                        <th class="th"><center>Codice Convenzionato</center></th>
+                        <th class="th"><center>Convenzionato</center></th>
+                        <th class="th"><center>Codice Punto Vendita</center></th>
+                        <th class="th"><center>Punto Vendita</center></th>
+                        <th class="th"><center>Categoria</center></th>
+                        <th class="th"><center>Codice Esito</center></th>
+                        <th class="th">
+                            <div scope="col"><center>Descrizione Esito</center></div>
+                        </th>
+                        <th class="th"><center>Note Società Esterna</center></th>
+                        <th class="th"><center>Data Notifica</center></th>
+                        <th class="th"><center>Data Verifica</center></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="slds-text" >
+                        <td class="td">{!v.selectedActivity[0].Num_Pratica__c}</td>
+                        <td class="td">{!v.selectedActivity[0].Dipendente__c}</td>
+                        <td class="td">{!v.selectedActivity[0].Societa__c}</td>
+                        <td class="td">{!v.selectedActivity[0].Debitore__c}</td>
+                        <td class="td">{!v.selectedActivity[0].Cod_agente_convenzionato__c}</td>
+                        <td class="td">{!v.selectedActivity[0].Rag_sociale_agente_convenzionato__c}</td>
+                        <td class="td">{!v.selectedActivity[0].Cod_subagente_pv__c}</td>
+                        <td class="td">{!v.selectedActivity[0].Rag_sociale_subagente_pv__c}</td>
+                        <td class="td">{!v.selectedActivity[0].Categoria__c}</td>
+                        <td class="td">{!v.selectedActivity[0].Cod_esito__c}</td>
+                        <td class="td">
+                            <div class="" >{!v.selectedActivity[0].Esito__c}</div>
+                        </td>
+                        <td class="td">{!v.selectedActivity[0].Nota_societa_esterna__c}</td>
+                        <td class="td" scope="col">
+                                <lightning:formattedDateTime
+                                    value="{!v.selectedActivity[0].Data_notifica__c}"
+                                    year="numeric"
+                                    month="2-digit"
+                                    day="2-digit"/>
+                            </td>
+                            <td class="td" scope="col">
+                                <lightning:formattedDateTime
+                                    value="{!v.selectedActivity[0].Data_verifica__c}"
+                                    year="numeric"
+                                    month="2-digit"
+                                    day="2-digit"/>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </aura:if>
+
+    <!-- TIPO PRODOTTO PP-->
+
+    <aura:if isTrue="{!v.tipoPP}">
+        <div class="bold slds-text-heading_small slds-box_small">
+            <lightning:formattedText value="DATI PRATICA"/>
+        </div>
+<!--        <div class="slds-grid slds-box slds-box_small white-color">-->
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-6 ">
+                <lightning:formattedText value="Numero Pratica"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.selectedActivity[0].Num_Pratica__c}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Data liquidazione"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.dataLiquidazione}"/>
+<!--                <lightning:formattedText value="{!v.recDatiPratica.dataLiquidazione}"/>-->
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Tipo Prodotto"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.tipoProdotto}"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Codice Destinazione Finanziamento"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.codDestFinanziamento}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Descrizione destinazione Finanziamento"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.descDestFinanziamento}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Descrizione bene"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.descrizioneBene}"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Importo Finanziato (euro)"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedNumber value="{!v.recDatiPratica.finanziato}" style="currency"
+                    currencyCode="EUR" currencyDisplayAs="symbol"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Numero Rate"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.numRata}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Importo Rate (euro)"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedNumber value="{!v.recDatiPratica.importoRata}" style="currency"
+                currencyCode="EUR" currencyDisplayAs="symbol"/>
+            </div>
+        </div>
+        <br/>
+        <div class="bold slds-text-heading_small slds-box_small">
+            <lightning:formattedText value="DATI INTERMEDIARIO"/>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Codice Subagente"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.selectedActivity[0].Cod_subagente_pv__c}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Ragione Sociale Subagente"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.selectedActivity[0].Rag_sociale_subagente_pv__c}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Stato Subagente"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value=""/>
+            </div>
+        </div>
+        <br/>
+        <div class="bold slds-text-heading_small slds-box_small">
+            <lightning:formattedText value="DATI CLIENTE/COOBBLIGATO"/>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Codice Cliente"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.codCliente}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Cliente"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.cognome + ' ' + v.recDatiPratica.nome}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono casa"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telefonoCasa}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono cellulare"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telCellulare}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono datore"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telDatore}"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Codice Coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.codClienteCoob}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.cognomeCoob + ' ' + v.recDatiPratica.nomeCoob}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono casa coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telefonoCasaCoob}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono cellulare coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telCellulareCoob}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono datore coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telDatoreCoob}"/>
+            </div>
+        </div>
+        <div class="bold slds-text-heading_small slds-box_small">
+                <lightning:formattedText value="Commodity Check Esiti PP"/>
+            </div>
+        <div class="slds-box" >
+            <table>
+                <thead>
+                    <tr >
+                        <th class="th" scope="col"><center>Pratica</center></th>
+                        <th class="th" scope="col"><center>Dip</center></th>
+                        <th class="th" scope="col"><center>Soc</center></th>
+                        <th class="th" scope="col"><center>Debitore</center></th>
+                        <th class="th" scope="col"><center>Codice Agente</center></th>
+                        <th class="th" scope="col"><center>Ragione Sociale Agente</center></th>
+                        <th class="th" scope="col"><center>Codice Subagente</center></th>
+                        <th class="th" scope="col"><center>Ragione Sociale Subagente</center></th>
+                        <th class="th" scope="col"><center>Categoria</center></th>
+                        <th class="th" scope="col"><center>Codice Esito</center></th>
+                        <th class="th" scope="col"><center>Descrizione Esito</center></th>
+                        <th class="th" scope="col"><center>Note Società Esterna</center></th>
+                        <th class="th" scope="col"><center>Data Notifica</center></th>
+                        <th class="th" scope="col"><center>Data Verifica</center></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="slds-text" >
+                        <td class="td" scope="col">{!v.selectedActivity[0].Num_Pratica__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Dipendente__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Societa__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Debitore__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Cod_agente_convenzionato__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Rag_sociale_agente_convenzionato__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Cod_subagente_pv__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Rag_sociale_subagente_pv__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Categoria__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Cod_esito__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Esito__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Nota_societa_esterna__c}</td>
+                        <td class="td" scope="col">
+                            <lightning:formattedDateTime
+                                value="{!v.selectedActivity[0].Data_notifica__c}"
+                                year="numeric"
+                                month="2-digit"
+                                day="2-digit"/>
+                        </td>
+                        <td class="td" scope="col">
+                            <lightning:formattedDateTime
+                                value="{!v.selectedActivity[0].Data_verifica__c}"
+                                year="numeric"
+                                month="2-digit"
+                                day="2-digit"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    
+    </aura:if>
+
+    <!-- TIPO VARIAZIONE ANAGRAFICA-->
+
+    <aura:if isTrue="{!v.tipoVA}">
+        <div class="bold slds-text-heading_small slds-box_small">
+            <lightning:formattedText value="DATI PRATICA"/>
+        </div>
+    
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Numero Pratica"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.selectedActivity[0].Num_Pratica__c}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Data liquidazione"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+<!--                <lightning:formattedText value="{!v.recDatiPratica.dataLiquidazione}"/>-->
+                <lightning:formattedText value="{!v.dataLiquidazione}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Tipo Prodotto"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.tipoProdotto}"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Codice Destinazione Finanziamento"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.codDestFinanziamento}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Descrizione destinazione Finanziamento"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.descDestFinanziamento}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Descrizione bene"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.descrizioneBene}"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Importo Finanziato (euro)"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedNumber value="{!v.recDatiPratica.finanziato}" style="currency" currencyCode="EUR" currencyDisplayAs="name"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Numero Rate"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.numRata}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Importo Rate (euro)"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedNumber value="{!v.recDatiPratica.importoRata}" style="currency" currencyCode="EUR" currencyDisplayAs="name"/>
+            </div>
+        </div>
+        <br/>
+        <div class="bold slds-text-heading_small slds-box_small">
+            <lightning:formattedText value="DATI INTERMEDIARIO"/>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Codice Dealer"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.codDealer}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Ragione Sociale Dealer"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.ragioneSocialeDealer}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-6">
+                <lightning:formattedText value="Stato Dealer"/>
+            </div>
+            <div class="slds-col slds-size_1-of-6">
+                <lightning:formattedText value="{!v.recDatiPratica.statoDealer}"/>
+            </div>
+        </div>
+        <br/>
+        <div class="bold slds-text-heading_small slds-box_small">
+            <lightning:formattedText value="DATI CLIENTE/COOBBLIGATO"/>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Codice Cliente"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.codCliente}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Cliente"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.cognome + ' ' + v.recDatiPratica.nome}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono casa"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telefonoCasa}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono cellulare"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telCellulare}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono datore"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telDatore}"/>
+            </div>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default">
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Codice Coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.codClienteCoob}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.cognomeCoob + ' ' + v.recDatiPratica.nomeCoob}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono casa coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telefonoCasaCoob}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono cellulare coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telCellulareCoob}"/>
+            </div>
+            <div class="bold slds-col slds-size_1-of-12">
+                <lightning:formattedText value="Telefono datore coobbligato"/>
+            </div>
+            <div class="slds-col slds-size_1-of-12">
+                <lightning:formattedText value="{!v.recDatiPratica.telDatoreCoob}"/>
+            </div>
+        </div>
+        <div class="bold slds-text-heading_small slds-box_small">
+                <lightning:formattedText value="Variazione Anagrafica"/>
+            </div>
+        <div class="slds-box" >
+            <table>
+                <thead>
+                    <tr class="slds-text-heading--label">
+                        <th class="th" scope="col"><center>Regione</center></th>
+                        <th class="th" scope="col"><center>Area</center></th>
+                        <th class="th" scope="col"><center>Pratica/Carta</center></th>
+                        <th class="th" scope="col"><center>Dip</center></th>
+                        <th class="th" scope="col"><center>Soc</center></th>
+                        <th class="th" scope="col"><center>Debitore</center></th>
+                        <th class="th" scope="col"><center>Codice Agente/Convenzionato</center></th>
+                        <th class="th" scope="col"><center>Rag Sociale Agente/Convenzionato</center></th>
+                        <th class="th" scope="col"><center>Codice Esito</center></th>
+                        <th class="th" scope="col"><center>Descrizione Esito</center></th>
+                        <th class="th" scope="col"><center>Note Società Esterna</center></th>
+                        <th class="th" scope="col"><center>Data Notifica</center></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="slds-text" >
+                        <td class="td" scope="col"></td>
+                        <td class="td" scope="col"></td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Num_Pratica__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Dipendente__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Societa__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Debitore__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Cod_agente_convenzionato__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Rag_sociale_agente_convenzionato__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Cod_esito__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Esito__c}</td>
+                        <td class="td" scope="col">{!v.selectedActivity[0].Nota_societa_esterna__c}</td>
+                        <td class="td" scope="col">
+                                <lightning:formattedDateTime
+                                    value="{!v.selectedActivity[0].Data_notifica__c}"
+                                    year="numeric"
+                                    month="2-digit"
+                                    day="2-digit"/>
+                            </td>
+                        </tr>
+                </tbody>
+            </table>
+        </div>
+    </aura:if>
+    <br/>
+    <div class="slds-box">
+        <div class="bold slds-col slds-size_1-of-12">
+            <lightning:formattedText value="Note"/>
+        </div>
+        <div class="slds-grid slds-box slds-box_small slds-theme_default slds-col slds-size_2-of-8">
+            <div class="slds-col slds-size_8-of-8">
+                <lightning:formattedRichText readonly="true" label="Note" value="{!v.vNota}" class="box-wrapper"/>
+            </div>
+        </div>
+    </div>
+    <aura:if isTrue="{!v.userIsBO}">
+        <aura:set attribute="else">
+            <div class="slds-box">
+                <div>
+                    <lightning:formattedText value="Scadenza Attuale : " class=" bold slds-col slds-size_2-of-8"/>
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <!--                <lightning:formattedText value="{!v.selectedActivity[0].Activity_id__r.DueDate__c}" class="bold slds-col slds-size_2-of-8"/>-->
+                    <lightning:formattedDateTime value="{!v.selectedActivity[0].Activity_id__r.DueDate__c}" year="numeric" month="numeric" day="numeric" class="bold slds-col slds-size_2-of-8"/>
+                </div>
+                <div>
+                    <lightning:input aura:id="date-input" class=" bold slds-col slds-size_2-of-8" dateStyle="short" name="date-input" label="Inserire la nuova data di scadenza:" type="date" value="{!v.nuovaData}" />
+                </div>
+            </div>
+        </aura:set>
+    </aura:if>
+    <br/>
+    <br/>
+    <div class="slds-box">
+        <div class="bold slds-col slds-size_1-of-12">
+            <lightning:formattedText value="Inserire Nota"/>
+        </div>
+        <lightning:textarea value="{!v.sNota}" class="slds-textarea slds-col slds-size_4-of-8" ></lightning:textarea>
+    </div>
+    <br/>
+    <!--<div class="slds-box">-->
+    <aura:if isTrue="{!not(v.tipoVA)}">
+        <div class="slds-box">
+            <aura:if isTrue="{!v.categoria}">
+                <lightning:combobox name="question1" 
+                    label="Siete riusciti a contattare il Cliente ?" 
+                    value="{!v.question1Value}" 
+                    options="{!v.question1Options}" 
+                    onchange="{!c.handleQ1 }" class="slds-col slds-size_2-of-8"/>
+                <aura:if isTrue="{!v.question1Value=='Si'}">
+                    <br/>
+                    <lightning:combobox name="question2" 
+                        label="Su quale telefono è stato contattato il cliente ?" 
+                        value="{!v.question2Value}"
+                        options="{!v.question2Options}" 
+                        onchange="{!c.handleQ2 }" class="slds-col slds-size_2-of-8"/>
+                </aura:if>
+                <aura:if isTrue="{!v.question1Value=='Si'}">
+                    <br/>
+                    <lightning:combobox name="question3" 
+                        label="E' stata aggiornata l'anagrafica del cliente (nuovo recapito, modifica numero ...) ?" 
+                        value="{!v.question3Value}"
+                        options="{!v.question3Options}" 
+                        onchange="{!c.handleQ3 }" class="slds-col slds-size_2-of-8" />
+                </aura:if>
+            </aura:if>
+        </div>
+        <br/>
+        <div class="slds-box">
+            <aura:if isTrue="{!not(empty(v.elencoFile))}">
+                <aura:if isTrue="{!v.refresh}">
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-col slds-size_4-of-8">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <!--<th class="" scope="col" style="width:10.00rem;">
+                                <div class="slds-truncate" title="download">Download</div>
+                            </th>-->
+                            <th class="" scope="col" style="width:25.00rem;">
+                                <div class="slds-truncate" title="nomefile" >Nome File</div>
+                            </th>
+                            <th class="" scope="col" style="width:25.00rem;">
+                                <div class="slds-truncate" title="nomefile" >Descrizione</div>
+                            </th>
+                            <th class="" scope="col" style="width:10.00rem;">
+                                <div class="slds-truncate" title="datainserimento">Data Inserimento</div>
+                            </th>
+                            <th class="" scope="col" style="width:10.00rem;">
+                                <div class="slds-truncate" title="elimina" >Download/Elimina</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <aura:iteration items="{!v.elencoFile}" var="item" indexVar="index" >
+                            <tr>
+                                <!--<td>
+                                    <span class="slds-icon_container slds-icon-utility-arrowdown clickable slds-col slds-size_1-of-8" onclick="{!c.downloadfile}" data-id="{!item.ContentDocumentId}">
+                                        <lightning:icon iconName="action:download" alternativeText="Download" size="xx-small"/>
+                                    </span>
+                                </td>-->
+                                <td>
+                                    <p><lightning:formattedText class="" value="{!item.Title}" /></p>
+                                </td>
+                                <td>
+                                    <p><lightning:formattedText class="" value="{!item.Description}" /></p>
+                                </td>
+                                <td>
+                                    <p><lightning:formattedDateTime value="{!item.CreatedDate}" year="numeric" month="numeric" day="numeric" hour="2-digit" minute="2-digit" hour12="false"/></p>
+                                </td>
+                                <td>
+                                    &nbsp; &nbsp;
+                                    <span class="slds-icon_container slds-icon-utility-arrowdown clickable slds-col slds-size_1-of-8" onclick="{!c.downloadfile}" data-id="{!item.ContentDocumentId}">
+                                        <lightning:icon iconName="action:download" alternativeText="Download" size="xx-small"/>
+                                    </span>
+                                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                                    <aura:if isTrue="{!not(item.Completa)}">
+                                        <span class="slds-icon_container slds-icon-utility-arrowdown clickable" onclick="{!c.cancellafile}" data-id="{!item.ContentDocumentId}">
+                                            <lightning:icon iconName="action:close" alternativeText="Elimina" size="xx-small"/>
+                                        </span>
+                                    </aura:if>
+                                </td>
+                            </tr>    
+                        </aura:iteration>
+                    </tbody>
+                </table>
+            </aura:if>
+            
+            <aura:set attribute="else">
+                    <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_info slds-col slds-size_2-of-8" role="alert">
+                        <h2>Non sono presenti allegati</h2>
+                    </div>
+                </aura:set>
+            </aura:if>
+            <br/>
+            <div class="slds-form-element">
+                <label class="slds-form-element_label" for="sample2">Descrizione Allegato</label>
+                <div class="slds-form-element_control">
+                    <lightning:textarea id="notaAll" class="slds-textarea slds-col slds-size_2-of-8" value="{!v.descAll}" ></lightning:textarea>
+                </div>
+            </div>
+
+            <!--disabled="{!v.disabled}" -->
+            <lightning:fileUpload  name="fileUploader"
+                label= "Allega documento"
+                multiple="{!v.multiple}"
+                disabled="{!empty(v.descAll)}"
+                recordId="{!v.selectedActivity[0].Activity_id__c}"
+                onuploadfinished="{! c.handleUploadFinished }"/>
+
+            <br/>
+        </div>
+    </aura:if>
+    <!--</div>-->
+    <br/>    
+    <aura:if isTrue="{!not(v.userIsBO)}">
+        <aura:if isTrue="{!not(v.inadempimento)}">
+            <div class="slds-box">
+                <ui:inputCheckbox aura:id="checkbox" label="Ritardo da imputare al Dealer" value="v.myBool" />
+            </div>
+        </aura:if>
+    </aura:if>
+    <br/>
+<!--    <aura:if isTrue="{!not(v.userIsBO)}">-->
+        <div class="slds-box">
+            <lightning:combobox name="esitoAct" label="Selezionare un esito" value="{!v.valueEsito}"  class="slds-col slds-size_2-of-8" options="{! v.optionsEsito }" onchange="{! c.handleChangeEsito }"/>
+            <aura:if isTrue="{!(v.valueEsito=='Activity Complete')}">
+                <lightning:combobox name="general" onchange="{! c.handleChangeCombo }" class="slds-col slds-size_2-of-8" label="Inserire un esito finale in caso di chiusura attività" placeholder="Select an Option" options="{! v.optionsChiusura }" value="{!v.opzioneChiusura}"/>
+            </aura:if>
+        </div>
+<!--    </aura:if>-->
+    <br/>
+    <div class="slds-box">
+        <lightning:button variant="destructive" label="Completa" title="Completa" onclick="{! c.handleCompleta }"/>
+        <lightning:button variant="destructive" label="Sospendi" title="Sospendi" onclick="{! c.handleSospendi}"/>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <lightning:button variant="destructive" label="Chiudi" title="Chiudi" onclick="{! c.handleChiudi }"/>
+    </div>
+
+</aura:component>

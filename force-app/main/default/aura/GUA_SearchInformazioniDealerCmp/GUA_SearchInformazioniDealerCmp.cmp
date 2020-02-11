@@ -1,0 +1,163 @@
+<aura:component implements="flexipage:availableForAllPageTypes" controller="GUA_GestioneContactCnt" access="global">
+    <aura:attribute name="nomeDealer" type="String" default="" />
+    <aura:attribute name="codiceOcsDealer" type="String" default="" />
+    <aura:attribute name="utenzaOrCFDealer" type="String" default="" />
+    <aura:attribute name="isOpenedModal" type="Boolean" default="false" />
+    <aura:attribute name="isFounded" type="Boolean" default="false" />
+    <aura:attribute name="recordId" type="String" />
+
+    <aura:attribute name="pageNumber" type="Integer" default="1" />
+    <aura:attribute name="pageSize" type="Integer" default="5" />
+    <aura:attribute name="isLastPage" type="Boolean" default="false" />
+    <aura:attribute name="isNotSearchInformazioniDealer" type="Boolean" default="true" />
+    <aura:attribute name="dataSize" type="Integer" default="0" />
+    <aura:attribute name="dealer" type="Account" />
+    <aura:attribute name="caseDealer" type="Case" />
+    <aura:attribute name="contactDetail" type="Case" />
+    <aura:attribute name="datiAggiuntivi" type="Object" />
+    <aura:attribute name="case" type="Case" default="{ 'sobjectType' : 'Case', 'Id':'', 'AccountId':'' }" />
+    <aura:attribute name="loaded" type="boolean" default="false" />
+    <aura:attribute name="isStandalone" type="boolean" default="false" />
+    <aura:attribute name="recordTypeName" type="String" default=""/>
+
+    <lightning:workspaceAPI aura:id="workspace"/>
+
+
+
+    <!--  <aura:handler name="Gua_SearchDealerEvt" event="c:Gua_SearchDealerEvt" action="{!c.doInit}" /> -->
+
+    <!--  <aura:registerEvent name="GUA_caseDealerEvt" type="c:GUA_SearchByCodiceDealerEvt" />  -->
+
+
+
+    <!-- attributes -->
+    <aura:attribute name="data" type="Object" />
+    <aura:attribute name="columns" type="List" />
+    <aura:attribute name="rowSelected" type="Case" />
+    <aura:attribute name="showDetailDealer" type="Boolean" default="false" />
+
+    <!-- handlers
+        <aura:handler name="init" value="{! this }" action="{! c.init }"/>     -->
+    <aura:if isTrue="{! v.loaded }">
+        <div class="demo-only" style="height:6rem">
+            <div class="slds-spinner_container">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+        <!--<lightning:spinner alternativeText="Loading" /> -->
+    </aura:if>
+
+    <aura:if isTrue="{!v.isOpenedModal}">
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open slds-modal_medium" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+
+                                      <span class="slds-assistive-text">Close</span>
+                                                                </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Ricerca Dealer</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <div class="slds-form">
+                        <lightning:input type="text" label="Nome" value="{!v.nomeDealer}" />
+                        <lightning:input label="Codice OCS" value="{!v.codiceOcsDealer}" />
+                        <lightning:input label="Utenza o CF" value="{!v.utenzaOrCFDealer}" />
+                        <div class="slds-p-top_small">
+                            <lightning:button label="Ricerca" variant="brand" onclick="{!c.recerceDealer}" />
+                        </div>
+
+                    </div>
+                    <aura:if isTrue="{!v.isFounded}">
+
+                        <div class="slds-scrollable_x" style="width:100%">
+
+                            <div class="slds-text-longform" style="">
+
+                                <div>
+                                    <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                                        <thead>
+                                            <tr class="slds-line-height_reset">
+                                                <th style="text-align:center;background-color:#0c0c0c;color:#fff;">SELEZIONA </th>
+                                                <th style="text-align:center;background-color:#0c0c0c;color:#fff;">Ragione Sociale</th>
+                                                <th style="text-align:center;background-color:#0c0c0c;color:#fff;">Cod. OCS</th>
+                                                <th style="text-align:center;background-color:#0c0c0c;color:#fff;">Tipo </th>
+                                                <th style="text-align:center;background-color:#0c0c0c;color:#fff;">Stato</th>
+                                                <th style="text-align:center;background-color:#0c0c0c;color:#fff;">Comune</th>
+                                                <th style="text-align:center;background-color:#0c0c0c;color:#fff;">Prov</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <aura:iteration items="{!v.data}" var="caseDealer">
+                                                <tr>
+                                                    <td>
+                                                        <span class="slds-radio">
+                                                                                    <lightning:input type="radio" id="filialeSelect" value="{!caseDealer}" name="options" tabindex="-1"
+                                                                                        onchange="{!c.dealerSelected}" aria-labelledby="radio-button-label-01 column-group-header" />
+                                                                                </span>
+                                                    </td>
+                                                    <td>{!caseDealer.Name} </td>
+                                                    <td>{!caseDealer.OCS_External_Id__c}</td>
+                                                    <td>{!caseDealer.Tipo_Intermediario__c}</td>
+                                                    <td>{!caseDealer.Status__c}</td>
+                                                    <td>{!caseDealer.ShippingCity}</td>
+                                                    <td>{!caseDealer.ShippingCountry}</td>
+                                                </tr>
+                                            </aura:iteration>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="slds-p-top_x-large">
+                                    <!-- <lightning:datatable columns="{! v.columns }" data="{! v.data }" keyField="id" onrowaction="{! c.handleRowAction }" /> -->
+                                </div>
+                                <div class="slds-clearfix">
+                                    <div class="slds-page-header" role="banner">
+                                        <div class="slds-float_right">
+                                            <lightning:button label="Prev" iconName="utility:chevronleft" iconPosition="left" onclick="{!c.handlePrev}" disabled="{! v.pageNumber == 1}" />
+                                            <lightning:button label="Next" iconName="utility:chevronright" iconPosition="right" disabled="{! v.isLastPage}" onclick="{!c.handleNext}" />
+                                        </div>
+                                        <p class="slds-page-header__title">Page {!v.pageNumber} | Showing records from {! ((v.pageNumber-1)*v.pageSize)+' to '+((v.pageNumber-1)*v.pageSize+v.dataSize)}</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </aura:if>
+                </div>
+
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.closeModalSearDealer}">Chiudi</button>
+
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+
+    </aura:if>
+
+    <aura:if isTrue="{!v.dealer.Id !=null}">
+
+        <c:GUA_DetailDealerOutBoundCmp datiAggiuntivi="{!v.datiAggiuntivi}" isDealer="false" dealer="{!v.dealer}" />
+
+        <div class="slds-card slds-p-top_large">
+            <c:GUA_Dettaglio2Contact contactDetails="{!v.contactDetail}" />
+        </div>
+    </aura:if>
+    <aura:if isTrue="{! v.loaded }">
+        <div class="demo-only" style="height:6rem">
+            <div class="slds-spinner_container">
+                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                    <span class="slds-assistive-text">Loading</span>
+                    <div class="slds-spinner__dot-a"></div>
+                    <div class="slds-spinner__dot-b"></div>
+                </div>
+            </div>
+        </div>
+        <!--<lightning:spinner alternativeText="Loading" /> -->
+    </aura:if>
+</aura:component>

@@ -1,0 +1,98 @@
+<!--
+  @File Name          : PV5866RichiestaConteggiEAGestione.cmp
+  @Description        : 
+  @Author             : Federica Forte
+  @Group              : 
+  @Last Modified By   : Federica Forte
+  @Last Modified On   : 27/1/2020, 18:11:20
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    23/12/2019   Federica Forte     Initial Version
+-->
+<aura:component controller="PV5866RichiestaConteggiEAGestione" access="global">
+    
+  <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+  <aura:attribute name="parent" type="Aura.Component" required="true" description="componente padre per accedere ai metodi comuni" />
+  <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre" />
+  <aura:attribute name="newStatus" type="String" />
+  <aura:attribute name="theCase" type="Case" />
+  <aura:attribute name='note' type='String' />
+  <aura:attribute name="allegati" type="Attachment[]"/>
+  <aura:attribute name="userData" type="PVForm.UserData" default="" />
+
+  <aura:attribute name="modificaRispFil" type="List" default="[{'label': 'Altro', 'value': ''},
+      {'label': 'Conteggio di e/a - inviato via posta prioritaria', 'value': 'posta prioritaria'},
+      {'label': 'Conteggio di e/a - inviato via mail', 'value': 'mail'},
+      {'label': 'Conteggio di e/a - inviato via fax', 'value': 'fax'}]" />
+  <aura:attribute name="RispFilCase" type="String" />
+
+  <aura:attribute name="modificaRispFilNote" type="String" />
+
+  <aura:attribute name="modificaData" type="String" />
+  <aura:attribute name="dataCase" type="Date" />
+
+  <aura:attribute name="clickLinkEvo" type="Boolean" default="false"/>
+
+  <aura:if isTrue="{!v.userData.user.UserRole.DeveloperName == 'GOPA'}">
+
+    <p>
+      <div class="my-left">
+        <div class="my-text">Risposta per filiale:</div>
+        <lightning:select name="rispFil" aura:id="rispFil" onchange="{!c.variazioneMotivo}">
+          <aura:iteration items="{!v.modificaRispFil}" var="modificaRispFil">
+            <option text="{!modificaRispFil.label}" value="{!modificaRispFil.value}" />
+          </aura:iteration>
+        </lightning:select>
+      </div>
+    </p>
+
+    <p>
+      <div class="my-left">
+          <lightning:textarea class="my-textarea" name="rispFilNote" aura:id="rispFilNote" value="{!v.modificaRispFilNote}"></lightning:textarea>
+      </div>
+      <div class="my-right">
+        <lightning:button class="my-space my-button" label="Conferma cambio Motivo" onclick="{!c.confermaVariazioneMotivo}"/>
+      </div>
+    </p>
+    
+    <p>
+      <div class="my-left">
+        <div class="my-text">Modifica data ricezione richiesta conteggio:</div>
+        <lightning:input type="date" name="data" value="{!v.modificaData}"/>
+      </div>
+      <div class="my-right">
+        <lightning:button class="my-space" label="Modifica Data" onclick="{!c.variazioneData}"/>
+      </div>
+    </p>
+
+    <br></br>
+    
+    <!-- TODO AGGIUSTARE -->
+    <!-- <lightning:layoutItem size="3"> 
+      <c:PVLinkEvo task="TK000001E9"
+          btn_label="Apri schermata EVO1" clicked="{!v.clickLinkEvo}"/>
+    </lightning:layoutItem> -->
+     
+    <lightning:layoutItem size="3"> 
+      <c:ApriSchermataEVO task="TK000001E9" numeroPratica="" office="" codiceCliente="" linkage="DEFAULT&amp;newpwd="
+         />
+    </lightning:layoutItem>
+
+    <!-- <lightning:layoutItem size="3"> 
+      <c:PVLinkEvo task="TK000001E9" infoPre="&amp;login_name=CUES300&amp;contextpath=/compasspv', 'WWGAction_evo_frame_closed'"
+          btn_label="Apri schermata EVO2" clicked="{!v.clickLinkEvo}"/>
+    </lightning:layoutItem> -->
+
+   
+    <lightning:card class='slds-form_stacked'>
+      <div class="slds-grid slds-container_medium slds-align_left slds-wrap">
+        <div class="slds-size_6-of-12">
+            <lightning:input type="checkbox" aura:id='checkboxRinviaAlMittente' label='Rinvia al mittente'
+                name='checkbox' />
+        </div>
+      </div>
+    </lightning:card> 
+
+  </aura:if>
+
+</aura:component>

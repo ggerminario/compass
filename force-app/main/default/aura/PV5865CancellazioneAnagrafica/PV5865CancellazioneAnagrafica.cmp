@@ -1,0 +1,17 @@
+<!--
+  @File Name          : PV5865CancellazioneAnagrafica.cmp
+  @Description        : 
+  @Author             : Adriana Lattanzi
+  @Group              : 
+  @Last Modified By   : Adriana Lattanzi
+  @Last Modified On   : 13/1/2020, 11:17:44
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    10/1/2020   Adriana Lattanzi     Initial Version
+-->
+<aura:component extends="c:PVSubComponentBase" access='global' controller='PV5865CancellazioneAnagraficaController'>
+  <aura:attribute name="respDTO" type="OCSCancellazioneAnagraficaInvoker.CancellazioneAnagraficaResponseDTO" />
+  
+  <!-- attributo per il blocco dell'inserimento in caso di errori -->
+  <aura:attribute name="bloccoInsert" type="Boolean" default="false" />
+</aura:component>

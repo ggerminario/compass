@@ -1,0 +1,44 @@
+<!--
+  @File Name          : PV3824CpayCredenzialiGestione.cmp
+  @Description        : 
+  @Author             : Raffaele Prudenzano
+  @Group              : 
+  @Last Modified By   : Raffaele Prudenzano
+  @Last Modified On   : 14/1/2020, 15:19:28
+  @Modification Log   : 
+  Ver       Date            Author      		    Modification
+  1.0    8/1/2020   Raffaele Prudenzano     Initial Version
+-->
+<aura:component controller="PV3824CpayCredenzialiGestione"
+    implements="flexipage:availableForAllPageTypes,force:hasRecordId" access='global'>
+    <aura:handler name='init' value='{!this}' action='{!c.doInit}' />
+    <aura:attribute name="parent" type="Aura.Component" required="true"
+        description="componente padre per accedere ai metodi comuni" />
+    <aura:method name="save" action="{!c.save}" description="Metodo richiamato dal bottone del componente padre">
+    </aura:method>
+
+    <!-- Attributi -->
+    <!-- da parent -->
+    <aura:attribute name="theCase" type="Case" />
+    <aura:attribute name="dispositionSelezionato" type="XCS_Disposition__c" />
+    <aura:attribute name='note' type='String' />
+    <aura:attribute name="allegati" type="Attachment[]" />
+    <aura:attribute name="newStatus" type="String" />
+
+    <!-- Attributi gestione-->
+    <aura:attribute name="userData" type="PVForm.UserData" default="" />
+    <aura:attribute name="messaggiErrore" type="String" access="Global" />
+
+    <!-- main -->
+    <aura:if isTrue="{!v.userData.user.UserRole.DeveloperName == 'Caricese'}">
+        <lightning:card class='slds-form_stacked'>
+            <div class="slds-grid slds-container_medium slds-align_left slds-wrap">
+                <div class="slds-size_6-of-12">
+                    <lightning:input type="checkbox" aura:id='checkboxRinviaAlMittente' label='Rinvia al mittente'
+                        name='checkbox' />
+                </div>
+            </div>
+        </lightning:card> 
+    </aura:if>
+
+</aura:component>

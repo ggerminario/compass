@@ -1,0 +1,116 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="CRM_GestioneEmail" >
+    
+    <aura:attribute name="destinatarioId" type="String" default=""/>
+    <aura:attribute name="destinatario" type="String" default=""/>
+    <aura:attribute name="categoria" type="String" default=""/>
+    <aura:attribute name="oggetto" type="String" default=""/>
+    <aura:attribute name="tipo" type="String" default=""/>
+    <aura:attribute name="listaDestinatari" type="List" default="[]"/>
+    <aura:attribute name="spinner" type="Integer" default="0"/>
+    <aura:attribute name="codPratica" type="String" default=""/>
+    <aura:attribute name="cc" type="String" default=""/>
+    <aura:attribute name="testo" type="String" default=""/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.init}"/>
+    
+
+    
+    <div class="container">
+        
+        <aura:if isTrue="{!not(v.spinner==0)}">
+            <lightning:spinner alternativeText="Loading" size="large" />
+        </aura:if>
+        
+        <br/>
+        
+        <form class="slds-form margine">
+            <div class="slds-grid slds-gutters">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:select label="Categoria" required="true" value="{!v.categoria}" messageWhenValueMissing="Il campo non può essere vuoto">
+                        <option value="">- Seleziona un valore -</option>
+                        <option value="5303">CPay</option>
+                        <option value="5302">Poste</option>
+                        <option value="5300">Sospesi Bancari</option>
+                        <option value="5301">Transitorio</option>
+                    </lightning:select>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning:select label="Destinatario" required="true" value="{!v.destinatarioId}" onchange="{!c.setDestinatarioNome}" messageWhenValueMissing="Il campo non può essere vuoto">
+                        <option value="">- Seleziona un valore -</option>
+                        <aura:iteration items="{!v.listaDestinatari}" var="temp">
+                            <option value="{!temp.Id}">{!temp.Name}</option>
+                        </aura:iteration>
+                        
+                        
+                    </lightning:select>
+                </div>
+            </div>
+            <br/>
+            
+            <div class="slds-grid slds-gutters">
+                
+                <div class="slds-col slds-size_1-of-2">
+
+                    <lightning:input required="true" aura:id="Aform" label="{!'Oggetto: Sospesi Banca '+v.destinatario}" messageWhenValueMissing="Il campo non può essere vuoto" value="{!v.oggetto}"/>     
+   
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    
+                    <lightning:input aura:id="Aform" label="CC:" value="{!v.cc}"/>  
+                </div>
+            </div>
+            
+            <br/>
+            
+        </form>
+        <div class="slds-grid slds-grid_align-center">
+            <div class="slds-col">
+                <lightning:accordion allowMultipleSectionsOpen="true">
+                    <lightning:accordionSection name="B" label="Dati Aggiuntivi">
+                        <hr/>
+                        <lightning:select  label="Tipo" value="{!v.tipo}">
+                            <option value="Banca">Banca</option>
+                            <option value="Cliente">Cliente</option>
+                            <option value="Pratica">Pratica</option>
+                        </lightning:select>
+                        
+                        
+                        
+                        <aura:if isTrue="{!v.tipo == 'Pratica'}">
+                            <lightning:input label="Codice Pratica" required="true" value="{!v.codPratica}" messageWhenValueMissing="Il campo non può essere vuoto"/>
+                            <br/>
+                            
+                            <lightning:button variant="neutral" disabled="{!not(v.spinner==0)}" title="Click to retrieve fields" label="Cerca" type="Submit" iconName="utility:search" iconPosition="left" onclick="{!c.cerca}" />
+                        </aura:if>                
+                        
+                        
+                        
+                        
+                        
+                        <hr/>
+                    </lightning:accordionSection>
+                </lightning:accordion>
+                
+            </div>
+        </div>
+        <br/>
+        <div class="margine slds-grid">
+            
+            <div class="slds-col ">
+                <lightning:inputRichText  placeholder="Inserisci il testo della mail" value="{!v.testo}"/>
+            </div>
+            
+        </div>
+        <br/>
+        <div class="slds-grid slds-grid_align-center">
+            <div class="slds-col">
+                <lightning:button variant="destructive" label="Invia" onclick="{! c.sendEmail }"/>
+            </div>
+           	
+        </div>
+        
+        <br/><br/><br/>
+    </div>
+    
+    
+</aura:component>
